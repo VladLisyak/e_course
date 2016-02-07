@@ -1,0 +1,67 @@
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+            http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+
+    <display-name>ua.nure.lisyak.SummaryTask4</display-name>
+    <listener>
+        <listener-class>ua.nure.lisyak.SummaryTask4.listener.ContextLoadListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>ua.nure.lisyak.SummaryTask4.listener.TaskListener</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>ResourceFilter</filter-name>
+        <filter-class>ua.nure.lisyak.SummaryTask4.filter.ResourceFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>LocaleFilter</filter-name>
+        <filter-class>ua.nure.lisyak.SummaryTask4.filter.LocaleFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>ua.nure.lisyak.SummaryTask4.filter.EncodingFilter</filter-class>
+    </filter>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/webjars/*</url-pattern>
+        <url-pattern>/assets/*</url-pattern>
+        <!--<url-pattern>/css/*</url-pattern>
+        <url-pattern>/fonts/*</url-pattern>-->
+    </servlet-mapping>
+
+    <filter-mapping>
+        <filter-name>ResourceFilter</filter-name>
+        <url-pattern>/webjars/*</url-pattern>
+        <url-pattern>/assets/*</url-pattern>
+        <!--<url-pattern>/js/*</url-pattern>
+        <url-pattern>/css/*</url-pattern>
+        <url-pattern>/font/*</url-pattern>-->
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>LocaleFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <context-param>
+        <param-name>locales</param-name>
+        <param-value>ru en</param-value>
+    </context-param>
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <page-encoding>UTF-8</page-encoding>
+        </jsp-property-group>
+    </jsp-config>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>
