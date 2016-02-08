@@ -9,10 +9,12 @@ public final class Constants {
      * Application configuration paths.
      */
     public static final class ROUTES{
+
         public static final String DATABASE_PROPS_PATH = "database.properties";
         public static final String UPLOAD_AUTHORS_DIRECTORY = "authors/";
         public static final String UPLOAD_BOOKS_DIRECTORY = "books/";
         public static final String UPLOAD_DIR = "B://library/";
+        public static final String BUNDLE_PATH = "messages";
     }
 
     /**
@@ -58,6 +60,9 @@ public final class Constants {
         public static final String CACHE = "ehcache";
         public static final String LANG = "lang";
         public static final String CURRENT_USER_ROLE = "currUser";;
+        public static final String NEW_LOCALE = "newLocale";
+        public static final String LOGIN = "login";
+        public static final String PASSWORD = "password";
 
 
         private Attributes() {
@@ -73,7 +78,7 @@ public final class Constants {
     }
 
     /**
-     * Validation constants.
+     * validation constants.
      *
      */
     public static final class Validation{
@@ -93,16 +98,23 @@ public final class Constants {
     }
 
     public static final class ServletPaths {
-        public static final String COURSE_LIST = "/courses";
-        public static final String LOGIN = "/login";
-
         public static final class User{
-            public static final String HOME = "/";
+            public static final String USER = "/user/";
+
+            public static final String HOME = USER+ "home";
+            public static final String LOGOUT = USER + "logout";
+
+            public static final String COURSE_LIST = USER + "courses";
+            public static final String LOGIN = USER + "login";
         }
+
+
     }
 
     public static final class Pages {
         private static final String PREFIX = "/WEB-INF/pages/";
+
+        public static final String ENABLED_ISSUE = PREFIX + "issue.jsp";
 
         public static final class User {
             private static final String USER_PREFIX = "user/";

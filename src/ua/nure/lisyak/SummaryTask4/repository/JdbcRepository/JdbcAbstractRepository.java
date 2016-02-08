@@ -2,10 +2,8 @@ package ua.nure.lisyak.SummaryTask4.repository.JdbcRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.nure.lisyak.SummaryTask4.annotation.Autowired;
 import ua.nure.lisyak.SummaryTask4.db.holder.ConnectionHolder;
 import ua.nure.lisyak.SummaryTask4.exception.DataAccessException;
-import ua.nure.lisyak.SummaryTask4.repository.UserRepository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,19 +21,6 @@ public abstract class JdbcAbstractRepository<T> {
     public static final Logger LOGGER = LoggerFactory.getLogger(JdbcAbstractRepository.class);
     protected static final String ERROR_MESSAGE = "Cannot handle sql ['{}']; Message: ";
     private final ConnectionHolder connectionHolder;
-
-    @Autowired
-    private UserRepository userRep;
-
-
-    public UserRepository getUserRep() {
-        return userRep;
-    }
-
-    public void setUserRep(UserRepository userRep) {
-        this.userRep = userRep;
-    }
-
 
     /**
 

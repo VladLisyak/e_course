@@ -25,8 +25,7 @@ public final class ContextLoadListener implements ServletContextListener {
         );
         loader.load(
                 "ua.nure.lisyak.SummaryTask4.repository",
-                "ua.nure.lisyak.SummaryTask4.service",
-                "ua.nure.lisyak.SummaryTask4.api.serialization"
+                "ua.nure.lisyak.SummaryTask4.service"
         );
     }
 

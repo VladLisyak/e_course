@@ -1,6 +1,7 @@
 package ua.nure.lisyak.SummaryTask4.filter;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
 
 import javax.servlet.FilterChain;
@@ -18,8 +19,8 @@ import java.io.IOException;
  */
 //@WebFilter("/*")
 public class LocaleFilter extends BaseFilter{
-	private static final Logger LOGGER = Logger.getLogger(LocaleFilter.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(LocaleFilter.class);
+
     private static final String COOKIES_LOCALE = "lang";
     private static final String COMMON_DEFAULT_LOCALE = "ru";
     private String[] locales;

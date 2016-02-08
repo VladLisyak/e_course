@@ -31,6 +31,7 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
     private static final String DELETE_ROLE = "user.role.delete";
     private static final String DELETE_OLD = "user.role.delete.old";
     private static final String ADD_ROLE = "user.role.add";
+    private static final String GET_BY_LOGIN = "user.get.by.login";
 
     /**
      * Creates a new repository.
@@ -152,16 +153,39 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
         }
     }
 
-     @Override
+    @Override
+    public User getByLogin(String login) {
+        String sql = QueryStorage.get(GET_BY_LOGIN);
+        try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+            ps.setString(1, login);
+
+            ResultSet rs = ps.executeQuery();
+
+            User user;
+
+            user = extractFromResultSet(rs);
+                user.setRoles(getRoles(user.getId()));
+
+
+            return user;
+        } catch (SQLException e) {
+            LOGGER.warn(ERROR_MESSAGE, sql, e);
+            throw new DataAccessException(getMessage(sql), e);
+        }
+    }
+
+    @Override
      protected User extractFromResultSet(ResultSet resultSet) throws SQLException{
         User user;
-
+        resultSet.next();
         user = new User();
         user.setId(resultSet.getInt("id"));
         user.setName(resultSet.getString("name"));
         user.setLogin(resultSet.getString("login"));
+        user.setEmail(resultSet.getString("email"));
+        user.setImage(resultSet.getString("image"));
         user.setPassword(resultSet.getString("password"));
-        user.setEnabled(Enabled.valueOf(resultSet.getString("enabled")));
+        user.setEnabled(Enabled.valueOf(resultSet.getString("enabled").toUpperCase()));
         user.setImage(user.getImage());
 
         return user;

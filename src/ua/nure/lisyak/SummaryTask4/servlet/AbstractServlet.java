@@ -2,10 +2,6 @@ package ua.nure.lisyak.SummaryTask4.servlet;
 
 
 import ua.nure.lisyak.SummaryTask4.service.CourseService;
-import ua.nure.lisyak.SummaryTask4.service.JdbcService.JdbcCourseService;
-import ua.nure.lisyak.SummaryTask4.service.JdbcService.JdbcJournalEntryService;
-import ua.nure.lisyak.SummaryTask4.service.JdbcService.JdbcMessageService;
-import ua.nure.lisyak.SummaryTask4.service.JdbcService.JdbcUserService;
 import ua.nure.lisyak.SummaryTask4.service.JournalEntryService;
 import ua.nure.lisyak.SummaryTask4.service.MessageService;
 import ua.nure.lisyak.SummaryTask4.service.UserService;
@@ -35,10 +31,11 @@ public abstract class AbstractServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         ServletContext context = getServletContext();
-        userService = (UserService) context.getAttribute(JdbcUserService.class.getName());
-        messageService = (MessageService) context.getAttribute(JdbcMessageService.class.getName());
-        journalEntryService = (JournalEntryService) context.getAttribute(JdbcJournalEntryService.class.getName());
-        courseService = (CourseService) context.getAttribute(JdbcCourseService.class.getName());
+        userService = (UserService) context.getAttribute(UserService.class.getName());
+        String s = MessageService.class.getName();
+        messageService = (MessageService) context.getAttribute(MessageService.class.getName());
+        journalEntryService = (JournalEntryService) context.getAttribute(JournalEntryService.class.getName());
+        courseService = (CourseService) context.getAttribute(CourseService.class.getName());
 
         defaultLocale = (String) context.getAttribute(Constants.Attributes.DEFAULT_LOCALE);
         locales = (String[]) context.getAttribute(Constants.Attributes.LOCALES);

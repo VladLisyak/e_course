@@ -1,5 +1,7 @@
 package ua.nure.lisyak.SummaryTask4.repository.JdbcRepository;
 
+import ua.nure.lisyak.SummaryTask4.annotation.Autowired;
+import ua.nure.lisyak.SummaryTask4.annotation.Repository;
 import ua.nure.lisyak.SummaryTask4.db.QueryStorage;
 import ua.nure.lisyak.SummaryTask4.db.holder.ConnectionHolder;
 import ua.nure.lisyak.SummaryTask4.exception.DataAccessException;
@@ -8,6 +10,7 @@ import ua.nure.lisyak.SummaryTask4.model.User;
 import ua.nure.lisyak.SummaryTask4.model.enums.Status;
 import ua.nure.lisyak.SummaryTask4.model.enums.Theme;
 import ua.nure.lisyak.SummaryTask4.repository.CourseRepository;
+import ua.nure.lisyak.SummaryTask4.repository.UserRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Repository
 public class JdbcCourseRepository extends JdbcAbstractRepository implements CourseRepository {
     private static final String SAVE_COURSE = "course.save";
     private static final String UPDATE_COURSE = "course.update";
@@ -32,6 +36,9 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
     private static final String SAVE_TUTOR = "course.tutor.save";
     private static final String DELETE_TUTOR = "course.tutor.delete";
 
+    @Autowired
+    private UserRepository userRep;
+
 
     /**
      * Creates a new repository.
@@ -41,6 +48,7 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
     public JdbcCourseRepository(ConnectionHolder connectionHolder) {
         super(connectionHolder);
     }
+
 
     @Override
     public Course save(Course course) {
@@ -59,7 +67,7 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
             ResultSet generatedKeys = ps.getGeneratedKeys();
             generatedKeys.next();
             int id = generatedKeys.getInt(1);
-    
+
             updateThemes(course);
 
             return get(id);
@@ -74,12 +82,12 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
         return queryBooleanForTwoParams(courseId, tutorId, save);
     }*/
 
-
     @Override
     public List<Course> getAllByTheme(Theme theme) {
         String sql = QueryStorage.get(GET_BY_THEME);
         return getAllByEnum(theme.toString(), sql);
     }
+
 
     @Override
     public Course update(Course course) {
@@ -125,11 +133,11 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
         return queryListForTwoParams(offset, limit, sql);
     }
 
-
     @Override
     public List<Course> getAllByTutorId(int id) {
         return getAllBy(id, GET_ALL_BY_TUTOR_ID);
     }
+
 
     @Override
     public List<Course> getAllFinished(){
@@ -248,5 +256,13 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
             LOGGER.warn(ERROR_MESSAGE, sql, e);
             throw new DataAccessException(getMessage(sql), e);
         }
+    }
+
+    public UserRepository getUserRep() {
+        return userRep;
+    }
+
+    public void setUserRep(UserRepository userRep) {
+        this.userRep = userRep;
     }
 }

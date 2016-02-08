@@ -1,22 +1,15 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<fmt:setLocale value="${sessionScope.currLocale}" scope="request"/>
-<fmt:setBundle basename="messages" scope="request"/>
 
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title><fmt:message key="app.title"/></title>
-    <c:set var="url">${pageContext.request.requestURL}</c:set>
-    <base href="${fn:substring(url, 0, fn:length(url) - fn:length(pageContext.request.requestURI))}${pageContext.request.contextPath}/" />
+<nav class="white" role="navigation">
+    <div class="nav-wrapper container">
+        <a id="logo-container" href="#" class="brand-logo">Logo</a>
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          rel="stylesheet">
-    <link href="<c:url value="webjars/materializecss/0.97.0/css/materialize.css"/>" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <link href="<c:url value="assets/css/user.css"/>" type="text/css" rel="stylesheet" media="screen,projection"/>
-
-</head>
-<body>
-
+        <ul class="right hide-on-med-and-down">
+            <li><a href="#">Navbar Link</a></li>
+            <li>
+            </li>
+        </ul>
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+</nav>

@@ -5,13 +5,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.nure.lisyak.SummaryTask4.annotation.Autowired;
 import ua.nure.lisyak.SummaryTask4.annotation.Repository;
-import ua.nure.lisyak.SummaryTask4.annotation.Serializer;
 import ua.nure.lisyak.SummaryTask4.annotation.Service;
 import ua.nure.lisyak.SummaryTask4.db.AnnotationHandler;
 import ua.nure.lisyak.SummaryTask4.db.holder.ConnectionHolder;
 import ua.nure.lisyak.SummaryTask4.db.manager.ConnectionManager;
-import ua.nure.lisyak.SummaryTask4.util.constant.*;
+import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
+import ua.nure.lisyak.SummaryTask4.util.constant.SettingsAndFolderPaths;
 import ua.nure.lisyak.SummaryTask4.util.file.FileServiceImpl;
+import ua.nure.lisyak.SummaryTask4.util.serialization.JSONSerializer;
 
 import javax.servlet.ServletContext;
 import java.io.IOException;
@@ -34,7 +35,6 @@ public class ContextLoader extends AbstractContextLoader {
     private CacheManager cacheManager;
     private Map<String, Object> beans = new HashMap<>();
     private Map<String, Object> services = new HashMap<>();
-    private Map<String, Object> serializers = new HashMap<>();
 
     /**
      * Creates new {@code ContextLoader} object.
@@ -52,6 +52,7 @@ public class ContextLoader extends AbstractContextLoader {
         context.setAttribute(Constants.Attributes.CONNECTION_MANAGER, manager);
         context.setAttribute(Constants.Attributes.FILE_SERVICE, new FileServiceImpl(SettingsAndFolderPaths.getUploadDirectory()));
         context.setAttribute(Constants.Attributes.CACHE, cacheManager.getCache(Constants.Attributes.CACHE));
+        context.setAttribute(Constants.Attributes.SERIALIZER, new JSONSerializer());
 
         cacheManager.addCache(Constants.Attributes.CACHE);
     }
@@ -67,7 +68,6 @@ public class ContextLoader extends AbstractContextLoader {
             beans.putAll(services);
             autowireBeans();
             manageServices();
-            manageSerializers();
         } catch (ReflectiveOperationException e) {
             LOGGER.error("Cannot load bean(s). Cause", e);
         } catch (IOException e) {
@@ -97,25 +97,41 @@ public class ContextLoader extends AbstractContextLoader {
             loadService(c);
             return;
         }
-        Serializer annotation = c.getAnnotation(Serializer.class);
-        if (annotation != null) {
-            loadSerializer(annotation.value(), c);
-        }
     }
 
     @SuppressWarnings("unchecked")
     private void loadRepository(Class c) throws ReflectiveOperationException {
         Constructor<?> constructor = c.getConstructor(ConnectionHolder.class);
         Object o = constructor.newInstance(connectionHolder);
-        beans.put(o.getClass().getName(), o);
+        String s = null;
+        for (Object obj: o.getClass().getInterfaces()) {
+            if (obj.toString().contains("Repository")){
+                s = obj.toString().replace("interface ", "");
+                break;
+            }
+        }
+        if (s!=null){
+            beans.put(s, o);
+        }
+        else{
+            LOGGER.debug("Repository {} wasnt logged because its not repository", o);
+        }
     }
 
     private void loadService(Class c) throws IllegalAccessException, InstantiationException {
-        services.put(c.getName(), c.newInstance());
-    }
-
-    private void loadSerializer(String prefix, Class c) throws IllegalAccessException, InstantiationException {
-        serializers.put(prefix, c.newInstance());
+        Object o = c.newInstance();
+        String s = null;
+        for (Object obj: o.getClass().getInterfaces()) {
+            if (obj.toString().contains("Service")){
+                s = obj.toString().replace("interface ", "");
+                break;
+            }
+        }
+        if (s!=null){
+            services.put(s, o);
+            return;
+        }
+            LOGGER.debug("Service {} wasnt logged Because its not repository", o);
     }
 
     private void autowireBeans() throws IllegalAccessException {
@@ -142,10 +158,6 @@ public class ContextLoader extends AbstractContextLoader {
             );
             servletContext.setAttribute(entry.getKey(), proxy);
         }
-    }
-
-    private void manageSerializers() {
-        servletContext.setAttribute(Constants.Attributes.SERIALIZERS, serializers);
     }
 
 }

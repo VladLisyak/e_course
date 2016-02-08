@@ -1,6 +1,6 @@
 package ua.nure.lisyak.SummaryTask4.filter;
 
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
 import ua.nure.lisyak.SummaryTask4.util.constant.SettingsAndFolderPaths;
 import ua.nure.lisyak.SummaryTask4.util.file.FileService;
@@ -23,7 +23,7 @@ import java.net.URLDecoder;
 //@WebFilter("ResourceFilter")
 public class ResourceFilter extends BaseFilter {
 
-    private static final Logger LOGGER = Logger.getLogger(ResourceFilter.class);
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ResourceFilter.class);
     private FileService fileServ;
 
     @Override

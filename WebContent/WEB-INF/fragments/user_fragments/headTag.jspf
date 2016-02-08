@@ -1,0 +1,20 @@
+<!-- Header - top area. -->
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title><fmt:message key="app.title"/></title>
+    <c:set var="url">${pageContext.request.requestURL}</c:set>
+    <base href="${fn:substring(url, 0, fn:length(url) - fn:length(pageContext.request.requestURI))}${pageContext.request.contextPath}/" />
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+    <link href="<c:url value="webjars/materializecss/0.97.0/css/materialize.css"/>" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="<c:url value="assets/css/user.css"/>" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <script src="webjars/angularjs/1.4.9/angular.js"></script>
+    <script src="webjars/angularjs/1.4.9/angular-messages.js"></script>
+    <script src="assets/js/app.js"></script>
+</head>

@@ -1,6 +1,6 @@
 package ua.nure.lisyak.SummaryTask4.filter;
 
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import java.io.IOException;
@@ -10,8 +10,8 @@ import java.io.IOException;
  */
 //@WebFilter("/*")
 public class EncodingFilter implements Filter{
-	private static final Logger LOGGER = Logger.getLogger(EncodingFilter.class);
-	
+	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EncodingFilter.class);
+
 	private static final String DEFAULT_ENCODING = "UTF-8";
 	private String encoding;
 	

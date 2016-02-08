@@ -48,4 +48,9 @@ public class JdbcUserService implements UserService {
     public List<User> getAll() {
         return repository.getAll();
     }
+
+    @Override
+    public User getByLogin(String login) {
+        return repository.getByLogin(login);
+    }
 }

@@ -200,7 +200,7 @@
             <version>${ehcache.version}</version>
         </dependency>
 
-        <!-- Logging with SLF4J & LogBack -->
+        <!-- Logging with SLF4J -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

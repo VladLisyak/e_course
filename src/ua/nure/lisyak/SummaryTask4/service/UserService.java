@@ -35,4 +35,6 @@ public interface UserService {
 
     @Cacheable
     List<User> getAll();
+
+    User getByLogin(String login);
 }

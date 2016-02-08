@@ -1,101 +1,57 @@
-<%@ include file="/WEB-INF/fragments/user_fragments/header.jspf"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<div id="index-banner" class="parallax-container">
-    <div class="section no-pad-bot">
-        <div class="container">
-            <br><br>
-            <h1 class="header center teal-text text-lighten-2">Parallax Template</h1>
-            <div class="row center">
-                <h5 class="header col s12 light">A modern responsive front-end framework based on Material Design</h5>
-            </div>
-            <div class="row center">
-                <a href="http://materializecss.com/getting-started.html" id="download-button" class="btn-large waves-effect waves-light teal lighten-1">Get Started</a>
-            </div>
-            <br><br>
+<html>
+<%@include file="/WEB-INF/fragments/user_fragments/headTag.jspf"%>
+<body ng-app="validationApp" ng-controller="mainController">
 
-        </div>
-    </div>
-    <div class="parallax"><img src="<c:url value="/assets/images/background1.jpg"/>" alt="Unsplashed background img 1"></div>
-</div>
-
-
+<%@include file="/WEB-INF/fragments/user_fragments/bodyHeader.jspf"%>
 <div class="container">
-    <div class="section">
-        <form>
-            <div class="input-field">
-                <input id="search" type="search" required>
-                <label for="search"><i class="material-icons">search</i></label>
+    <h2 class="page-header"><fmt:message key="app.login"/></h2>
+    <div class="row">
+        <form name="userForm" novalidate>
+
+            <div class="form-group" ng-class="{ 'invalid': userForm.name.$touched && userForm.name.$invalid }">
+                <label>Name</label>
+                <input type="text" name="name" class="form-control" ng-class="{ 'invalid': userForm.name.$touched && userForm.name.$invalid }"
+                       ng-model="main.name"
+                       ng-minlength="5"
+                       ng-maxlength="10"
+                       required>
+
+                <div class="help-block" ng-messages="userForm.name.$error" ng-if="userForm.name.$touched">
+                    <p class="invalid" ng-message="minlength">Your name is too short.</p>
+                    <p class="invalid" ng-message="maxlength">Your name is too long.</p>
+                    <p class="invalid" ng-message="required">Your name is required.</p>
+                </div>
             </div>
+
+            <div class="form-group" ng-class="{ 'invalid': userForm.email.$touched && userForm.email.$invalid }">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control"
+                       ng-model="main.email"
+                       ng-minlength="5"
+                       ng-maxlength="20"
+                       required>
+
+                <div class="help-block" ng-messages="userForm.email.$error" ng-if="userForm.email.$touched">
+                    <div ng-messages-include="messages.html"></div>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-danger">Submit</button>
+            </div>
+
         </form>
-        <!--   Icon Section   -->
-        <div class="row">
-            <div class="col s12 m4">
-                <div class="icon-block">
-                    <h2 class="center brown-text"><i class="material-icons">flash_on</i></h2>
-                    <h5 class="center">Speeds up development</h5>
 
-                    <p class="light">We did most of the heavy lifting for you to provide a default stylings that incorporate our custom components. Additionally, we refined animations and transitions to provide a smoother experience for developers.</p>
-                </div>
-            </div>
-
-            <div class="col s12 m4">
-                <div class="icon-block">
-                    <h2 class="center brown-text"><i class="material-icons">group</i></h2>
-                    <h5 class="center">User Experience Focused</h5>
-
-                    <p class="light">By utilizing elements and principles of Material Design, we were able to create a framework that incorporates components and animations that provide more feedback to users. Additionally, a single underlying responsive system across all platforms allow for a more unified user experience.</p>
-                </div>
-            </div>
-
-            <div class="col s12 m4">
-                <div class="icon-block">
-                    <h2 class="center brown-text"><i class="material-icons">settings</i></h2>
-                    <h5 class="center">Easy to work with</h5>
-
-                    <p class="light">We have provided detailed documentation as well as specific code examples to help new users get started. We are also always open to feedback and can answer any questions a user may have about Materialize.</p>
-                </div>
-            </div>
-        </div>
+        <pre>userForm.name.$error = {{ userForm.name.$error | json }}</pre>
 
     </div>
 </div>
-
-
-<div class="parallax-container valign-wrapper">
-    <div class="section no-pad-bot">
-        <div class="container">
-            <div class="row center">
-                <h5 class="header col s12 light">A modern responsive front-end framework based on Material Design</h5>
-            </div>
-        </div>
-    </div>
-    <div class="parallax"><img src="<c:url value="/assets/images/background2.jpg"/>" alt="Unsplashed background img 2"></div>
-</div>
-
-<div class="container">
-    <div class="section">
-
-        <div class="row">
-            <div class="col s12 center">
-                <h3><i class="mdi-content-send brown-text"></i></h3>
-                <h4>Contact Us</h4>
-                <p class="left-align light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque id nunc nec volutpat. Etiam pellentesque tristique arcu, non consequat magna fermentum ac. Cras ut ultricies eros. Maecenas eros justo, ullamcorper a sapien id, viverra ultrices eros. Morbi sem neque, posuere et pretium eget, bibendum sollicitudin lacus. Aliquam eleifend sollicitudin diam, eu mattis nisl maximus sed. Nulla imperdiet semper molestie. Morbi massa odio, condimentum sed ipsum ac, gravida ultrices erat. Nullam eget dignissim mauris, non tristique erat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
-<div class="parallax-container valign-wrapper">
-    <div class="section no-pad-bot">
-        <div class="container">
-            <div class="row center">
-                <h5 class="header col s12 light">A modern responsive front-end framework based on Material Design</h5>
-            </div>
-        </div>
-    </div>
-    <div class="parallax"><img src="<c:url value="/assets/images/background3.jpg"/>" alt="Unsplashed background img 3"></div>
-</div>
-
 <%@ include file="/WEB-INF/fragments/user_fragments/footer.jspf"%>
+</body>
+</html>
+
