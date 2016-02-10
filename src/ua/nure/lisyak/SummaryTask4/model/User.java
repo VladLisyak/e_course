@@ -3,6 +3,7 @@ package ua.nure.lisyak.SummaryTask4.model;
 import ua.nure.lisyak.SummaryTask4.model.enums.Enabled;
 import ua.nure.lisyak.SummaryTask4.model.enums.Role;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -24,7 +25,7 @@ public class User extends Entity {
 
     private Enabled enabled;
 
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public String getName() {
         return name;

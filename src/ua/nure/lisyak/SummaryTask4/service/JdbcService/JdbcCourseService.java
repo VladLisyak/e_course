@@ -6,6 +6,7 @@ import ua.nure.lisyak.SummaryTask4.model.Course;
 import ua.nure.lisyak.SummaryTask4.model.enums.Theme;
 import ua.nure.lisyak.SummaryTask4.repository.CourseRepository;
 import ua.nure.lisyak.SummaryTask4.service.CourseService;
+import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
 
 import java.util.List;
 
@@ -40,8 +41,22 @@ public class JdbcCourseService implements CourseService {
     }
 
     @Override
-    public List<Course> getSorted(int offset, int limit) {
-        return repository.getSorted(offset, limit);
+    public List<Course> getFiltered(int offset, int limit, String searchBy, String search, String sortBy, String order) {
+        String sortParam = Constants.SORT_TYPES.contains(sortBy) ? sortBy : Constants.SORT_TYPES.get(0);
+        String orderParam = order.equals("ASC")
+                || order.equals("DESC")
+                ? order : "ASC";
+        if(searchBy!=null && Constants.SEARCH_TYPES.contains(searchBy)){
+
+            return repository.getFiltered(offset, limit, searchBy, search, sortParam, orderParam);
+        }
+
+        return repository.getSorted(offset, limit, sortParam, orderParam);
+    }
+
+    @Override
+    public Course getByTitleAndTutor(String title, int tutorId) {
+        return repository.getByTitleAndTutor(title, tutorId);
     }
 
     @Override
@@ -62,5 +77,15 @@ public class JdbcCourseService implements CourseService {
     @Override
     public List<Course> getAll() {
         return repository.getAll();
+    }
+
+    @Override
+    public List<Course> getAllByStudentId(int id) {
+        return repository.getAllByStudentId(id);
+    }
+
+    @Override
+    public List<Course> getAllExceptSubscribed(int id) {
+        return repository.getAllExceptSubscribed(id);
     }
 }

@@ -18,26 +18,35 @@ public final class SettingsAndFolderPaths {
     private static final String DATABASE_CONFIG_FILE = "/ua/nure/lisyak/SummaryTask4/settings/db.properties";
     private static final String MAIL_PROPERTIES = "/ua/nure/lisyak/SummaryTask4/settings/mail.properties";
     private static final String REPORTS = "/templates/reports/";
-    private static final String CONFIG_FILE = "/ua/nure/lisyak/SummaryTask4/settings/config.properties";
+
     private static final String BUNDLE_PATH = "messages";
+
+    private static final String CONFIG_FILE = "/ua/nure/lisyak/SummaryTask4/settings/config.properties";
     private static final String RESOURCE_PATH = "/uploads/";
 
     private static final int MAX_CHECKING_OUT;
 
 
-    private static final int BOOKS_PER_PAGE;
+    private static final int COURSES_PER_PAGE;
     private static final String UPLOAD_DIRECTORY;
     private static final String UPLOAD_COURSES_DIRECTORY;
     private static final String UPLOAD_USERS_DIRECTORY;
     private static final String UPLOAD_PATH_MAPPING;
     private static final List<String> ALLOWED_IMAGE_TYPES;
     private static final String UPDATE_ORDERS_TASK_EXECUTION_TIME;
+
+   public static final class Images{
+       public static final String TEMP_DIRECTORY = "B://e_course/";
+       public static final int SIZE_THRESHOLD = 1024 * 1024;
+       public static final int MAX_SIZE = 1024 * 1024 * 5;
+   }
+
     static {
         try (InputStream resource = SettingsAndFolderPaths.class.getResourceAsStream(CONFIG_FILE)) {
             Properties prop = new Properties();
             prop.load(resource);
             MAX_CHECKING_OUT = Integer.parseInt(prop.getProperty("order.maxCheckingOut"));
-            BOOKS_PER_PAGE = Integer.parseInt(prop.getProperty("search.booksPerPages"));
+            COURSES_PER_PAGE = Integer.parseInt(prop.getProperty("search.coursesPerPage"));
             UPLOAD_DIRECTORY = prop.getProperty("upload.dir");
             UPLOAD_COURSES_DIRECTORY = prop.getProperty("upload.dir.courses");
             UPLOAD_USERS_DIRECTORY = prop.getProperty("upload.dir.users");
@@ -52,7 +61,6 @@ public final class SettingsAndFolderPaths {
     public static String getEhcacheConfig() {
         return EHCACHE_CONFIG;
     }
-
     public static String getSqlFile() {
         return SQL_FILE;
     }
@@ -73,8 +81,8 @@ public final class SettingsAndFolderPaths {
         return MAX_CHECKING_OUT;
     }
 
-    public static int getBooksPerPage() {
-        return BOOKS_PER_PAGE;
+    public static int getCoursesPerPage() {
+        return COURSES_PER_PAGE;
     }
 
     public static String getUploadDirectory() {
@@ -109,7 +117,11 @@ public final class SettingsAndFolderPaths {
         return RESOURCE_PATH;
     }
 
+    public static String getConfigFile() {
+        return CONFIG_FILE;
+    }
 
     private SettingsAndFolderPaths() {
     }
+
 }

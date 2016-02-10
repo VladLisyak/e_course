@@ -18,7 +18,7 @@ import java.util.List;
  * Basic servlet for all servlets. Provides access to 
  * services that are needed for more than one servlet.
  */
-public abstract class AbstractServlet extends HttpServlet {
+public abstract class AbstractServlet<T> extends HttpServlet {
 	
 	private static final long serialVersionUID = -7053877476429245836L;
     private UserService userService;
@@ -136,6 +136,14 @@ public abstract class AbstractServlet extends HttpServlet {
             return null;
         }
         return paramValue.trim();
+    }
+
+    protected Boolean getBooleanParam(HttpServletRequest request, String param, Boolean def) {
+        String strParamValue = request.getParameter(param);
+        if (strParamValue == null) {
+            return def;
+        }
+        return Boolean.valueOf(strParamValue);
     }
 
     /**

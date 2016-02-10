@@ -35,7 +35,7 @@ public class JdbcMessageService implements MessageService {
     }
 
     @Override
-    public int getUnreadCount(int id) {
+    public Integer getUnreadCount(int id) {
         return repository.getUnreadCount(id);
     }
 

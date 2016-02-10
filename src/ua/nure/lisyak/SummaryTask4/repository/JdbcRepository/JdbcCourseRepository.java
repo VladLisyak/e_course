@@ -6,21 +6,19 @@ import ua.nure.lisyak.SummaryTask4.db.QueryStorage;
 import ua.nure.lisyak.SummaryTask4.db.holder.ConnectionHolder;
 import ua.nure.lisyak.SummaryTask4.exception.DataAccessException;
 import ua.nure.lisyak.SummaryTask4.model.Course;
-import ua.nure.lisyak.SummaryTask4.model.User;
 import ua.nure.lisyak.SummaryTask4.model.enums.Status;
 import ua.nure.lisyak.SummaryTask4.model.enums.Theme;
 import ua.nure.lisyak.SummaryTask4.repository.CourseRepository;
 import ua.nure.lisyak.SummaryTask4.repository.UserRepository;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.sql.Date;
+import java.util.*;
 
 @Repository
 public class JdbcCourseRepository extends JdbcAbstractRepository implements CourseRepository {
     private static final String SAVE_COURSE = "course.save";
+    private static final String GET_WITH_COUNT = "course.get.with.count";
     private static final String UPDATE_COURSE = "course.update";
     private static final String DELETE_COURSE = "course.delete";
     private static final String GET_COURSE = "course.get";
@@ -33,8 +31,17 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
     private static final String DELETE_OLD_THEME = "course.theme.delete.old";
     private static final String GET_BY_THEME = "course.getAll.by.theme";
     private static final String GET_THEMES = "course.get.themes.by.id";
+    private static final String GET_ALL_BY_STUDENT_ID = "course.get.by.student.id";
+    private static final String GET_ALL_EXCEPT_SUBSCRIBED = "course.get.except.subscribed";
+    private static final String SUBSCRIBERS_COUNT = "subscribers.get.count";
+    private static final String GET_SORTED = "course.get.sorted.";
+    private static final String GET_FILTERED = "course.get.filtered";
+
+    private static final String GET_BY_TITLE_AND_TUTOR = "course.get.by.title.and.tutor";
     private static final String SAVE_TUTOR = "course.tutor.save";
     private static final String DELETE_TUTOR = "course.tutor.delete";
+
+    private static final Map<String, String> orders = new HashMap<>();
 
     @Autowired
     private UserRepository userRep;
@@ -47,6 +54,10 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
      */
     public JdbcCourseRepository(ConnectionHolder connectionHolder) {
         super(connectionHolder);
+        orders.put("id", "id");
+        orders.put("title", "title");
+        orders.put("length", "end_date - start_date");
+        orders.put("count", "count");
     }
 
 
@@ -104,7 +115,6 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
 
             ps.executeUpdate();
 
-
             return get(course.getId());
         } catch (SQLException e) {
             LOGGER.warn(ERROR_MESSAGE, sql, e);
@@ -121,23 +131,15 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
     public Course get(int id) {
         String sql = QueryStorage.get(GET_COURSE);
         Course course = (Course) get(id, sql);
-        User tutor = getUserRep().get(course.getTutorId());
-        course.setTutor(tutor);
-        course.setThemes(getThemes(id));
+
         return course;
     }
 
-    @Override
-    public List<Course> getSorted(int offset, int limit) {
-        String sql = QueryStorage.get(GET_ALL_SORTED);
-        return queryListForTwoParams(offset, limit, sql);
-    }
 
     @Override
     public List<Course> getAllByTutorId(int id) {
         return getAllBy(id, GET_ALL_BY_TUTOR_ID);
     }
-
 
     @Override
     public List<Course> getAllFinished(){
@@ -150,6 +152,7 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
             throw new DataAccessException(getMessage(sql), e);
         }
     }
+
 
     @Override
     public boolean setAllFinished(){
@@ -176,6 +179,74 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
     }
 
     @Override
+    public List<Course> getAllByStudentId(int id) {
+        String sql = QueryStorage.get(GET_ALL_BY_STUDENT_ID);
+        return getAllBy(id, sql);
+    }
+
+    @Override
+    public List<Course> getAllExceptSubscribed(int id) {
+        String sql = QueryStorage.get(GET_ALL_EXCEPT_SUBSCRIBED);
+        return getAllBy(id, sql);
+    }
+
+
+
+    @Override
+    public List<Course> getSorted(int offset, int limit, String sort, String order) {
+        String query = QueryStorage.get(GET_WITH_COUNT);
+        try (PreparedStatement ps = getConnection().prepareStatement(query)) {
+            ps.setString(1, orders.get(sort));
+            ps.setString(2, order);
+            ps.setInt(3, offset);
+            ps.setInt(4, limit);
+
+            return extractListFromPreparedStatement(ps);
+        }catch (SQLException e){
+            LOGGER.warn(ERROR_MESSAGE, query, e);
+            throw new DataAccessException(getMessage(query), e);
+        }
+    }
+
+    //TODO check getSorted and getFiltered
+     @Override
+    public List<Course> getFiltered(int offset, int limit, String searchBy, String search, String sortBy, String order) {
+        String query = QueryStorage.get(GET_FILTERED);
+        try (PreparedStatement ps = getConnection().prepareStatement(query)) {
+            ps.setString(1, searchBy);
+            ps.setString(2, search);
+            ps.setString(3, orders.get(sortBy));
+            ps.setString(4, order);
+            ps.setInt(5, offset);
+            ps.setInt(6, limit);
+
+            return extractListFromPreparedStatement(ps);
+        }catch (SQLException e){
+            LOGGER.warn(ERROR_MESSAGE, query, e);
+            throw new DataAccessException(getMessage(query), e);
+        }
+    }
+
+    @Override
+    public Course getByTitleAndTutor(String title, int tutorId) {
+        String sql = QueryStorage.get(GET_BY_TITLE_AND_TUTOR);
+        try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+            ps.setString(1, title);
+            ps.setInt(2, tutorId);
+            ResultSet rs = ps.executeQuery();
+
+            if(!rs.next()){
+                return null;
+            }
+
+            return extractFromResultSet(rs);
+        }catch (SQLException e){
+            LOGGER.warn(ERROR_MESSAGE, sql, e);
+            throw new DataAccessException(getMessage(sql), e);
+        }
+    }
+
+    @Override
     protected Course extractFromResultSet(ResultSet resultSet) throws SQLException {
         Course course;
 
@@ -188,8 +259,7 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
         course.setEndDate(resultSet.getDate("endDate"));
         course.setStatus(Status.valueOf(resultSet.getString("status")));
         course.setTutorId(resultSet.getInt("tutor_id"));
-
-
+        course.setSubscribersCount(resultSet.getInt("count"));
 
         return course;
     }
@@ -205,18 +275,20 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
         }
     }
 
-    @Override
-    protected List<Course> extractListFromPreparedStatement(PreparedStatement ps) throws SQLException{
-        List<Course> studentCourses = new ArrayList<>();
-        ResultSet rs = ps.executeQuery();
+    private Integer getSubscribersCount(int courseId){
+        String query = QueryStorage.get(SUBSCRIBERS_COUNT);
+        try (PreparedStatement ps = getConnection().prepareStatement(query)) {
+            ps.setInt(1, courseId);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
 
-        while (rs.next()){
-            Course course = extractFromResultSet(rs);
-            studentCourses.add(course);
+            return rs.getInt("count");
+        }catch (SQLException e){
+            LOGGER.warn(ERROR_MESSAGE, query, e);
+            throw new DataAccessException(getMessage(query), e);
         }
-
-        return studentCourses;
     }
+
 
    private boolean updateThemes(Course course) {
 

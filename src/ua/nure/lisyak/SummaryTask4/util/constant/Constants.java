@@ -1,20 +1,44 @@
 package ua.nure.lisyak.SummaryTask4.util.constant;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ua.nure.lisyak.SummaryTask4.exception.FileProcessingException;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+
 /**
  * String constants.
  *
  */
 public final class Constants {
-    /**
-     * Application configuration paths.
-     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(Constants.class);
+
+    public static final List<String> SORT_TYPES;
+    public static final List<String> SEARCH_TYPES;
+
+    static {
+        try (InputStream resource = SettingsAndFolderPaths.class.getResourceAsStream(SettingsAndFolderPaths.getConfigFile())) {
+            Properties prop = new Properties();
+            prop.load(resource);
+            SORT_TYPES = Arrays.asList(prop.getProperty("sort.types").split(";"));
+            SEARCH_TYPES = Arrays.asList(prop.getProperty("search.types").split(";"));
+
+        } catch (IOException e) {
+            LOGGER.error("Cannot load file: '{}'", SettingsAndFolderPaths.getConfigFile());
+            throw new FileProcessingException("Cannot load file: '" + SettingsAndFolderPaths.getConfigFile() + "'", e);
+        }
+    }
     public static final class ROUTES{
 
         public static final String DATABASE_PROPS_PATH = "database.properties";
         public static final String UPLOAD_AUTHORS_DIRECTORY = "authors/";
         public static final String UPLOAD_BOOKS_DIRECTORY = "books/";
         public static final String UPLOAD_DIR = "B://library/";
-        public static final String BUNDLE_PATH = "messages";
+        public static final String BUNDLE_PATH = "/messages";
     }
 
     /**
@@ -63,7 +87,18 @@ public final class Constants {
         public static final String NEW_LOCALE = "newLocale";
         public static final String LOGIN = "login";
         public static final String PASSWORD = "password";
-
+        public static final String COURSE_ID = "courseId";
+        public static final String EMAIL_CONFIRMATION_PARAMETER = "uId";
+        public static final String REFERRER_ID = "referrerId";
+        public static final java.lang.String IS_DIALOG = "all";
+        public static final java.lang.String SEARCH_BY = "searchBy";
+        public static final java.lang.String SEARCH_PARAM = "search";
+        public static final java.lang.String LIMIT = "limit";
+        public static final java.lang.String OFFSET = "offset";
+        public static final java.lang.String SORT_BY = "sortBy";
+        public static final String TUTORS = "tutors";
+        public static final String ORDER = "order";
+        public static final String THEMES = "themes";
 
         private Attributes() {
         }
@@ -93,19 +128,28 @@ public final class Constants {
         public static final String PAGES_COUNT = "validator.pagesCount";
         public static final String YEAR = "validator.year";
         public static final String TOO_BIG = "validator.tooBig";
-        public static final String CANT_BE_NEGATIVE = "validator.cannotBeNegative";
-
+        public static final String START_DATE_GREATER_END_DATE = "validator.startGreaterEnd";
     }
 
     public static final class ServletPaths {
+        public static final String AJAX = "ajax/";
+        public static final String LOCALE = "/locale";
+
         public static final class User{
+
             public static final String USER = "/user/";
-
             public static final String HOME = USER+ "home";
-            public static final String LOGOUT = USER + "logout";
 
+            public static final String LOGOUT = USER + "logout";
             public static final String COURSE_LIST = USER + "courses";
             public static final String LOGIN = USER + "login";
+            public static final String REGISTER = USER + "register";
+            public static final String PROFILE = USER + "profile";
+
+            //TODO fix servlets to get PathVariable instead of param
+            public static final String SUBSCRIPTION = USER+ AJAX + "subscription/*";
+            public static final String MESSAGES = USER + "messages/*";
+            public static final String AJAX_COURSE_LIST = USER + AJAX + "course/*";
         }
 
 
@@ -117,12 +161,16 @@ public final class Constants {
         public static final String ENABLED_ISSUE = PREFIX + "issue.jsp";
 
         public static final class User {
-            private static final String USER_PREFIX = "user/";
+            private static final String USER_PREFIX = PREFIX + "user/";
 
-            public static final String LOGIN = PREFIX+ USER_PREFIX + "login.jsp";
+            public static final String LOGIN = USER_PREFIX + "login.jsp";
+            public static final String REGISTRATION = USER_PREFIX +"registration.jsp";
+            public static final String HOME = USER_PREFIX +"index.jsp";
+            public static final String COURSES = USER_PREFIX + "courses.jsp";
         }
     }
 
     private Constants(){
+
     }
 }

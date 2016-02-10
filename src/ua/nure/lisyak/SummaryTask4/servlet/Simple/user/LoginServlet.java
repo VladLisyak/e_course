@@ -13,8 +13,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet(urlPatterns = {Constants.ServletPaths.User.LOGIN})
 public class LoginServlet extends BaseServlet{
@@ -47,33 +45,36 @@ public class LoginServlet extends BaseServlet{
         Validator validator = new UserValidator(login, password, getLocale(req));
 
         if (validator.hasErrors()) {
-            setErrors(req, resp, validator, login, password);
+            sendError(req, resp, validator);
             return;
         }
 
         User user = getUserService().getByLogin(login);
         if (!user.getLogin().equals(login)) {
             validator.putIssue("login", "validator.invalidLogin");
-            setErrors(req, resp, validator, login, password);
+            sendError(req, resp, validator);
             return;
         }
         LOGGER.debug("User found. The id is {} and login is {}", user.getId(), user.getLogin());
 
         if (!user.getPassword().equals(password)) {
             validator.putIssue("password", "validator.invalidPassword");
-            setErrors(req, resp, validator, login, password);
+            sendError(req, resp, validator);
             return;
         }
 
         switch (user.getEnabled()){
             case WAITING:{
                 validator.putIssue("enabled", "validator.confirmation");
-                forward(Constants.Pages.ENABLED_ISSUE, req, resp);
-                break;
+                sendError(req, resp, validator);
+                /*forward(Constants.Pages.ENABLED_ISSUE, req, resp);*/
+                return;
             }
             case BANNED:{
                 validator.putIssue("enabled", "validator.banned");
-                forward(Constants.Pages.ENABLED_ISSUE, req, resp);
+                sendError(req, resp, validator);
+                /*forward(Constants.Pages.ENABLED_ISSUE, req, resp);*/
+                return;
             }
         }
 
@@ -81,38 +82,6 @@ public class LoginServlet extends BaseServlet{
 
         redirectToAction(Constants.ServletPaths.User.COURSE_LIST, req, resp);
 
-    }
-
-
-    /**
-     * Sets errors which prevents logging and
-     * forward back to validation form
-     *
-     * @param validator {@link Validator} entity that contains errors to be set.
-     * @param login login of account that the user trying to get access to.
-     * @param password password of account that the user trying to get access to
-     *
-     * @throws ServletException
-     * @throws IOException
-     */
-    private void setErrors(HttpServletRequest request, HttpServletResponse response, Validator validator, String login, String password)
-            throws ServletException, IOException {
-        //request.setAttribute("messages", validator.getMessages());
-
-        LOGGER.trace("Errors found while logging in. With login {}", login);
-
-        List<String> messages = new ArrayList<>();
-
-        /*for (Map.Entry<String, String> message : validator.getMessages().entrySet()) {
-            messages.add(message.getValue());
-        }*/
-
-        print(request, response, validator.getMessages());
-/*
-        request.setAttribute("login", login);
-        request.setAttribute("password", password);*/
-
-        //forward(PagesPaths.Main.LOGIN, request, response);
     }
 
 }

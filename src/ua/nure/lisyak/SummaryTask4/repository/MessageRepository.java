@@ -20,7 +20,7 @@ public interface MessageRepository {
 
     List<Message> getByToId(int id);*/
 
-    int getUnreadCount(int id);
+    Integer getUnreadCount(int id);
 
     Message getUnread(int toId, int fromId);
 

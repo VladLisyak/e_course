@@ -100,7 +100,9 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
         String sql = QueryStorage.get(GET_USER);
         User user = (User) get(id, sql);
 
+        if(user != null){
         user.setRoles(getRoles(id));
+        }
 
         return user;
 
@@ -110,13 +112,14 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
     public User getByEmail(String email) {
         String sql = QueryStorage.get(GET_USER_BY_EMAIL);
         try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
-            User user;
+            User user = null;
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
 
+            if(rs.next()){
             user = extractFromResultSet(rs);
-
             user.setRoles(getRoles(user.getId()));
+            }
 
             return user;
         } catch (SQLException e) {
@@ -161,11 +164,12 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
 
             ResultSet rs = ps.executeQuery();
 
-            User user;
+            User user = null;
 
-            user = extractFromResultSet(rs);
+            if(rs.next()) {
+                user = extractFromResultSet(rs);
                 user.setRoles(getRoles(user.getId()));
-
+            }
 
             return user;
         } catch (SQLException e) {
@@ -177,7 +181,6 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
     @Override
      protected User extractFromResultSet(ResultSet resultSet) throws SQLException{
         User user;
-        resultSet.next();
         user = new User();
         user.setId(resultSet.getInt("id"));
         user.setName(resultSet.getString("name"));

@@ -54,12 +54,12 @@ public abstract class JdbcAbstractRepository<T> {
 
     protected T get(int id, String sql){
         try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
-            T entity;
+            T entity = null;
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-
-            entity = extractFromResultSet(rs);
-
+            if(rs.next()) {
+                entity = extractFromResultSet(rs);
+            }
             return entity;
         } catch (SQLException e) {
             LOGGER.warn(ERROR_MESSAGE, sql, e);

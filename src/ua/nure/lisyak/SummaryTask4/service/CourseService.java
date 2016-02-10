@@ -29,8 +29,6 @@ public interface CourseService {
 
    /* List<StudentCourse> getAllByStudentId(int id);*/
 
-    List<Course> getSorted(int offset, int limit);
-
     List<Course> getAllByTutorId(int id);
 
     List<Course> getAllFinished();
@@ -40,4 +38,15 @@ public interface CourseService {
 
     @Cacheable
     List<Course> getAll();
+
+    @Cacheable
+    List<Course> getAllByStudentId(int id);
+
+    @Cacheable
+    List<Course> getAllExceptSubscribed(int id);
+
+    @Cacheable
+    List<Course> getFiltered(int offset, int limit, String searchBy, String search, String sortBy, String order);
+
+    Course getByTitleAndTutor(String title, int tutorId);
 }

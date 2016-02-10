@@ -17,8 +17,6 @@ public interface CourseRepository {
 
     Course get(int id);
 
-    List<Course> getSorted(int offset, int limit);
-
     List<Course> getAllByTutorId(int id);
 
     List<Course> getAllFinished();
@@ -27,4 +25,13 @@ public interface CourseRepository {
 
     List<Course> getAll();
 
+    List<Course> getAllByStudentId(int id);
+
+    List<Course> getAllExceptSubscribed(int id);
+
+    List<Course> getSorted(int offset, int limit, String sort, String order);
+
+    List<Course> getFiltered(int offset, int limit, String searchBy, String search, String sortBy, String order);
+
+    Course getByTitleAndTutor(String title, int tutorId);
 }

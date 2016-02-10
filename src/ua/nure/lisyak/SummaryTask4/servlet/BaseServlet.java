@@ -7,13 +7,14 @@ import ua.nure.lisyak.SummaryTask4.model.User;
 import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
 import ua.nure.lisyak.SummaryTask4.util.file.FileService;
 import ua.nure.lisyak.SummaryTask4.util.serialization.StreamSerializer;
+import ua.nure.lisyak.SummaryTask4.util.validation.Validator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 
 /**
  * Basic servlet that provides functionality for operating 
@@ -93,7 +94,7 @@ public abstract class BaseServlet extends AbstractServlet {
 
     }
 
-    /**
+/*    *//**
      * Prints a list of items to response
      *
      * @param request  request
@@ -102,7 +103,7 @@ public abstract class BaseServlet extends AbstractServlet {
      * @param c        class of items stored in the list
      * @param <T>      type of items stored in the list
      * @throws IOException if an input or output exception occurred
-     */
+     *//*
     protected <T> void print(HttpServletRequest request, HttpServletResponse response, List<T> list, Class<T> c) throws IOException {
         StreamSerializer serializer = (StreamSerializer) getServletContext().getAttribute(Constants.Attributes.SERIALIZER);
         if (serializer == null) {
@@ -118,6 +119,62 @@ public abstract class BaseServlet extends AbstractServlet {
             response.setContentType("text/html");
             response.sendError(500);
         }
+    }*/
+
+
+    /**
+     * Sets errors which prevents logging and
+     * forward back to validation form
+     *
+     * @param validator {@link Validator} entity that contains errors to be set.
+     * @throws ServletException
+     * @throws IOException
+     */
+    protected void sendError(HttpServletRequest request, HttpServletResponse response, Validator validator)
+            throws ServletException, IOException {
+        //request.setAttribute("messages", validator.getMessages());
+
+        LOGGER.trace("Errors found while processing operation");
+
+       // print(request, response, validator.getMessages());
+
+        StringBuilder error = new StringBuilder();
+
+        for (Map.Entry<String, String> errorEntry :validator.getMessages().entrySet()) {
+            error.append(errorEntry.getValue()).append("\n");
+        }
+
+        response.sendError(400, error.toString());
+
+    }
+
+
+
+    protected void checkUserUniqueness(User user, Validator validator) {
+        User existingUser = getUserService().getByLogin(user.getLogin());
+        if (existingUser != null) {
+            validator.putIssue("login", "validate.loginTaken");
+        }
+        existingUser = getUserService().getByEmail(user.getEmail());
+        if (existingUser != null) {
+            validator.putIssue("email", "validate.emailTaken");
+        }
+    }
+
+
+    protected Integer getEntityId(HttpServletRequest req) {
+
+        String path = req.getRequestURI();
+        String servletPath = req.getServletPath();
+        String[] slicedPath = path.split("/");
+        String[] slicedServletPath = servletPath.split("/");
+        String variableString = slicedPath[slicedPath.length-1];
+
+        if(slicedServletPath[slicedServletPath.length-1].contains(variableString)){
+            return null;
+        }
+
+        return Integer.parseInt(variableString);
     }
 
 /*    *//**
@@ -125,7 +182,7 @@ public abstract class BaseServlet extends AbstractServlet {
      * @param usr {@link User} to check
      * @param validator {@link Validator} entity for testing.
      *//*
-    protected void checkUniqueness(User usr, Validator validator) {
+    protected void checkUserUniqueness(User usr, Validator validator) {
         User existingUser = getUserService().getByLogin(usr.getLogin(), usr.getId());
         if (existingUser != null){
         	

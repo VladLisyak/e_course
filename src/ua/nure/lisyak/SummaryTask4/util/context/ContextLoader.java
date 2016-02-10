@@ -9,6 +9,7 @@ import ua.nure.lisyak.SummaryTask4.annotation.Service;
 import ua.nure.lisyak.SummaryTask4.db.AnnotationHandler;
 import ua.nure.lisyak.SummaryTask4.db.holder.ConnectionHolder;
 import ua.nure.lisyak.SummaryTask4.db.manager.ConnectionManager;
+import ua.nure.lisyak.SummaryTask4.util.LocaleUtil;
 import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
 import ua.nure.lisyak.SummaryTask4.util.constant.SettingsAndFolderPaths;
 import ua.nure.lisyak.SummaryTask4.util.file.FileServiceImpl;
@@ -52,6 +53,7 @@ public class ContextLoader extends AbstractContextLoader {
         context.setAttribute(Constants.Attributes.CONNECTION_MANAGER, manager);
         context.setAttribute(Constants.Attributes.FILE_SERVICE, new FileServiceImpl(SettingsAndFolderPaths.getUploadDirectory()));
         context.setAttribute(Constants.Attributes.CACHE, cacheManager.getCache(Constants.Attributes.CACHE));
+        context.setAttribute(Constants.Attributes.LOCALE_UTIL, new LocaleUtil(Constants.ROUTES.BUNDLE_PATH, (String[]) context.getAttribute(Constants.Attributes.LOCALES));
         context.setAttribute(Constants.Attributes.SERIALIZER, new JSONSerializer());
 
         cacheManager.addCache(Constants.Attributes.CACHE);

@@ -96,13 +96,18 @@ public class JdbcMessageRepository extends JdbcAbstractRepository implements Mes
     }*/
 
     @Override
-    public int getUnreadCount(int id) {
+    public Integer getUnreadCount(int id) {
         String sql = QueryStorage.get(GET_UNREAD_COUNT);
         try(PreparedStatement ps = getConnection().prepareStatement(sql)) {
             ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
 
-            return rs.getInt("message_count");
+            Integer unreadCount = null;
+
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+            unreadCount = rs.getInt("message_count");}
+
+            return unreadCount;
         }catch (SQLException e) {
             LOGGER.warn(ERROR_MESSAGE, sql, e);
             throw new DataAccessException(getMessage(sql), e);
@@ -116,8 +121,13 @@ public class JdbcMessageRepository extends JdbcAbstractRepository implements Mes
             ps.setInt(1, fromId);
             ps.setInt(2, toId);
             ResultSet rs = ps.executeQuery();
+            Message unreadMessage = null;
 
-            return extractFromResultSet(rs);
+            if(rs.next()){
+                unreadMessage = extractFromResultSet(rs);
+            }
+
+            return unreadMessage;
         }catch (SQLException e) {
             LOGGER.warn(ERROR_MESSAGE, sql, e);
             throw new DataAccessException(getMessage(sql), e);
