@@ -26,4 +26,5 @@ public interface MessageRepository {
 
     List<Message> getDialog(int fId, int sId);
 
+    List<Message> getUnread(Integer userId);
 }

@@ -45,15 +45,19 @@ public class ContextLoader extends AbstractContextLoader {
      * @param cacheManager
      */
     public ContextLoader(ConnectionHolder holder, ConnectionManager manager, ServletContext context, CacheManager cacheManager) {
-        this.cacheManager = cacheManager;
+        String[] localesFromContext = (String[]) context.getAttribute(Constants.Attributes.LOCALES);
+        String[] defaultLocales = {"en", "ru"};
+        String[] localesToSet = localesFromContext==null? defaultLocales:localesFromContext;
 
+        this.cacheManager = cacheManager;
         this.servletContext = context;
         this.connectionHolder = holder;
         this.connectionManager = manager;
+
+        context.setAttribute(LocaleUtil.class.getName(), new LocaleUtil(Constants.ROUTES.BUNDLE_PATH, localesToSet));
         context.setAttribute(Constants.Attributes.CONNECTION_MANAGER, manager);
         context.setAttribute(Constants.Attributes.FILE_SERVICE, new FileServiceImpl(SettingsAndFolderPaths.getUploadDirectory()));
         context.setAttribute(Constants.Attributes.CACHE, cacheManager.getCache(Constants.Attributes.CACHE));
-        context.setAttribute(Constants.Attributes.LOCALE_UTIL, new LocaleUtil(Constants.ROUTES.BUNDLE_PATH, (String[]) context.getAttribute(Constants.Attributes.LOCALES));
         context.setAttribute(Constants.Attributes.SERIALIZER, new JSONSerializer());
 
         cacheManager.addCache(Constants.Attributes.CACHE);

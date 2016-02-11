@@ -124,13 +124,17 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
 
     @Override
     public boolean delete(int id) {
-        return super.delete(id, DELETE_COURSE);
+        String sql = QueryStorage.get(DELETE_COURSE);
+        return super.delete(id, sql);
     }
 
     @Override
     public Course get(int id) {
         String sql = QueryStorage.get(GET_COURSE);
         Course course = (Course) get(id, sql);
+        if(course!=null){
+        course.setTutor(userRep.get(course.getTutorId()));
+        course.setThemes(getThemes(id));}
 
         return course;
     }
@@ -255,8 +259,8 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
         course.setTitle(resultSet.getString("title"));
         course.setDescription(resultSet.getString("description"));
         course.setImage(resultSet.getString("image"));
-        course.setStartDate(resultSet.getDate("startDate"));
-        course.setEndDate(resultSet.getDate("endDate"));
+        course.setStartDate(resultSet.getDate("start_date"));
+        course.setEndDate(resultSet.getDate("end_date"));
         course.setStatus(Status.valueOf(resultSet.getString("status")));
         course.setTutorId(resultSet.getInt("tutor_id"));
         course.setSubscribersCount(resultSet.getInt("count"));
@@ -320,7 +324,7 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
-                roles.add(Theme.valueOf(rs.getString("role")));
+                roles.add(Theme.valueOf(rs.getString("theme")));
             }
 
             return roles;

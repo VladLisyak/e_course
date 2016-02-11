@@ -52,4 +52,9 @@ public class JdbcJournalEntryService implements JournalEntryService {
     public List<JournalEntry> getAllByTutorId(int id) {
         return repository.getAllByTutorId(id);
     }
+
+    @Override
+    public JournalEntry getByTutorId(int tutorId, int entryId) {
+        return repository.getByTutorId(tutorId, entryId);
+    }
 }

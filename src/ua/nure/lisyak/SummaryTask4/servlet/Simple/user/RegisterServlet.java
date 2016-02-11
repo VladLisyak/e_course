@@ -8,6 +8,7 @@ import ua.nure.lisyak.SummaryTask4.model.User;
 import ua.nure.lisyak.SummaryTask4.model.enums.Enabled;
 import ua.nure.lisyak.SummaryTask4.model.enums.Role;
 import ua.nure.lisyak.SummaryTask4.servlet.BaseServlet;
+import ua.nure.lisyak.SummaryTask4.util.LocaleUtil;
 import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
 import ua.nure.lisyak.SummaryTask4.util.constant.SettingsAndFolderPaths;
 import ua.nure.lisyak.SummaryTask4.util.mail.MailService;
@@ -24,8 +25,6 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 @WebServlet(name = "RegisterServlet", urlPatterns = {Constants.ServletPaths.User.REGISTER})
 @MultipartConfig(
@@ -102,7 +101,7 @@ public class RegisterServlet extends BaseServlet {
 
         User savedUser = saveUser(imagePart, user);
 
-        if (savedUser == null || savedUser.getId()>0) {
+        if (savedUser == null) {
             validator.putIssue("error", "validator.error500");
             sendError(request, response, validator);
             return;
@@ -124,27 +123,17 @@ public class RegisterServlet extends BaseServlet {
     }
 
 
-
-    private User saveUser(Part part, User user) {
-        User savedUser = getUserService().save(user);
-        if (part != null && part.getSize() != 0) {
-            String image = getFileService().saveFile(savedUser.getId(), SettingsAndFolderPaths.getUploadUsersDirectory(), part);
-            savedUser.setImage(image);
-            return getUserService().update(savedUser);
-        }
-        return null;
-    }
-
     //TODO if there will be any more explicit BundleResource declarations, create class Translator
     private void sendEmail(HttpServletRequest request, User user) throws MessagingException {
         String locale = getLocale(request);
-        ResourceBundle bundle = getTranslator();
-        String title = bundle.getString("mail.userConfirm.title");
+        LocaleUtil translator = getTranslator();
+
+        String title = translator.translate("mail.userConfirm.title", locale);
 
         String to = user.getEmail();
         String template = MailService.getTemplate("/mailTemp/userConfirmed.html");
-        String body = bundle.getString("mail.userConfirm.body");
-        String linkText = bundle.getString("mail.userConfirm.reff");
+        String body = translator.translate("mail.userConfirm.body", locale);
+        String linkText = translator.translate("mail.userConfirm.reff", locale);
 
         template = template
                 .replace("${language}", locale)

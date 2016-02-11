@@ -48,4 +48,9 @@ public class JdbcMessageService implements MessageService {
     public List<Message> getDialog(int fId, int sId) {
         return repository.getDialog(fId, sId);
     }
+
+    @Override
+    public List<Message> getUnread(Integer userId) {
+        return repository.getUnread(userId);
+    }
 }

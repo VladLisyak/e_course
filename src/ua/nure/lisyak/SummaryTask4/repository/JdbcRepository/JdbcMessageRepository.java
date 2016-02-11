@@ -20,6 +20,7 @@ public class JdbcMessageRepository extends JdbcAbstractRepository implements Mes
     private static final String GET_UNREAD_COUNT = "message.unread.count";
     private static final String GET_DIALOG = "message.dialog";
     private static final String GET_UNREAD_FROM_TO = "message.unread.from.to";
+    private static final String GET_UNREAD = "message.unread";
 
     /**
      * Creates a new repository.
@@ -140,6 +141,21 @@ public class JdbcMessageRepository extends JdbcAbstractRepository implements Mes
         return queryListForTwoParams(fId, sId, sql);
     }
 
+    @Override
+    public List<Message> getUnread(Integer userId) {
+        String sql = QueryStorage.get(GET_UNREAD);
+        try(PreparedStatement ps = getConnection().prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+
+            return getAllFromResultSet(rs);
+        }catch (SQLException e) {
+            LOGGER.warn(ERROR_MESSAGE, sql, e);
+            throw new DataAccessException(getMessage(sql), e);
+        }
+    }
+
     private List<Message> getAllFromResultSet(ResultSet rs) throws SQLException {
         List<Message> messages = new ArrayList<>();
         while(rs.next()){
@@ -153,6 +169,7 @@ public class JdbcMessageRepository extends JdbcAbstractRepository implements Mes
     protected Message extractFromResultSet(ResultSet rs) throws SQLException {
         Message m = new Message();
         m.setId(rs.getInt("id"));
+        m.setReferrerName(rs.getString("name"));
         m.setFromId(rs.getInt("from_id"));
         m.setToId(rs.getInt("to_id"));
         m.setDate(rs.getDate("date"));

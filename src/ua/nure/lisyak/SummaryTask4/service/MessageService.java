@@ -29,4 +29,6 @@ public interface MessageService {
     Message getUnread(int toId, int fromId);
 
     List<Message> getDialog(int fId, int sId);
+
+    List<Message> getUnread(Integer userId);
 }

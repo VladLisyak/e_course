@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import ua.nure.lisyak.SummaryTask4.exception.SerializerException;
 import ua.nure.lisyak.SummaryTask4.model.User;
 import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
+import ua.nure.lisyak.SummaryTask4.util.constant.SettingsAndFolderPaths;
 import ua.nure.lisyak.SummaryTask4.util.file.FileService;
 import ua.nure.lisyak.SummaryTask4.util.serialization.StreamSerializer;
 import ua.nure.lisyak.SummaryTask4.util.validation.Validator;
@@ -13,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.Map;
 
@@ -148,7 +150,25 @@ public abstract class BaseServlet extends AbstractServlet {
 
     }
 
+    protected User saveUser(Part part, User user) {
+        User savedUser = getUserService().save(user);
+        if (part != null && part.getSize() != 0) {
+            String image = getFileService().saveFile(savedUser.getId(), SettingsAndFolderPaths.getUploadUsersDirectory(), part);
+            savedUser.setImage(image);
+            return getUserService().update(savedUser);
+        }
+        return null;
+    }
 
+    private boolean updateUser(Part part, User user) {
+        User savedUser = getUserService().get(user.getId());
+        if (part != null && part.getSize() != 0) {
+            String image = getFileService().saveFile(savedUser.getId(), SettingsAndFolderPaths.getUploadUsersDirectory(), part);
+            savedUser.setImage(image);
+        }
+
+        return getUserService().update(savedUser)!=null;
+    }
 
     protected void checkUserUniqueness(User user, Validator validator) {
         User existingUser = getUserService().getByLogin(user.getLogin());

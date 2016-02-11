@@ -5,6 +5,7 @@ import ua.nure.lisyak.SummaryTask4.service.CourseService;
 import ua.nure.lisyak.SummaryTask4.service.JournalEntryService;
 import ua.nure.lisyak.SummaryTask4.service.MessageService;
 import ua.nure.lisyak.SummaryTask4.service.UserService;
+import ua.nure.lisyak.SummaryTask4.util.LocaleUtil;
 import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
 
 import javax.servlet.ServletContext;
@@ -26,14 +27,15 @@ public abstract class AbstractServlet<T> extends HttpServlet {
     private JournalEntryService journalEntryService;
     private CourseService courseService;
     private String defaultLocale;
+    private LocaleUtil translator;
     private String[] locales;
 
     @Override
     public void init() throws ServletException {
         ServletContext context = getServletContext();
         userService = (UserService) context.getAttribute(UserService.class.getName());
-        String s = MessageService.class.getName();
         messageService = (MessageService) context.getAttribute(MessageService.class.getName());
+        translator = (LocaleUtil) context.getAttribute(LocaleUtil.class.getName());
         journalEntryService = (JournalEntryService) context.getAttribute(JournalEntryService.class.getName());
         courseService = (CourseService) context.getAttribute(CourseService.class.getName());
 
@@ -73,6 +75,10 @@ public abstract class AbstractServlet<T> extends HttpServlet {
         } catch (NumberFormatException e) {
             return null;
         }
+    }
+
+    protected LocaleUtil getTranslator(){
+        return translator;
     }
 
     /**

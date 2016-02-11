@@ -99,6 +99,8 @@ public final class Constants {
         public static final String TUTORS = "tutors";
         public static final String ORDER = "order";
         public static final String THEMES = "themes";
+        public static final String LOCALE_UTIL = "translator";
+        public static final String COUNT = "count";
 
         private Attributes() {
         }
@@ -132,8 +134,13 @@ public final class Constants {
     }
 
     public static final class ServletPaths {
-        public static final String AJAX = "ajax/";
+        private static final String AJAX = "ajax/";
         public static final String LOCALE = "/locale";
+        //TODO fix servlets to get PathVariable instead of param
+        public static final String SUBSCRIPTION = AJAX + "subscription/*";
+        public static final String MESSAGES = AJAX + "messages/*";
+        public static final String AJAX_COURSE_LIST =  AJAX + "course/*";
+        public static final String USER =AJAX + "user/*" ;
 
         public static final class User{
 
@@ -146,13 +153,22 @@ public final class Constants {
             public static final String REGISTER = USER + "register";
             public static final String PROFILE = USER + "profile";
 
-            //TODO fix servlets to get PathVariable instead of param
-            public static final String SUBSCRIPTION = USER+ AJAX + "subscription/*";
-            public static final String MESSAGES = USER + "messages/*";
-            public static final String AJAX_COURSE_LIST = USER + AJAX + "course/*";
+
         }
 
 
+        public class Admin {
+            private static final String ADMIN = "/admin/";
+
+            public static final String COURSES = ADMIN + "courses";
+            public static final String USERS = ADMIN + "users";
+        }
+
+        public class Tutor {
+            private static final String ADMIN = "/admin/";
+
+            public static final String JOURNAL = ADMIN + "journal";
+        }
     }
 
     public static final class Pages {
@@ -167,6 +183,21 @@ public final class Constants {
             public static final String REGISTRATION = USER_PREFIX +"registration.jsp";
             public static final String HOME = USER_PREFIX +"index.jsp";
             public static final String COURSES = USER_PREFIX + "courses.jsp";
+        }
+
+        public class Admin {
+            private static final String ADMIN_PREFIX = PREFIX + "admin/";
+
+            public static final String COURSES = ADMIN_PREFIX + "courses.jsp";
+            public static final String USERS = "user.jsp";
+        }
+
+        public class Tutor {
+            private static final String TUTOR_PREFIX = PREFIX + "tutor/";
+
+            public static final String JOURNAL = TUTOR_PREFIX + "journal.jsp";
+            public static final String DIALOG = TUTOR_PREFIX  + "dialog.jsp";
+            public static final String UNREAD = TUTOR_PREFIX + "unread.jsp";
         }
     }
 

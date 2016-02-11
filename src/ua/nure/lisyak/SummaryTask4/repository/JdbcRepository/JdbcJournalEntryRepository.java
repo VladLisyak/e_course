@@ -25,6 +25,7 @@ public class JdbcJournalEntryRepository extends JdbcAbstractRepository implement
     private static final String GET_JOURNAL_ENTRY_BY_COURSE = "journal.by.course";
     private static final String GET_JOURNAL_ENTRY_BY_STUDENT = "journal.get.by.student";
     private static final String DELETE_BY_STUDENT = "journal.delete.by.student";
+    private static final String GET_BY_TUTOR_ID = "journal.get.by.tutor";
 
     /**
      * Creates a new repository.
@@ -89,6 +90,25 @@ public class JdbcJournalEntryRepository extends JdbcAbstractRepository implement
     public List<JournalEntry> getAllByTutorId(int id) {
         String sql = QueryStorage.get(GET_JOURNAL_ENTRY_BY_TUTOR);
         return getAllBy( id, sql);
+    }
+
+    @Override
+    public JournalEntry getByTutorId(int tutorId, int entryId) {
+        String sql = QueryStorage.get(GET_BY_TUTOR_ID);
+        try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+            ps.setInt(1, tutorId);
+            ps.setInt(2, entryId);
+
+            ResultSet rs = ps.executeQuery();
+            if(!rs.next()){
+                return null;
+            }
+
+            return extractFromResultSet(rs);
+        } catch (SQLException e) {
+            LOGGER.warn(ERROR_MESSAGE, sql, e);
+            throw new DataAccessException(getMessage(sql), e);
+        }
     }
 
     @Override

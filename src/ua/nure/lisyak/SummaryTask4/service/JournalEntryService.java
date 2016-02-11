@@ -28,4 +28,6 @@ public interface JournalEntryService {
     List<JournalEntry> getAllByCourseId(int id);
 
     List<JournalEntry> getAllByTutorId(int id);
+
+    JournalEntry getByTutorId(int tutorId, int entryId);
 }

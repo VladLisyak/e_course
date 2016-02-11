@@ -5,6 +5,16 @@ import java.util.Date;
 public class Message extends Entity {
     private int fromId;
 
+    private int toId;
+
+    private String message;
+
+    private Boolean read;
+
+    private Date date;
+
+    private String referrerName;
+
     public int getFromId() {
         return fromId;
     }
@@ -45,12 +55,17 @@ public class Message extends Entity {
         this.date = date;
     }
 
-    private int toId;
-    private String message;
+    public Boolean getRead() {
+        return read;
+    }
 
-    private Boolean read;
+    public String getReferrerName() {
+        return referrerName;
+    }
 
-    private Date date;
+    public void setReferrerName(String referrerName) {
+        this.referrerName = referrerName;
+    }
 
 
 }

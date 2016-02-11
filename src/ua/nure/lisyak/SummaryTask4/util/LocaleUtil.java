@@ -1,6 +1,8 @@
 package ua.nure.lisyak.SummaryTask4.util;
 
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -11,7 +13,7 @@ import java.util.ResourceBundle;
  */
 //TODO See if this class needs deleting
 public class LocaleUtil {
-	private static final Logger LOGGER = Logger.getLogger(LocaleUtil.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(LocaleUtil.class);
 	private Map<String, ResourceBundle> resBundles;
 
     /**
@@ -24,7 +26,7 @@ public class LocaleUtil {
         resBundles = new HashMap<>();
         for (String locale : locales) {
             ResourceBundle resBundle = ResourceBundle.getBundle(bundlePath, new Locale(locale));
-            LOGGER.debug("Bundle for path"+ bundlePath + " "+ locale);
+            LOGGER.debug("Bundle for path {} and locale {}", bundlePath, locale);
             resBundles.put(locale, resBundle);
         }
     }
@@ -37,9 +39,9 @@ public class LocaleUtil {
      * @return found interpretation
      */
     public String translate(String key, String locale) {
-    	LOGGER.debug(key + " translation " +locale);
+    	LOGGER.debug("{} translation {}", key, locale);
         ResourceBundle bundle = resBundles.get(locale);
-        LOGGER.debug((bundle!=null) ? bundle.getLocale(): "bundle for " +locale+ " is empty");
+        LOGGER.debug((bundle!=null) ? bundle.getLocale().toString(): "bundle for " +locale+ " is empty");
         
         if (bundle == null) {
             return null;

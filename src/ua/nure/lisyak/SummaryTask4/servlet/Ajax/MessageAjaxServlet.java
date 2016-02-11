@@ -1,7 +1,6 @@
-package ua.nure.lisyak.SummaryTask4.servlet.Ajax.user;
+package ua.nure.lisyak.SummaryTask4.servlet.Ajax;
 
 import ua.nure.lisyak.SummaryTask4.model.Message;
-import ua.nure.lisyak.SummaryTask4.servlet.Ajax.BaseAjaxServlet;
 import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
 
 import javax.servlet.ServletException;
@@ -11,17 +10,24 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(urlPatterns = {Constants.ServletPaths.User.MESSAGES})
+@WebServlet(urlPatterns = {Constants.ServletPaths.MESSAGES})
 public class MessageAjaxServlet extends BaseAjaxServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer referrerId = getIntParam(req, Constants.Attributes.REFERRER_ID);
         Boolean isDialog = getBooleanParam(req, Constants.Attributes.IS_DIALOG, false);
-        Integer userId = getCurrentUser(req).getId();
+        Integer userId = getIntParam(req, Constants.Attributes.ID);
+        Boolean count = getBooleanParam(req, Constants.Attributes.COUNT, false);
+
+        if(count){
+            print(req,resp, getMessageService().getUnreadCount(userId));
+            return;
+        }
 
         if(referrerId == null){
-            resp.sendError(400);
+            List<Message> allUnread = getMessageService().getUnread(userId);
+            print(req, resp, allUnread);
             return;
         }
 
