@@ -9,11 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(Constants.ServletPaths.User.PROFILE)
-public class ProfileServlet extends BaseServlet{
-
+@WebServlet(Constants.ServletPaths.User.MESSAGES)
+public class MessageServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        forward(Constants.Pages.User.PROFILE, req, resp);
+        Integer id = getEntityId(req);
+        if(id != null){
+            req.setAttribute(Constants.Attributes.ID, id);
+            forward(Constants.Pages.User.DIALOG, req, resp);
+        }else{
+            forward(Constants.Pages.User.UNREAD, req, resp);
+        }
     }
 }

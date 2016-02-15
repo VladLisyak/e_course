@@ -40,7 +40,8 @@ public class LocaleFilter extends BaseFilter{
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
     	String locale = request.getParameter(Constants.Attributes.LANG);
           if (locale == null) {
-              locale = getLocaleFromSession(request);}
+              locale = getLocaleFromSession(request);
+          }
 
           LOGGER.info("Locale filter set locale to "+locale);
           setLocale(request, response, locale);
@@ -52,21 +53,21 @@ public class LocaleFilter extends BaseFilter{
      * @param filterConfig {@link FilterConfig} locales to be loaded from.
      */
     private void loadLocales(FilterConfig filterConfig) {
-			locales = (String[]) filterConfig.getServletContext().getAttribute(Constants.Attributes.LOCALES);		
-			
-			if (locales == null){
+			locales = filterConfig.getServletContext().getInitParameter(Constants.Attributes.LOCALES).split(" ");
+
+			if (locales.length== 0){
 				LOGGER.error("Locales loading error, locale are set to default - " + COMMON_DEFAULT_LOCALE);
 				defaultLocale = COMMON_DEFAULT_LOCALE;
 				locales = new String[]{defaultLocale};
-				
+
 			}else{
-				defaultLocale = locales[0];     
+				defaultLocale = locales[0];
 			}
-			
+
 			servContext = filterConfig.getServletContext();
 	        servContext.setAttribute(Constants.Attributes.LOCALES, locales);
-				
 			servContext.setAttribute(Constants.Attributes.DEFAULT_LOCALE, defaultLocale);
+
 			LOGGER.debug("Default locale loaded to "+ defaultLocale);
     }
 

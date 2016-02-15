@@ -1,1 +1,6 @@
-"no"
+{
+  "language": "en",
+  "login": "Login",
+  "userLogin": "Login",
+  "userPassword": "Password"
+}

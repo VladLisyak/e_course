@@ -101,6 +101,7 @@ public final class Constants {
         public static final String THEMES = "themes";
         public static final String LOCALE_UTIL = "translator";
         public static final String COUNT = "count";
+        public static final String COURSES = "myCourses";
 
         private Attributes() {
         }
@@ -134,7 +135,7 @@ public final class Constants {
     }
 
     public static final class ServletPaths {
-        private static final String AJAX = "ajax/";
+        private static final String AJAX = "/ajax/";
         public static final String LOCALE = "/locale";
         //TODO fix servlets to get PathVariable instead of param
         public static final String SUBSCRIPTION = AJAX + "subscription/*";
@@ -153,7 +154,7 @@ public final class Constants {
             public static final String REGISTER = USER + "register";
             public static final String PROFILE = USER + "profile";
 
-
+            public static final String MESSAGES = USER + "messages";
         }
 
 
@@ -165,9 +166,11 @@ public final class Constants {
         }
 
         public class Tutor {
-            private static final String ADMIN = "/admin/";
+            private static final String TUTOR = "/tutor/";
 
-            public static final String JOURNAL = ADMIN + "journal";
+            public static final String JOURNAL = TUTOR + "journal";
+            public static final String PROFILE = TUTOR + "profile";
+            public static final String MESSAGES = TUTOR + "messages";
         }
     }
 
@@ -183,6 +186,9 @@ public final class Constants {
             public static final String REGISTRATION = USER_PREFIX +"registration.jsp";
             public static final String HOME = USER_PREFIX +"index.jsp";
             public static final String COURSES = USER_PREFIX + "courses.jsp";
+            public static final String PROFILE = USER_PREFIX + "profile.jsp";
+            public static final String DIALOG = USER_PREFIX + "dialog.jsp";
+            public static final String UNREAD = USER_PREFIX + "unread.jsp";
         }
 
         public class Admin {
@@ -198,6 +204,7 @@ public final class Constants {
             public static final String JOURNAL = TUTOR_PREFIX + "journal.jsp";
             public static final String DIALOG = TUTOR_PREFIX  + "dialog.jsp";
             public static final String UNREAD = TUTOR_PREFIX + "unread.jsp";
+            public static final String PROFILES = TUTOR_PREFIX + "profile.jsp";
         }
     }
 

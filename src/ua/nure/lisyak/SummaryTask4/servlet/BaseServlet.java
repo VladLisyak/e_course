@@ -146,7 +146,7 @@ public abstract class BaseServlet extends AbstractServlet {
             error.append(errorEntry.getValue()).append("\n");
         }
 
-        response.sendError(400, error.toString());
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST,error.toString());
 
     }
 

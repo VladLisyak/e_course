@@ -20,7 +20,6 @@ public class LoginServlet extends BaseServlet{
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        LOGGER.error("User already logged in");
         User user = getCurrentUser(req);
         if (user != null) {
             redirectToAction(Constants.ServletPaths.User.COURSE_LIST, req, resp);
@@ -37,7 +36,6 @@ public class LoginServlet extends BaseServlet{
             redirectToAction(Constants.ServletPaths.User.COURSE_LIST, req, resp);
             return;
         }
-        LOGGER.error("in Post");
 
         String login = getStringParam(req, Constants.Attributes.LOGIN);
         String password = getStringParam(req, Constants.Attributes.PASSWORD);
@@ -50,7 +48,7 @@ public class LoginServlet extends BaseServlet{
         }
 
         User user = getUserService().getByLogin(login);
-        if (!user.getLogin().equals(login)) {
+        if ( user== null || !user.getLogin().equals(login)) {
             validator.putIssue("login", "validator.invalidLogin");
             sendError(req, resp, validator);
             return;

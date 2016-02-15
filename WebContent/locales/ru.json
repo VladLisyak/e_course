@@ -1,1 +1,6 @@
-"no"
+{
+    "language": "ru",
+    "login": "Войти",
+    "userLogin": "Логин",
+    "userPassword": "Пароль"
+}
