@@ -22,7 +22,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -71,17 +70,17 @@ public class RegisterServlet extends BaseServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = new User();
-        user.setName(request.getParameter("name"));
-        user.setEmail(request.getParameter("email"));
-        user.setLogin(request.getParameter("login"));
-        user.setPassword(request.getParameter("password"));
+        user.setName(getStringParam(request, "name"));
+        user.setEmail(getStringParam(request, "email"));
+        user.setLogin(getStringParam(request, "login"));
+        user.setPassword(getStringParam(request, "password"));
         String locale = getLocale(request);
 
-        Part imagePart = request.getPart(Constants.Attributes.IMAGE);
+        String image = getStringParam(request, Constants.Attributes.IMAGE);
 
         Validator validator = new UserValidator(user, locale);
 
-        if (imagePart != null && imagePart.getSize() != 0 && !SettingsAndFolderPaths.isImage(imagePart.getContentType())) {
+        if (image != null && !SettingsAndFolderPaths.isImage(image)) {
             validator.putIssue(Constants.Attributes.IMAGE, "validator.invalidFileFormat");
         }
 
@@ -99,13 +98,13 @@ public class RegisterServlet extends BaseServlet {
         user.addRole(Role.STUDENT);
         user.setEnabled(Enabled.WAITING);
 
-        User savedUser = saveUser(imagePart, user);
+       User savedUser = saveUser(image, user);
 
-        if (savedUser == null) {
+       if (savedUser == null) {
             validator.putIssue("error", "validator.error500");
             sendError(request, response, validator);
             return;
-        }
+       }
 
         HttpSession session = request.getSession();
         try {
@@ -119,7 +118,7 @@ public class RegisterServlet extends BaseServlet {
             LOGGER.warn("Unable to send confirmation message. Account should be confirmed manually.");
         }
 
-        redirectToAction(Constants.Pages.User.HOME, request, response);
+        redirectToAction(Constants.ServletPaths.User.HOME, request, response);
     }
 
 
@@ -131,7 +130,7 @@ public class RegisterServlet extends BaseServlet {
         String title = translator.translate("mail.userConfirm.title", locale);
 
         String to = user.getEmail();
-        String template = MailService.getTemplate("/mailTemp/userConfirmed.html");
+        String template = MailService.getTemplate("/templates/mail/userConfirmed.html");
         String body = translator.translate("mail.userConfirm.body", locale);
         String linkText = translator.translate("mail.userConfirm.reff", locale);
 

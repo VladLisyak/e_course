@@ -1,5 +1,6 @@
 package ua.nure.lisyak.SummaryTask4.util.file;
 
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.nure.lisyak.SummaryTask4.exception.FileProcessingException;
@@ -8,6 +9,7 @@ import javax.mail.internet.ContentDisposition;
 import javax.mail.internet.ParseException;
 import javax.servlet.http.Part;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -32,18 +34,26 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public String saveFile(Integer name, String subDirectory, Part file) {
+    public String saveFile(Integer name, String subDirectory, String file) {
         return saveFile("" + name, subDirectory, file);
     }
 
     @Override
-    public String saveFile(String name, String subDirectory, Part file) {
+    public String saveFile(String name, String subDirectory, String file) {
         String extension = getExtension(file);
+        String imageToSave = file.split(",")[1];
         String fileName = generateFileName(name, extension);
+
+        byte[] imageByteArray = decodeImage(imageToSave);
+
         String path = folderPath + subDirectory + fileName;
-        writeFileOnDisk(file, path);
+        writeFileOnDisk(imageByteArray, path);
         LOGGER.debug("File saved to {} ", path);
         return fileName;
+    }
+
+    public static byte[] decodeImage(String imageDataString) {
+        return Base64.decodeBase64(imageDataString);
     }
 
     @Override
@@ -68,21 +78,12 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public String getExtension(String fileName) {
-        int index = fileName.lastIndexOf('.');
-        if (index == -1) {
-            return null;
-        }
+    public String getExtension(String file) {
         try {
-            return fileName.substring(index + 1);
+            return file.split("/|;")[1];
         } catch (IndexOutOfBoundsException e) {
             throw new FileProcessingException("Cannot get file extension", e);
         }
-    }
-
-    private String getExtension(Part file) {
-        String fileName = getFileName(file);
-        return getExtension(fileName);
     }
 
     private String getFileName(Part filePart) {
@@ -101,9 +102,16 @@ public class FileServiceImpl implements FileService {
         return null;
     }
 
-    private void writeFileOnDisk(Part file, String filePath) {
+    private void writeFileOnDisk(byte[] file, String filePath) {
         try {
-            file.write(filePath);
+            File f = new File(filePath);
+            if(f.exists()){
+                f.delete();
+            }
+                if(f.createNewFile()){
+                    FileOutputStream imageOutFile = new FileOutputStream(f);
+                    imageOutFile.write(file);
+                }
         } catch (IOException e) {
             LOGGER.error("File cannot be written on disk", e);
             throw new FileProcessingException("File cannot be save", e);

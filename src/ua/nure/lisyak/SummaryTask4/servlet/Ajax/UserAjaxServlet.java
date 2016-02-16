@@ -14,7 +14,6 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -60,11 +59,11 @@ public class UserAjaxServlet extends BaseAjaxServlet{
         String locale = getStringParam(req,Constants.Attributes.LANG);
         LocaleUtil translator = getTranslator();
 
-        Part imagePart = req.getPart(Constants.Attributes.IMAGE);
+        String imagePart = getStringParam(req, Constants.Attributes.IMAGE);
 
         Validator validator = new UserValidator(user, locale);
 
-        if (imagePart != null && imagePart.getSize() != 0 && !SettingsAndFolderPaths.isImage(imagePart.getContentType())) {
+        if (imagePart != null && !SettingsAndFolderPaths.isImage(imagePart)) {
             validator.putIssue(Constants.Attributes.IMAGE, "validator.invalidFileFormat");
         }
 
@@ -99,11 +98,11 @@ public class UserAjaxServlet extends BaseAjaxServlet{
         User user = (User)getEntityFromRequest(req, User.class);
         String locale = getStringParam(req,Constants.Attributes.LANG);
 
-        Part imagePart = req.getPart(Constants.Attributes.IMAGE);
+        String imagePart = getStringParam(req, Constants.Attributes.IMAGE);
 
         Validator validator = new UserValidator(user, locale);
 
-        if (imagePart != null && imagePart.getSize() != 0 && !SettingsAndFolderPaths.isImage(imagePart.getContentType())) {
+        if (imagePart != null && !SettingsAndFolderPaths.isImage(imagePart)) {
             validator.putIssue(Constants.Attributes.IMAGE, "validator.invalidFileFormat");
         }
 

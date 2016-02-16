@@ -57,6 +57,7 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
             ResultSet generatedKeys = ps.getGeneratedKeys();
             generatedKeys.next();
             int id = generatedKeys.getInt(1);
+            user.setId(id);
 
             updateRoles(user);
 
@@ -213,15 +214,15 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
     }
 
     private boolean updateRoles(User user) {
-        if(user.getRoles()==null){
+        if(user.getRoles()==null || user.getRoles().size()==0){
             user.addRole(Role.STUDENT);
         }
 
-        if (!deleteOldRoles(user.getId()))
-            return false;
+        deleteOldRoles(user.getId());
 
 
         for (Role role : user.getRoles()) {
+            LOGGER.debug("Adding role {}", role);
             addRole(user.getId(), role);
         }
 
@@ -242,7 +243,7 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
     }
 
     private boolean deleteOldRoles(int userId){
-        return super.delete(userId, DELETE_OLD);
+        return super.delete(userId, QueryStorage.get(DELETE_OLD));
     }
 
     private boolean addRole(int themeId, Role role) {

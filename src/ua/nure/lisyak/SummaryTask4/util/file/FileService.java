@@ -1,6 +1,5 @@
 package ua.nure.lisyak.SummaryTask4.util.file;
 
-import javax.servlet.http.Part;
 import java.io.File;
 import java.util.List;
 
@@ -17,7 +16,7 @@ public interface FileService {
      * @param file         part that contains the file
      * @return generated file name
      */
-    String saveFile(Integer name, String subDirectory, Part file);
+    String saveFile(Integer name, String subDirectory, String file);
 
     /**
      * Saves with the specified name to the specified directory from the {@code file} part.
@@ -27,7 +26,7 @@ public interface FileService {
      * @param file         part that contains the file
      * @return generated file name
      */
-    String saveFile(String name, String subDirectory, Part file);
+    String saveFile(String name, String subDirectory, String file);
 
     /**
      * Loads file from using relative path to it
@@ -54,7 +53,6 @@ public interface FileService {
      * Gets the file extension from its name.
      * @param fileName file name
      * @return file extension
-     * @throws ua.nure.bekuzarov.SummaryTask4.exception.FileException if extension cannot be obtained
      */
     String getExtension(String fileName);
 }

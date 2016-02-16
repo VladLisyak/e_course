@@ -7,21 +7,19 @@ import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
 import ua.nure.lisyak.SummaryTask4.util.constant.SettingsAndFolderPaths;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(urlPatterns = {Constants.ServletPaths.AJAX_COURSE_LIST})
-@MultipartConfig(
+/*@MultipartConfig(
         location = SettingsAndFolderPaths.Images.TEMP_DIRECTORY,
         fileSizeThreshold = SettingsAndFolderPaths.Images.SIZE_THRESHOLD,
         maxFileSize = SettingsAndFolderPaths.Images.MAX_SIZE
-)
+)*/
 public class CourseAjaxServlet extends BaseAjaxServlet {
 
     @Override
@@ -75,7 +73,7 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
             return;
         }
 
-        Part imagePart = req.getPart(Constants.Attributes.IMAGE);
+        String imagePart = getStringParam(req,Constants.Attributes.IMAGE);
 
         if (saveCourse(imagePart, course)!=null){
             print(req, resp,  translator.translate("object.saved", locale));
@@ -92,7 +90,7 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
         Course course = (Course) getEntityFromRequest(req, Course.class);
         String locale = getStringParam(req,Constants.Attributes.LANG);
         LocaleUtil translator = getTranslator();
-        Part imagePart = req.getPart(Constants.Attributes.IMAGE);
+        String imagePart = getStringParam(req, Constants.Attributes.IMAGE);
 
         if(updateCourse(imagePart, course)){
             print(req, resp,  translator.translate("object.saved", locale));
@@ -125,22 +123,22 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
         return existingCourse==null;
     }
 
-    private Course saveCourse(Part part, Course course) {
+    private Course saveCourse(String image, Course course) {
         Course savedCourse = getCourseService().save(course);
-        if (part != null && part.getSize() != 0) {
-            String image = getFileService().saveFile(savedCourse.getId(), SettingsAndFolderPaths.getUploadCoursesDirectory(), part);
-            savedCourse.setImage(image);
+        if (image != null) {
+            String imageName = getFileService().saveFile(savedCourse.getId(), SettingsAndFolderPaths.getUploadCoursesDirectory(), image);
+            savedCourse.setImage(imageName);
             return getCourseService().update(savedCourse);
         }
         return null;
     }
 
 
-    private boolean updateCourse(Part part, Course course) {
+    private boolean updateCourse(String image, Course course) {
         Course savedCourse = getCourseService().get(course.getId());
-        if (part != null && part.getSize() != 0) {
-            String image = getFileService().saveFile(savedCourse.getId(), SettingsAndFolderPaths.getUploadCoursesDirectory(), part);
-            savedCourse.setImage(image);;
+        if (image != null) {
+            String imageName = getFileService().saveFile(savedCourse.getId(), SettingsAndFolderPaths.getUploadCoursesDirectory(), image);
+            savedCourse.setImage(imageName);
         }
 
         return getCourseService().update(savedCourse)!=null;

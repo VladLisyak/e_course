@@ -184,7 +184,7 @@ public final class Constants {
 
             public static final String LOGIN = USER_PREFIX + "login.jsp";
             public static final String REGISTRATION = USER_PREFIX +"registration.jsp";
-            public static final String HOME = USER_PREFIX +"index.jsp";
+            public static final String HOME = PREFIX + "index.jsp";
             public static final String COURSES = USER_PREFIX + "courses.jsp";
             public static final String PROFILE = USER_PREFIX + "profile.jsp";
             public static final String DIALOG = USER_PREFIX + "dialog.jsp";

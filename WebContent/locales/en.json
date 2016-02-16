@@ -2,5 +2,7 @@
   "language": "en",
   "login": "Login",
   "userLogin": "Login",
-  "userPassword": "Password"
+  "userPassword": "Password",
+  "registered": "Registered. Confirmation letter was sent to email.",
+  "logged": "Logged"
 }

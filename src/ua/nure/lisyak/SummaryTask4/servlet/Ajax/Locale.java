@@ -12,11 +12,16 @@ import java.util.Arrays;
 
 @WebServlet(urlPatterns = {Constants.ServletPaths.LOCALE})
 public class Locale extends BaseServlet{
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        print(req, resp, getLocale(req));
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String newLocale = req.getParameter(Constants.Attributes.NEW_LOCALE);
         req.getSession().setAttribute(Constants.Attributes.CURRENT_LOCALE, newLocale);
+        req.setAttribute(Constants.Attributes.CURRENT_LOCALE, newLocale);
 
         if(Arrays.asList(getLocales()).contains(newLocale)){
             req.getRequestDispatcher("locales/"+newLocale + ".json").forward(req,resp);

@@ -105,8 +105,9 @@ public final class SettingsAndFolderPaths {
         return UPDATE_ORDERS_TASK_EXECUTION_TIME;
     }
 
-    public static boolean isImage(String contentType) {
-        return ALLOWED_IMAGE_TYPES.contains(contentType);
+    public static boolean isImage(String imageString) {
+        String type = imageString.split("/|;")[1];
+        return ALLOWED_IMAGE_TYPES.contains(type);
     }
 
     public static String getBundlePath() {
