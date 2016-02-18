@@ -8,6 +8,8 @@ public class CourseWithSubscription extends Course {
 
     public CourseWithSubscription(Course course, Boolean subsribed) {
         super(
+                course.getId(),
+                course.getSubscribersCount(),
                 course.getTutorId(),
                 course.getTitle(),
                 course.getDescription(),

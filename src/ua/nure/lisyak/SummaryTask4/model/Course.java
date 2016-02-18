@@ -24,7 +24,7 @@ public class Course extends Entity{
     public Course() {
     }
 
-    public Course(int tutorId, String title, String description, String image, Date startDate, Date endDate, Status status, User tutor, Set<Theme> themes) {
+    public Course(int id, int count, int tutorId, String title, String description, String image, Date startDate, Date endDate, Status status, User tutor, Set<Theme> themes) {
 
         this.tutorId = tutorId;
         this.title = title;
@@ -35,6 +35,8 @@ public class Course extends Entity{
         this.status = status;
         this.tutor = tutor;
         this.themes = themes;
+        this.id = id;
+        this.subscribersCount = count;
     }
 
     public int getTutorId() {

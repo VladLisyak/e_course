@@ -132,9 +132,6 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
     public Course get(int id) {
         String sql = QueryStorage.get(GET_COURSE);
         Course course = (Course) get(id, sql);
-        if(course!=null){
-        course.setTutor(userRep.get(course.getTutorId()));
-        course.setThemes(getThemes(id));}
 
         return course;
     }
@@ -263,7 +260,11 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
         course.setEndDate(resultSet.getDate("end_date"));
         course.setStatus(Status.valueOf(resultSet.getString("status")));
         course.setTutorId(resultSet.getInt("tutor_id"));
-        course.setSubscribersCount(resultSet.getInt("count"));
+        int count = resultSet.getInt("count");
+        course.setSubscribersCount(count);
+
+        course.setTutor(userRep.get(course.getTutorId()));
+        course.setThemes(getThemes(course.getId()));
 
         return course;
     }

@@ -3,6 +3,25 @@ body{
     /*padding:50px;*/
 }
 
+.space {
+    padding-left: 415px;
+}
+
+p,h2 {
+    -ms-word-break: break-all;
+    word-break: break-all;
+
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+}
+
+p{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 #login-dp{
     min-width: 250px;
     padding: 14px 14px 0;

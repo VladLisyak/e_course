@@ -49,7 +49,7 @@ public class ResourceFilter extends BaseFilter {
      * Gets file from locale storage.
      */
     private void receiveFromStorage(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String path = request.getServletPath();
+        String path = request.getRequestURI();
         String filePath = path.replace(SettingsAndFolderPaths.getResourcePath(), "");
         File file = fileServ.getFile(filePath);
         LOGGER.debug("Getting file "+ file.getAbsoluteFile());

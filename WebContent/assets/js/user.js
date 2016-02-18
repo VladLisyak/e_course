@@ -4,9 +4,61 @@
 // user.js
 // create angular app
 var app = angular.module('app', ['ngMessages']);
-app.controller('loginRegisterController',['$rootScope',
+app.run(function($rootScope, $http) {
+    $rootScope.changeLang = function(id){
+        $http.post("/locale?newLocale="+id, {}).success(function(data, status) {
+            $rootScope.locale = id;
+            $rootScope.lang = data;
+        })
+    };
 
-    function($scope, $rootScope, $http) {
+    $rootScope.defineLang = function(){
+        $http.get("/locale", {}).success(function(data) {
+            $rootScope.changeLang(data);
+        })
+    };
+
+    $rootScope.checkLang = function(lang){
+        if (lang== $rootScope.lang['language']){
+            return true;
+        }
+    };
+
+    $rootScope.hide = function(){
+        $('#editRow').modal('hide');
+    };
+
+
+    $rootScope.closeNoty = function(){
+        if ( $rootScope.failedNote) {
+            $rootScope.failedNote.close();
+            $rootScope.failedNote = undefined;
+        }
+    };
+
+    $rootScope.failNoty = function(reason) {
+        $rootScope.closeNoty();
+        $rootScope.failedNote = noty({
+            text: reason,
+            type: 'error',
+            layout: 'bottomRight',
+            timeout: 2500
+        });
+    };
+
+    $rootScope.successNoty = function(reason) {
+        $rootScope.closeNoty();
+        $rootScope.failedNote = noty({
+            text: reason,
+            type: 'success',
+            layout: 'bottomRight',
+            timeout: 2500
+        });
+    };
+});
+app.controller('loginRegisterController',
+
+    function($scope, $http, $rootScope) {
         $scope.notyFlag = "new";
         $scope.nameTemplate = "^[A-ZА-Яа-яa-z]+$";
         $scope.loginTemplate = "^[A-ZА-Яа-яa-z0-9_-]+$";
@@ -18,57 +70,9 @@ app.controller('loginRegisterController',['$rootScope',
 
         $scope.failedNote = undefined;
 
-
+        $scope.sortTypes = {};
+        
         $scope.formData = {};
-        $scope.changeLang = function(id){
-            console.log(id);
-
-            $http.post("/locale?newLocale="+id, {}).success(function(data, status) {
-                $scope.locale = id;
-                $scope.lang = data;
-            })
-        };
-
-        $scope.defineLang = function(){
-            $http.get("/locale", {}).success(function(data) {
-                $scope.changeLang(data);
-            })
-        };
-
-        $scope.checkLang = function(lang){
-            if (lang==$scope.lang.language){
-                return true;
-            }
-        };
-
-
-        $scope.closeNoty = function(){
-            if ($scope.failedNote) {
-                $scope.failedNote.close();
-                $scope.failedNote = undefined;
-            }
-        };
-
-        $scope.failNoty = function(reason) {
-            $scope.closeNoty();
-            $scope.failedNote = noty({
-                text: reason,
-                type: 'error',
-                layout: 'bottomRight',
-                timeout: 2500
-            });
-        };
-
-        $scope.successNoty = function(reason) {
-            $scope.closeNoty();
-            $scope.failedNote = noty({
-                text: reason,
-                type: 'success',
-                layout: 'bottomRight',
-                timeout: 2500
-            });
-        };
-
 
 
         // function to submit the form after all validation has occurred
@@ -82,11 +86,11 @@ app.controller('loginRegisterController',['$rootScope',
             }).success(function (){
                 switch (path) {
                     case $scope.login:{
-                        $scope.notyFlag = $scope.lang['logged'];
+                        $scope.notyFlag = $rootScope.lang['logged'];
                         break;
                     }
                     case $scope.register:{
-                        $scope.notyFlag = $scope.lang['registered'];
+                        $scope.notyFlag =  $rootScope.lang['registered'];
                         console.log($scope.notyFlag);
                         break;
                     }
@@ -94,7 +98,7 @@ app.controller('loginRegisterController',['$rootScope',
                     default:
                 }
                 if(!($scope.notyFlag.localeCompare('new')==0)){
-                    $scope.successNoty($scope.notyFlag);
+                    $rootScope.successNoty($scope.notyFlag);
                     $scope.notyFlag = 'new';
                 }
 
@@ -102,7 +106,7 @@ app.controller('loginRegisterController',['$rootScope',
             }).error(function (data){
                     $scope.message = data;
                     console.log(data);
-                    $scope.failNoty($scope.message.substring($scope.message.indexOf('<u>'), $scope.message.indexOf('</u>')));
+                    $rootScope.failNoty($scope.message.substring($scope.message.indexOf('<u>'), $scope.message.indexOf('</u>')));
             });
         };
 
@@ -111,24 +115,45 @@ app.controller('loginRegisterController',['$rootScope',
         };
 
         angular.element(document).ready(function () {
-            $scope.defineLang();
+            $rootScope.defineLang();
         });
-}]);
+});
 
 app.controller('coursesController',
 
-    function($scope, $http) {
+    function($scope, $http, $rootScope) {
+        $rootScope.userId = undefined;
 
         angular.element(document).ready(function () {
+            $rootScope.defineLang();
             $http.get("/ajax/course", {})
                 .success(function(data) {
                 $scope.courses = data;
             }).error(function (data){
                 $scope.message = data;
                 console.log(data);
-                $scope.failNoty($scope.message.substring($scope.message.indexOf('<u>'), $scope.message.indexOf('</u>')));
+                $rootScope.failNoty($scope.message.substring($scope.message.indexOf('<u>'), $scope.message.indexOf('</u>')));
             });
         });
+
+        $scope.subscribeToCourse = function(id){
+            $http.post("/ajax/subscription/"+id, {})
+                .success(function(data) {
+                    $rootScope.successNoty($scope['operationSuccess']);
+                    $rootScope.hide();
+                }).error(function(data){
+                    $scope.message = data;
+                    $rootScope.failNoty($scope.message.substring($scope.message.indexOf('<u>'), $scope.message.indexOf('</u>')));
+                });
+        };
+
+        $scope.detailsData = {};
+
+        $scope.courseDetails = function(object){
+            console.log(object);
+            $scope.detailsData = object;
+            $('#editRow').modal();
+        }
 });
 
 app.directive('appFilereader', function($q) {

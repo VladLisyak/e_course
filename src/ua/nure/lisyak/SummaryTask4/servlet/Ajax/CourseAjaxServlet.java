@@ -48,7 +48,7 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
             String order = getStringParam(req, Constants.Attributes.ORDER, "asc");
 
 
-            List<Course> studentSubscriptions = getCourseService().getAllByStudentId(getIntParam(req, Constants.Attributes.ID));
+            List<Course> studentSubscriptions = getCourseService().getAllByStudentId(getIntParam(req, Constants.Attributes.ID, 0));
             List<Course> filteredCourses = getCourseService().getFiltered(offset,limit,searchBy,search,sort,order);
 
             for (Course course : filteredCourses) {

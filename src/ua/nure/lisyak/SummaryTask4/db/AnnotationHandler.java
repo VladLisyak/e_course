@@ -60,7 +60,11 @@ public class AnnotationHandler implements InvocationHandler {
 
             StringBuilder sb = new StringBuilder(method.getName());
             for ( Object o: args) {
-                sb.append(o.toString());
+                if(o!=null){
+                    sb.append(o.toString());
+                }else{
+                    sb.append("null");
+                }
             }
 
             if (cacheable){
