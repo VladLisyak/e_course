@@ -3,10 +3,10 @@ package ua.nure.lisyak.SummaryTask4.transferObjects;
 import ua.nure.lisyak.SummaryTask4.model.Course;
 
 public class CourseWithSubscription extends Course {
-    private Boolean subsribed;
+    private Boolean subscribed;
 
 
-    public CourseWithSubscription(Course course, Boolean subsribed) {
+    public CourseWithSubscription(Course course, Boolean subscribed) {
         super(
                 course.getId(),
                 course.getSubscribersCount(),
@@ -20,15 +20,15 @@ public class CourseWithSubscription extends Course {
                 course.getTutor(),
                 course.getThemes());
 
-        this.subsribed = subsribed;
+        this.subscribed = subscribed;
     }
 
-    public Boolean getSubsribed() {
-        return subsribed;
+    public Boolean getSubscribed() {
+        return subscribed;
     }
 
-    public void setSubsribed(Boolean subsribed) {
-        this.subsribed = subsribed;
+    public void setSubscribed(Boolean subscribed) {
+        this.subscribed = subscribed;
     }
 
 }

@@ -1,8 +1,10 @@
 package ua.nure.lisyak.SummaryTask4.model;
 
 import ua.nure.lisyak.SummaryTask4.model.enums.Status;
+import ua.nure.lisyak.SummaryTask4.model.enums.Theme;
 
 import java.util.Date;
+import java.util.Set;
 
 public class JournalEntry extends Entity{
     private int courseId;
@@ -12,10 +14,28 @@ public class JournalEntry extends Entity{
     private Date startDate;
 
     private Date endDate;
+    Set<Theme> themes;
 
     private String studentEmail;
+
     private Status status;
     private int mark;
+
+    public JournalEntry(int courseId, int studentId) {
+        this.courseId = courseId;
+        this.studentId = studentId;
+    }
+
+    public JournalEntry() {
+    }
+
+    public Set<Theme> getThemes() {
+        return themes;
+    }
+
+    public void setThemes(Set<Theme> themes) {
+        this.themes = themes;
+    }
 
     public int getCourseId() {
         return courseId;

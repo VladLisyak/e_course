@@ -3,9 +3,9 @@ package ua.nure.lisyak.SummaryTask4.service.JdbcService;
 import ua.nure.lisyak.SummaryTask4.annotation.Autowired;
 import ua.nure.lisyak.SummaryTask4.annotation.Service;
 import ua.nure.lisyak.SummaryTask4.model.Course;
-import ua.nure.lisyak.SummaryTask4.model.enums.Theme;
 import ua.nure.lisyak.SummaryTask4.repository.CourseRepository;
 import ua.nure.lisyak.SummaryTask4.service.CourseService;
+import ua.nure.lisyak.SummaryTask4.util.Tuple;
 import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
 
 import java.util.List;
@@ -20,10 +20,10 @@ public class JdbcCourseService implements CourseService {
         return repository.save(course);
     }
 
-    @Override
+   /* @Override
     public List<Course> getAllByTheme(Theme theme) {
         return repository.getAllByTheme(theme);
-    }
+    }*/
 
     @Override
     public Course update(Course course) {
@@ -41,10 +41,10 @@ public class JdbcCourseService implements CourseService {
     }
 
     @Override
-    public List<Course> getFiltered(int offset, int limit, String searchBy, String search, String sortBy, String order) {
+    public Tuple<List<? extends Course>, Integer> getFiltered(int offset, int limit, String searchBy, String search, String sortBy, String order) {
         String sortParam = Constants.SORT_TYPES.contains(sortBy) ? sortBy : Constants.SORT_TYPES.get(0);
-        String orderParam = order.equals("ASC")
-                || order.equals("DESC")
+        String orderParam = order.equalsIgnoreCase("ASC")
+                || order.equalsIgnoreCase("DESC")
                 ? order : "ASC";
         if(searchBy!=null && Constants.SEARCH_TYPES.contains(searchBy)){
 
@@ -57,6 +57,11 @@ public class JdbcCourseService implements CourseService {
     @Override
     public Course getByTitleAndTutor(String title, int tutorId) {
         return repository.getByTitleAndTutor(title, tutorId);
+    }
+
+    @Override
+    public Float getStudentAverageMark(int id) {
+        return repository.getStudentAverageMark(id);
     }
 
     @Override
@@ -74,10 +79,10 @@ public class JdbcCourseService implements CourseService {
         return repository.setAllFinished();
     }
 
-    @Override
+    /*@Override
     public List<Course> getAll() {
         return repository.getAll();
-    }
+    }*/
 
     @Override
     public List<Course> getAllByStudentId(int id) {

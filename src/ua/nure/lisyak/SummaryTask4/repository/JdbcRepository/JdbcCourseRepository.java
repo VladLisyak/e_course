@@ -10,9 +10,10 @@ import ua.nure.lisyak.SummaryTask4.model.enums.Status;
 import ua.nure.lisyak.SummaryTask4.model.enums.Theme;
 import ua.nure.lisyak.SummaryTask4.repository.CourseRepository;
 import ua.nure.lisyak.SummaryTask4.repository.UserRepository;
+import ua.nure.lisyak.SummaryTask4.util.Tuple;
 
-import java.sql.*;
 import java.sql.Date;
+import java.sql.*;
 import java.util.*;
 
 @Repository
@@ -40,11 +41,21 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
     private static final String GET_BY_TITLE_AND_TUTOR = "course.get.by.title.and.tutor";
     private static final String SAVE_TUTOR = "course.tutor.save";
     private static final String DELETE_TUTOR = "course.tutor.delete";
-
-    private static final Map<String, String> orders = new HashMap<>();
+    private static final String GET_COURSE_COUNT = "course.count";
+    private static final String AVERAGE_MARK = "student.average.mark";
 
     @Autowired
     private UserRepository userRep;
+    private static final Map<String, String> orders = new HashMap<>();
+
+
+    public UserRepository getUserRep() {
+        return userRep;
+    }
+
+    public void setUserRep(UserRepository userRep) {
+        this.userRep = userRep;
+    }
 
 
     /**
@@ -54,12 +65,14 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
      */
     public JdbcCourseRepository(ConnectionHolder connectionHolder) {
         super(connectionHolder);
+    }
+
+    static {
         orders.put("id", "id");
         orders.put("title", "title");
         orders.put("length", "end_date - start_date");
         orders.put("count", "count");
     }
-
 
     @Override
     public Course save(Course course) {
@@ -94,13 +107,6 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
     }*/
 
     @Override
-    public List<Course> getAllByTheme(Theme theme) {
-        String sql = QueryStorage.get(GET_BY_THEME);
-        return getAllByEnum(theme.toString(), sql);
-    }
-
-
-    @Override
     public Course update(Course course) {
         String sql = QueryStorage.get(UPDATE_COURSE);
         try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
@@ -128,6 +134,7 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
         return super.delete(id, sql);
     }
 
+
     @Override
     public Course get(int id) {
         String sql = QueryStorage.get(GET_COURSE);
@@ -135,25 +142,6 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
 
         return course;
     }
-
-
-    @Override
-    public List<Course> getAllByTutorId(int id) {
-        return getAllBy(id, GET_ALL_BY_TUTOR_ID);
-    }
-
-    @Override
-    public List<Course> getAllFinished(){
-        String sql = QueryStorage.get(GET_ALL_FINISHED);
-        try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
-
-            return extractListFromPreparedStatement(ps);
-        }catch (SQLException e){
-            LOGGER.warn(ERROR_MESSAGE, sql, e);
-            throw new DataAccessException(getMessage(sql), e);
-        }
-    }
-
 
     @Override
     public boolean setAllFinished(){
@@ -164,67 +152,6 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
         }catch (SQLException e){
             LOGGER.warn(ERROR_MESSAGE, sql, e);
             throw new DataAccessException(getMessage(sql), e);
-        }
-    }
-
-    @Override
-    public List<Course> getAll() {
-        String sql = QueryStorage.get(GET_ALL);
-        try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
-
-            return extractListFromPreparedStatement(ps);
-        }catch (SQLException e){
-            LOGGER.warn(ERROR_MESSAGE, sql, e);
-            throw new DataAccessException(getMessage(sql), e);
-        }
-    }
-
-    @Override
-    public List<Course> getAllByStudentId(int id) {
-        String sql = QueryStorage.get(GET_ALL_BY_STUDENT_ID);
-        return getAllBy(id, sql);
-    }
-
-    @Override
-    public List<Course> getAllExceptSubscribed(int id) {
-        String sql = QueryStorage.get(GET_ALL_EXCEPT_SUBSCRIBED);
-        return getAllBy(id, sql);
-    }
-
-
-
-    @Override
-    public List<Course> getSorted(int offset, int limit, String sort, String order) {
-        String query = QueryStorage.get(GET_WITH_COUNT);
-        try (PreparedStatement ps = getConnection().prepareStatement(query)) {
-            ps.setString(1, orders.get(sort));
-            ps.setString(2, order);
-            ps.setInt(3, offset);
-            ps.setInt(4, limit);
-
-            return extractListFromPreparedStatement(ps);
-        }catch (SQLException e){
-            LOGGER.warn(ERROR_MESSAGE, query, e);
-            throw new DataAccessException(getMessage(query), e);
-        }
-    }
-
-    //TODO check getSorted and getFiltered
-     @Override
-    public List<Course> getFiltered(int offset, int limit, String searchBy, String search, String sortBy, String order) {
-        String query = QueryStorage.get(GET_FILTERED);
-        try (PreparedStatement ps = getConnection().prepareStatement(query)) {
-            ps.setString(1, searchBy);
-            ps.setString(2, search);
-            ps.setString(3, orders.get(sortBy));
-            ps.setString(4, order);
-            ps.setInt(5, offset);
-            ps.setInt(6, limit);
-
-            return extractListFromPreparedStatement(ps);
-        }catch (SQLException e){
-            LOGGER.warn(ERROR_MESSAGE, query, e);
-            throw new DataAccessException(getMessage(query), e);
         }
     }
 
@@ -244,6 +171,21 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
         }catch (SQLException e){
             LOGGER.warn(ERROR_MESSAGE, sql, e);
             throw new DataAccessException(getMessage(sql), e);
+        }
+    }
+
+    @Override
+    public Float getStudentAverageMark(int id) {
+        String query = QueryStorage.get(AVERAGE_MARK);
+        try (PreparedStatement ps = getConnection().prepareStatement(query)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+
+            return rs.getFloat("mark");
+        }catch (SQLException e){
+            LOGGER.warn(ERROR_MESSAGE, query, e);
+            throw new DataAccessException(getMessage(query), e);
         }
     }
 
@@ -280,7 +222,8 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
         }
     }
 
-    private Integer getSubscribersCount(int courseId){
+
+    /*private Integer getSubscribersCount(int courseId){
         String query = QueryStorage.get(SUBSCRIBERS_COUNT);
         try (PreparedStatement ps = getConnection().prepareStatement(query)) {
             ps.setInt(1, courseId);
@@ -292,8 +235,7 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
             LOGGER.warn(ERROR_MESSAGE, query, e);
             throw new DataAccessException(getMessage(query), e);
         }
-    }
-
+    }*/
 
    private boolean updateThemes(Course course) {
 
@@ -317,7 +259,8 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
         return super.delete(userId, DELETE_OLD_THEME);
     }
 
-    private Set<Theme> getThemes(int id) {
+    @Override
+    public Set<Theme> getThemes(int id) {
         String sql = QueryStorage.get(GET_THEMES);
         try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
             Set<Theme> roles = new HashSet<>();
@@ -335,11 +278,102 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
         }
     }
 
-    public UserRepository getUserRep() {
-        return userRep;
+  /*  @Override
+    public List<Course> getAllByTheme(Theme theme) {
+        String sql = QueryStorage.get(GET_BY_THEME);
+        return getAllByEnum(theme.toString(), sql);
+    }*/
+
+    @Override
+    public List<Course> getAllByTutorId(int id) {
+        String query = QueryStorage.get(GET_ALL_BY_TUTOR_ID);
+        return getAllBy(id, query);
     }
 
-    public void setUserRep(UserRepository userRep) {
-        this.userRep = userRep;
+    @Override
+    public List<Course> getAllFinished(){
+        String sql = QueryStorage.get(GET_ALL_FINISHED);
+        try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+
+            return extractListFromPreparedStatement(ps);
+        }catch (SQLException e){
+            LOGGER.warn(ERROR_MESSAGE, sql, e);
+            throw new DataAccessException(getMessage(sql), e);
+        }
     }
+
+    /*@Override
+    public List<Course> getAll() {
+        String sql = QueryStorage.get(GET_ALL);
+        try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+
+            return extractListFromPreparedStatement(ps);
+        }catch (SQLException e){
+            LOGGER.warn(ERROR_MESSAGE, sql, e);
+            throw new DataAccessException(getMessage(sql), e);
+        }
+    }*/
+
+    @Override
+    public List<Course> getAllByStudentId(int id) {
+        String sql = QueryStorage.get(GET_ALL_BY_STUDENT_ID);
+        return getAllBy(id, sql);
+    }
+
+    @Override
+    public List<Course> getAllExceptSubscribed(int id) {
+        String sql = QueryStorage.get(GET_ALL_EXCEPT_SUBSCRIBED);
+        return getAllBy(id, sql);
+    }
+
+
+
+    @Override
+    public Tuple<List<? extends Course>, Integer> getSorted(int offset, int limit, String sort, String order) {
+        String query = QueryStorage.get(GET_WITH_COUNT);
+        query = query.replace("{s}", orders.get(sort));
+        query = query.replace("{o}", order);
+
+        return getTuple(offset, limit, query);
+    }
+
+
+    @Override
+    public Tuple<List<? extends Course>, Integer> getFiltered(int offset, int limit, String searchBy, String search, String sortBy, String order) {
+        String query = QueryStorage.get(GET_FILTERED);
+        query = query.replace("{s}", orders.get(sortBy));
+        query = query.replace("{o}", order);
+        query = query.replace("{c}", searchBy);
+        query = query.replace("{w}", search);
+
+       return getTuple(offset, limit, query);
+    }
+
+    private int getCourseCount(String query){
+        String countQuery = QueryStorage.get(GET_COURSE_COUNT);
+        int index = query.indexOf("LIMIT");
+        query = query.substring(0, index);
+
+        countQuery = countQuery.replace("{tc}", query);
+
+        try (PreparedStatement ps = getConnection().prepareStatement(countQuery)) {
+            ResultSet rs = ps.executeQuery();
+            return rs.next()?rs.getInt("countCol"):0;
+
+        }catch (SQLException e){
+            LOGGER.warn(ERROR_MESSAGE, countQuery, e);
+            throw new DataAccessException(getMessage(countQuery), e);
+        }
+    }
+
+    private Tuple getTuple(int offset, int limit, String query){
+        List<Course> courses = queryListForTwoParams(offset, limit, query);
+        query = query.replaceFirst("\\?", String.valueOf(offset));
+        query = query.replaceFirst("\\?", String.valueOf(limit));
+        Integer count = getCourseCount(query);
+
+        return new Tuple<>(courses, count);
+    }
+
+
 }

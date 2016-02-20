@@ -1,8 +1,10 @@
 package ua.nure.lisyak.SummaryTask4.servlet.Ajax;
 
 import ua.nure.lisyak.SummaryTask4.model.Course;
+import ua.nure.lisyak.SummaryTask4.model.User;
 import ua.nure.lisyak.SummaryTask4.transferObjects.CourseWithSubscription;
 import ua.nure.lisyak.SummaryTask4.util.LocaleUtil;
+import ua.nure.lisyak.SummaryTask4.util.Tuple;
 import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
 import ua.nure.lisyak.SummaryTask4.util.constant.SettingsAndFolderPaths;
 
@@ -26,7 +28,25 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<CourseWithSubscription> courses = new ArrayList<>();
         Integer id = getEntityId(req);
+        Integer tutorId = getIntParam(req, Constants.Attributes.TUTOR_ID);
+        List<Course> studentSubscriptions = new ArrayList<>();
+        User user = getCurrentUser(req);
+        if(user!=null){
+            studentSubscriptions = getCourseService().getAllByStudentId(user.getId());
+        }
 
+        if(tutorId != null){
+            List<Course> tutorCourses = getCourseService().getAllByTutorId(tutorId);
+
+            for (Course course : tutorCourses) {
+                courses.add(studentSubscriptions.contains(course)
+                        ? new CourseWithSubscription(course, true)
+                        : new CourseWithSubscription(course, false));
+            }
+
+            print(req, resp, courses);
+            return;
+        }
         if(id!=null){
             Course course = getCourseService().get(id);
             if(course!=null){
@@ -48,16 +68,16 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
             String order = getStringParam(req, Constants.Attributes.ORDER, "asc");
 
 
-            List<Course> studentSubscriptions = getCourseService().getAllByStudentId(getIntParam(req, Constants.Attributes.ID, 0));
-            List<Course> filteredCourses = getCourseService().getFiltered(offset,limit,searchBy,search,sort,order);
+            Tuple<List<? extends Course>, Integer> coursesWithCount = getCourseService().getFiltered(offset,limit,searchBy,search,sort,order);
 
-            for (Course course : filteredCourses) {
+            for (Course course : coursesWithCount.getFirstEntity()) {
                 courses.add(studentSubscriptions.contains(course)
                         ? new CourseWithSubscription(course, true)
                         : new CourseWithSubscription(course, false));
             }
+            coursesWithCount.setFirstEntity(courses);
 
-            print(req, resp, courses);
+            print(req, resp, coursesWithCount);
         }
     }
 

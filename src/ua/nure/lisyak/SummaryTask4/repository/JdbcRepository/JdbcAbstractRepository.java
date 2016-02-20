@@ -106,7 +106,7 @@ public abstract class JdbcAbstractRepository<T> {
 
         while (rs.next()){
             T entity = extractFromResultSet(rs);
-            studentCourses.add(entity);
+              studentCourses.add(entity);
         }
 
         return studentCourses;

@@ -3,13 +3,20 @@
  */
 // user.js
 // create angular app
-var app = angular.module('app', ['ngMessages']);
-app.run(function($rootScope, $http) {
+var app = angular.module('app', ['ngMessages', 'angularUtils.directives.dirPagination']);
+app.run(function($rootScope, $http, $location) {
     $rootScope.changeLang = function(id){
         $http.post("/locale?newLocale="+id, {}).success(function(data, status) {
             $rootScope.locale = id;
             $rootScope.lang = data;
         })
+    };
+
+    $rootScope.detailsData = {};
+
+    $rootScope.courseDetails = function(object){
+        $rootScope.detailsData = object;
+        $('#editRow').modal();
     };
 
     $rootScope.defineLang = function(){
@@ -55,6 +62,10 @@ app.run(function($rootScope, $http) {
             timeout: 2500
         });
     };
+
+    angular.element(document).ready(function () {
+        $rootScope.defineLang();
+    });
 });
 app.controller('loginRegisterController',
 
@@ -114,9 +125,7 @@ app.controller('loginRegisterController',
             window.location.href = 'user/home';
         };
 
-        angular.element(document).ready(function () {
-            $rootScope.defineLang();
-        });
+
 });
 
 app.controller('coursesController',
@@ -124,22 +133,12 @@ app.controller('coursesController',
     function($scope, $http, $rootScope) {
         $rootScope.userId = undefined;
 
-        angular.element(document).ready(function () {
-            $rootScope.defineLang();
-            $http.get("/ajax/course", {})
-                .success(function(data) {
-                $scope.courses = data;
-            }).error(function (data){
-                $scope.message = data;
-                console.log(data);
-                $rootScope.failNoty($scope.message.substring($scope.message.indexOf('<u>'), $scope.message.indexOf('</u>')));
-            });
-        });
 
         $scope.subscribeToCourse = function(id){
             $http.post("/ajax/subscription/"+id, {})
                 .success(function(data) {
-                    $rootScope.successNoty($scope['operationSuccess']);
+                    $rootScope.successNoty($scope.lang['operationSuccess']);
+                    filter($scope.pagination.current);
                     $rootScope.hide();
                 }).error(function(data){
                     $scope.message = data;
@@ -147,14 +146,100 @@ app.controller('coursesController',
                 });
         };
 
-        $scope.detailsData = {};
+        $scope.searchData = {};
 
-        $scope.courseDetails = function(object){
-            console.log(object);
-            $scope.detailsData = object;
-            $('#editRow').modal();
+        $scope.totalCourses = 0;
+        $scope.searchData['limit'] = 6;// this should match however many results your API puts on one page
+
+        filter(1);
+
+        $scope.pagination = {
+            current: 1
+        };
+
+        $scope.pageChanged = function(newPage) {
+            filter(newPage);
+        };
+
+        $scope.filter = function(){
+            filter(1);
+            $scope.pagination.current = 1;
+        };
+
+        $scope.reset = function(){
+            $scope.searchData['searchBy'] = undefined;
+            $scope.searchData['search'] = undefined;
+            $scope.searchData['sortBy'] = undefined;
+            $scope.searchData['order'] = undefined;
+            $scope.pagination.current = 1;
+            filter(1);
+        };
+
+        function filter(pageNumber){
+            $scope.searchData['offset'] = (pageNumber - 1)*$scope.searchData['limit'];
+            $http({
+                method: 'GET',
+                url: '/ajax/course',
+                params: $scope.searchData
+            }).success(function(data) {
+                $scope.courses=data['firstEntity'];
+                $scope.totalCourses = data['secondEntity']
+            }).error(function(data){
+                $scope.message = data;
+                $rootScope.failNoty($scope.message.substring($scope.message.indexOf('<u>'), $scope.message.indexOf('</u>')));
+            });
         }
+
 });
+
+app.controller('profileController',
+
+    function($scope, $http, $rootScope) {
+
+       $scope.deleteRow = function(id){
+           $http({
+               method: 'DELETE',
+               url: '/ajax/subscription/'+id
+           }).success(function(data) {
+               $rootScope.successNoty(data);
+           }).error(function(data){
+               $rootScope.failNoty($scope.message.substring($scope.message.indexOf('<u>'), $scope.message.indexOf('</u>')));
+           });
+        };
+
+        $scope.details = function(id){
+            $http({
+                method: 'GET',
+                url: '/ajax/course/'+id
+            }).success(function(data) {
+                $rootScope.courseDetails(data);
+            }).error(function(data){
+                $rootScope.failNoty($scope.message.substring($scope.message.indexOf('<u>'), $scope.message.indexOf('</u>')));
+            });
+        };
+
+    });
+
+app.controller('tutorDetailsController',
+
+    function($scope, $http, $rootScope, $location) {
+        $scope.courses = {};
+        getCourses();
+
+        function getCourses(){
+            var path = $location.absUrl();
+            var pathArr = path.split("/");
+            var id = pathArr[pathArr.length - 1];
+            if(id!=undefined){
+                $http({
+                    method: 'GET',
+                    url: '/ajax/course?tId='+id
+                }).success(function(data) {
+                    $scope.courses = data;
+                    console.log($scope.courses);
+                });}
+        }
+    });
 
 app.directive('appFilereader', function($q) {
     var slice = Array.prototype.slice;

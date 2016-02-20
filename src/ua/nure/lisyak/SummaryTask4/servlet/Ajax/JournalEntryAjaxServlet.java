@@ -18,10 +18,15 @@ public class JournalEntryAjaxServlet extends BaseAjaxServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        JournalEntry journalEntryToSave = (JournalEntry) getEntityFromRequest(request, JournalEntry.class);
+        Integer id = getEntityId(request);
         String locale = getStringParam(request,Constants.Attributes.LANG);
-
-        if(journalEntryToSave != null && getJournalEntryService().save(journalEntryToSave)!=null){
+        User user = getCurrentUser(request);
+        if(user == null){
+            redirectToAction(Constants.ServletPaths.User.LOGIN, request, response);
+            return;
+        }
+        JournalEntry journalEntryToSave = new JournalEntry(id, getCurrentUser(request).getId());
+        if(id != null && getJournalEntryService().save(journalEntryToSave)!=null){
             print(request, response, getTranslator().translate("object.saved", locale));
             return;
         }
@@ -33,18 +38,17 @@ public class JournalEntryAjaxServlet extends BaseAjaxServlet {
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Integer id = getEntityId(request);
         LocaleUtil translator = getTranslator();
-        String locale = getStringParam(request,Constants.Attributes.LANG);
+        String locale = getLocale(request);
         if(id!=null){
-            User user = getUserService().get(getIntParam(request, Constants.Attributes.ID));
+            User user = getCurrentUser(request);
 
-            if(getJournalEntryService().deleteByStudent(user.getId(),id)){
+            if(user!= null && getJournalEntryService().deleteByStudent(user.getId(),id)){
                 print(request, response,  translator.translate("object.deleted", locale));
                 return;
             }
         }
 
         response.sendError(HttpServletResponse.SC_NOT_FOUND, translator.translate("object.notFound",locale));
-
     }
 
     @Override
@@ -68,8 +72,8 @@ public class JournalEntryAjaxServlet extends BaseAjaxServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user = getUserService().get((getIntParam(request, Constants.Attributes.ID)));
-        String locale = getStringParam(request,Constants.Attributes.LANG);
+        User user = getCurrentUser(request);
+        String locale = getLocale(request);
 
         List<JournalEntry> courses;
         if(user!=null){

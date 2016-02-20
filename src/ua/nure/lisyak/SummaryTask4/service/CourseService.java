@@ -4,7 +4,7 @@ import ua.nure.lisyak.SummaryTask4.annotation.Cacheable;
 import ua.nure.lisyak.SummaryTask4.annotation.EvictCache;
 import ua.nure.lisyak.SummaryTask4.annotation.Transactional;
 import ua.nure.lisyak.SummaryTask4.model.Course;
-import ua.nure.lisyak.SummaryTask4.model.enums.Theme;
+import ua.nure.lisyak.SummaryTask4.util.Tuple;
 
 import java.util.List;
 
@@ -24,8 +24,8 @@ public interface CourseService {
 
     Course get(int id);
 
-    @Cacheable
-    List<Course> getAllByTheme(Theme theme);
+   /* @Cacheable
+    List<Course> getAllByTheme(Theme theme);*/
 
    /* List<StudentCourse> getAllByStudentId(int id);*/
 
@@ -36,8 +36,8 @@ public interface CourseService {
     @EvictCache
     boolean setAllFinished();
 
-    @Cacheable
-    List<Course> getAll();
+   /* @Cacheable
+    List<Course> getAll();*/
 
     @Cacheable
     List<Course> getAllByStudentId(int id);
@@ -46,7 +46,9 @@ public interface CourseService {
     List<Course> getAllExceptSubscribed(int id);
 
     @Cacheable
-    List<Course> getFiltered(int offset, int limit, String searchBy, String search, String sortBy, String order);
+    Tuple<List<? extends Course>, Integer> getFiltered(int offset, int limit, String searchBy, String search, String sortBy, String order);
 
     Course getByTitleAndTutor(String title, int tutorId);
+
+    Float getStudentAverageMark(int id);
 }

@@ -82,6 +82,7 @@
         <webjars-meaterialize.version>0.97.0</webjars-meaterialize.version>
         <webjars-angularjs.version>1.4.9</webjars-angularjs.version>
         <webjars-angularjs.file.upload>2.1.1</webjars-angularjs.file.upload>
+        <webjars-datatables.version>1.10.9</webjars-datatables.version>
     </properties>
 
     <name>E_course</name>
@@ -253,6 +254,12 @@
             <groupId>org.webjars</groupId>
             <artifactId>nervgh-angular-file-upload</artifactId>
             <version>${webjars-angularjs.file.upload}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>datatables</artifactId>
+            <version>${webjars-datatables.version}</version>
         </dependency>
 
     </dependencies>

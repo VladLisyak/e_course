@@ -1,11 +1,13 @@
 package ua.nure.lisyak.SummaryTask4.repository.JdbcRepository;
 
+import ua.nure.lisyak.SummaryTask4.annotation.Autowired;
 import ua.nure.lisyak.SummaryTask4.annotation.Repository;
 import ua.nure.lisyak.SummaryTask4.db.QueryStorage;
 import ua.nure.lisyak.SummaryTask4.db.holder.ConnectionHolder;
 import ua.nure.lisyak.SummaryTask4.exception.DataAccessException;
 import ua.nure.lisyak.SummaryTask4.model.JournalEntry;
 import ua.nure.lisyak.SummaryTask4.model.enums.Status;
+import ua.nure.lisyak.SummaryTask4.repository.CourseRepository;
 import ua.nure.lisyak.SummaryTask4.repository.JournalEntryRepository;
 
 import java.sql.PreparedStatement;
@@ -27,6 +29,8 @@ public class JdbcJournalEntryRepository extends JdbcAbstractRepository implement
     private static final String DELETE_BY_STUDENT = "journal.delete.by.student";
     private static final String GET_BY_TUTOR_ID = "journal.get.by.tutor";
 
+    @Autowired
+    private CourseRepository courseRep;
     /**
      * Creates a new repository.
      *
@@ -165,6 +169,9 @@ public class JdbcJournalEntryRepository extends JdbcAbstractRepository implement
         entry.setStudentEmail(rs.getString("email"));
         entry.setStatus(Status.valueOf(rs.getString("status")));
 
+        entry.setThemes(courseRep.getThemes(entry.getId()));
+
         return entry;
     }
+
 }

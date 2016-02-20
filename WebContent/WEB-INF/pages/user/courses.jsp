@@ -39,6 +39,18 @@
             </select>
             <input type="text" ng-show="!searchData.searchBy.localeCompare('theme')==0" class="form-control col-md-3" ng-model="searchData.search"/>
         </div>
+        <div class="form-group  col-md-3">
+            <label for="limit">{lang.viewOnPage}}</label>
+            <input type="number" id = "limit" min="1" max="25" class="input-xs col-xs-1 form-control input-md pull-right" ng-model="searchData.limit"/>
+        </div>
+        <div class="form-group  col-md-3">
+        <div class=" col-xs-12 pull-right">
+            <button type="button" class="btn btn-info btn-top-margin " ng-click="filter()">{lang.filter}}</button>
+        </div>
+            <div class="col-xs-12 pull-right">
+            <button type="button" class="btn btn-primary btn-top-margin " ng-click="reset()">{lang.reset}}</button>
+        </div>
+        </div>
     </div>
     </form>
 
@@ -54,7 +66,7 @@
     </div>
     <div class="view-box">
 
-        <div ng-repeat="course in courses">
+        <div dir-paginate="course in courses | itemsPerPage: searchData.limit" total-items="totalCourses" current-page="pagination.current">
             <div class="col-sm-6 col-md-4">
                 <div class="thumbnail">
                     <figure>
@@ -69,17 +81,20 @@
                         <p role="presentation">
                             <small>{lang.subscribersCount}} <span class="badge">{{course.subscribersCount}}</span></small>
                         </p>
+                        <p>
                         <c:choose>
-                        <c:when test="${empty sessionScope.currUser}">
+                        <c:when test="${empty sessionScope.currentUser}">
                             <p><a href="${pageContext.request.contextPath}/user/login">{lang.loginTo}}</a> {lang.subscribe}}
                             </p>
                         </c:when>
                         <c:otherwise>
-                        <p><a href="#" ng-if="!(course.subscribed || course.status.localeCompare('FINISHED'))"
+                        <a ng-show="(!course.subscribed) && (course.status.localeCompare('FINISHED')!=0)"
                               ng-click="subscribeToCourse(course.id)" class="btn btn-primary" role="button">{lang.subscribe}}</a>
                             </c:otherwise>
-                            </c:choose>
+                        </c:choose>
+                        <div>
                             <a class="btn btn-default" ng-click="courseDetails(course)" role="button">{lang.details}}</a>
+                        </div>
                         </p>
                     </div>
                 </div>
@@ -87,60 +102,10 @@
         </div>
     </div>
 </div>
-<%@ include file="/WEB-INF/fragments/user_fragments/footer.jspf" %>
-<div class="modal fade" id="editRow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title" id="myModalLabel">{lang.courseDetails}}</h2>
-            </div>
-            <div class="modal-body">
-                <img src="<c:url value="/uploads/courses/{{detailsData.image}}"/>"<%-- alt="item1"--%> width="570"
-                     height="250">
-
-                <div >
-                    <h1 id="title">{{detailsData.title}}</h1>
-                </div>
-
-                <div >
-                    <h2 id="description">{{detailsData.description}}</h2>
-                </div>
-
-                <div >
-                    <p role="presentation">
-                        <small>{lang.subscribersCount}} <span class="badge">{{detailsData.subscribersCount}}</span>
-                        </small>
-                    </p>
-                </div>
-
-                <div >
-                    <h4>{lang.start}} {{detailsData.startDate}} | {lang.end}} {{detailsData.endDate}}</h4>
-                </div>
-
-                <div>
-                        <h4><span ng-repeat="theme in detailsData.themes" class="label label-default">{{theme}}</span></h4>
-                </div>
-
-                <div class="space">
-                    <div class="pull-right">
-                    <img src="<c:url value="/uploads/users/{{detailsData.tutor.image}}"/>"<%-- alt="item1"--%>
-                         width="80" height="80">
-                    </div>
-                    <h5>{lang.tutorIs}} <a href="${pageContext.request.contextPath}/user/tutor/{{detailsData.tutor.id}}">
-                        {{detailsData.tutor.name}}</a></h5>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" ng-click="subscribeToCourse(course.id)">
-                        {lang.subscribe}}
-                    </button>
-                    <button type="button" class="btn btn-default" ng-click="hide()">{lang.close}}</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
+<div class="row">
+<dir-pagination-controls class = "col-md-4 col-md-offset-5" on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
 </div>
+<%@ include file="/WEB-INF/fragments/user_fragments/footer.jspf" %>
+<%@ include file="/WEB-INF/fragments/user_fragments/modal.jspf" %>
 </body>
 </html>

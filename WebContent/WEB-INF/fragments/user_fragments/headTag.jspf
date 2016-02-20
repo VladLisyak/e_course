@@ -7,12 +7,15 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><fmt:message key="app.title"/></title>
     <c:set var="url">${pageContext.request.requestURL}</c:set>
     <base href="${fn:substring(url, 0, fn:length(url) - fn:length(pageContext.request.requestURI))}${pageContext.request.contextPath}/" />
 
     <link href="<c:url value="webjars/bootstrap/3.3.5/css/bootstrap.css"/>" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link href="<c:url value="/assets/css/user.css"/>" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link rel="stylesheet" href="webjars/datatables/1.10.9/css/jquery.dataTables.min.css">
+
     <script src="webjars/angularjs/1.4.9/angular.js"></script>
     <script src="webjars/angularjs/1.4.9/angular-messages.js"></script>
     <script src="webjars/angularjs/1.4.9/angular-resource.min.js" type="text/javascript"></script>

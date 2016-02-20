@@ -97,11 +97,18 @@ public final class Constants {
         public static final java.lang.String OFFSET = "offset";
         public static final java.lang.String SORT_BY = "sortBy";
         public static final String TUTORS = "tutors";
+        public static final String TUTOR = "tutor";
         public static final String ORDER = "order";
         public static final String THEMES = "themes";
         public static final String LOCALE_UTIL = "translator";
         public static final String COUNT = "count";
+        public static final String COURSES_OF_CURRENT_USER_COUNT = "coursesCount";
+        public static final String AVERAGE_MARK = "avgMark";
         public static final String COURSES = "myCourses";
+        public static final String CURRENT_USER_COURSES = "userCourses";
+        public static final String FINISHED_USER_COURSES = "finishedCourses";
+        public static final String ELSE_USER_COURSES = "elseUserCourses";
+        public static final String TUTOR_ID = "tId";
 
         private Attributes() {
         }
@@ -155,6 +162,7 @@ public final class Constants {
             public static final String PROFILE = USER + "profile";
 
             public static final String MESSAGES = USER + "messages";
+            public static final String TUTOR_DETAILS = USER + "tutor/*";
         }
 
 
@@ -189,6 +197,7 @@ public final class Constants {
             public static final String PROFILE = USER_PREFIX + "profile.jsp";
             public static final String DIALOG = USER_PREFIX + "dialog.jsp";
             public static final String UNREAD = USER_PREFIX + "unread.jsp";
+            public static final String TUTOR = USER_PREFIX + "tutor.jsp";
         }
 
         public class Admin {

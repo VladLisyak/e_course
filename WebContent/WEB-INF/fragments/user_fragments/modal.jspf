@@ -1,0 +1,59 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<div class="modal fade" id="editRow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2 class="modal-title" id="myModalLabel">{lang.courseDetails}}</h2>
+            </div>
+            <div class="modal-body">
+                <img src="<c:url value="/uploads/courses/{{detailsData.image}}"/>"<%-- alt="item1"--%> width="570" height="250">
+
+                <div >
+                    <h1 id="title" class = "title">{{detailsData.title}}</h1>
+                </div>
+
+                <div >
+                    <h2 id="description" class = "description">{{detailsData.description}}</h2>
+                </div>
+
+                <div >
+                    <p role="presentation">
+                        <small>{lang.subscribersCount}} <span class="badge subscribersCount">{{detailsData.subscribersCount}}</span>
+                        </small>
+                    </p>
+                </div>
+
+                <div >
+                    <h4>{lang.start}} {{detailsData.startDate}} | {lang.end}} {{detailsData.endDate}}</h4>
+                </div>
+
+                <div>
+                    <h4><span ng-repeat="theme in detailsData.themes" class="label label-default">{{theme}}</span></h4>
+                </div>
+
+                <div class="space">
+                    <div class="pull-right">
+                        <img src="<c:url value="/uploads/users/{{detailsData.tutor.image}}"/>"<%-- alt="item1"--%>
+                        width="80" height="80">
+                    </div>
+                    <h5>{lang.tutorIs}} <a href="${pageContext.request.contextPath}/user/tutor/{{detailsData.tutor.id}}">
+                        {{detailsData.tutor.name}}</a></h5>
+                </div>
+
+                <div class="modal-footer">
+                    <c:if test="${not empty currentUser}">
+                    <button type="button" ng-show="(!detailsData.subscribed) && (detailsData.status.localeCompare('FINISHED')!=0)" class="btn btn-primary" ng-click="subscribeToCourse(course.id)">
+                        {lang.subscribe}}
+                    </button>
+                    </c:if>
+                    <button type="button" class="btn btn-default" ng-click="hide()">{lang.close}}</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

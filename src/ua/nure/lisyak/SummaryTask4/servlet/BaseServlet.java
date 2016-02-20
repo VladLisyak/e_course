@@ -43,8 +43,8 @@ public abstract class BaseServlet extends AbstractServlet {
 
     protected User getCurrentUser(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        String currUserId = (String)session.getAttribute(Constants.Attributes.CURRENT_USER);
-        Object userObj = session.getAttribute(currUserId);
+       /* String currUserId = (String)session.getAttribute(Constants.Attributes.CURRENT_USER);
+       */ Object userObj = session.getAttribute(Constants.Attributes.CURRENT_USER);
         
         return userObj == null ? null : (User) userObj;
     }
@@ -56,8 +56,8 @@ public abstract class BaseServlet extends AbstractServlet {
      */
     protected void setCurrentUser(HttpServletRequest request, User user) {
         HttpSession session = request.getSession();
-        session.setAttribute(Constants.Attributes.CURRENT_USER, String.valueOf(user.getId()));
-        session.setAttribute(String.valueOf(user.getId()), user);
+        session.setAttribute(Constants.Attributes.CURRENT_USER, user);
+        /*session.setAttribute(String.valueOf(user.getId()), user);*/
     }
 
     /**
@@ -66,8 +66,7 @@ public abstract class BaseServlet extends AbstractServlet {
      */
     protected void unsetCurrentUser(HttpServletRequest request) {
     	HttpSession session = request.getSession();
-        String currUser = (String)session.getAttribute(Constants.Attributes.CURRENT_USER);
-        session.removeAttribute(currUser);
+
         session.removeAttribute(Constants.Attributes.CURRENT_USER);
     }
 
@@ -198,6 +197,8 @@ public abstract class BaseServlet extends AbstractServlet {
 
         return Integer.parseInt(variableString);
     }
+
+
 
 /*    *//**
      * Checks if the specified login unique
