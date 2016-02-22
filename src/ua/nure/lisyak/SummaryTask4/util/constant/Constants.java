@@ -109,6 +109,7 @@ public final class Constants {
         public static final String FINISHED_USER_COURSES = "finishedCourses";
         public static final String ELSE_USER_COURSES = "elseUserCourses";
         public static final String TUTOR_ID = "tId";
+        public static final String EMAIL = "email";
 
         private Attributes() {
         }
@@ -163,6 +164,7 @@ public final class Constants {
 
             public static final String MESSAGES = USER + "messages";
             public static final String TUTOR_DETAILS = USER + "tutor/*";
+            public static final String PASSWORD_REMIND = USER + "forgetPassword";
         }
 
 
@@ -179,6 +181,7 @@ public final class Constants {
             public static final String JOURNAL = TUTOR + "journal";
             public static final String PROFILE = TUTOR + "profile";
             public static final String MESSAGES = TUTOR + "messages";
+            public static final String LOGIN = TUTOR + "login";
         }
     }
 
@@ -198,6 +201,7 @@ public final class Constants {
             public static final String DIALOG = USER_PREFIX + "dialog.jsp";
             public static final String UNREAD = USER_PREFIX + "unread.jsp";
             public static final String TUTOR = USER_PREFIX + "tutor.jsp";
+            public static final String REMIND_PAGE = USER_PREFIX + "forgetPassword.jsp";
         }
 
         public class Admin {
@@ -210,10 +214,11 @@ public final class Constants {
         public class Tutor {
             private static final String TUTOR_PREFIX = PREFIX + "tutor/";
 
-            public static final String JOURNAL = TUTOR_PREFIX + "journal.jsp";
+            public static final String JOURNAL = TUTOR_PREFIX + "main.jsp";
             public static final String DIALOG = TUTOR_PREFIX  + "dialog.jsp";
             public static final String UNREAD = TUTOR_PREFIX + "unread.jsp";
             public static final String PROFILES = TUTOR_PREFIX + "profile.jsp";
+            public static final String LOGIN = TUTOR_PREFIX + "login.jsp";
         }
     }
 

@@ -3,13 +3,15 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
-<%@include file="/WEB-INF/fragments/user_fragments/headTag.jspf" %>
+<%@include file="/WEB-INF/fragments/headTag.jspf" %>
 <body ng-app="app" id = "body" ng-cloak ng-controller="profileController">
 <%@include file="/WEB-INF/fragments/user_fragments/bodyHeader.jspf" %>
     <div class="container">
         <ul class="nav nav-pills nav-justified" role="tablist">
             <li role="presentation" class="active"><a href="#tab1" role="tab" data-toggle="tab">{lang.profile}}</a></li>
-            <li role="presentation"><a href="#tab2" role="tab" data-toggle="tab">{lang.activeCourses}}</a></li>
+            <li role="presentation"><a href="#tab2" role="tab" data-toggle="tab">{lang.beforeStartCourses}}</a></li>
+            <li role="presentation"><a href="#tab3" role="tab" data-toggle="tab">{lang.activeCourses}}</a></li>
+            <li role="presentation"><a href="#tab4" role="tab" data-toggle="tab">{lang.finishedCourses}}</a></li>
         </ul>
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="tab1">
@@ -80,13 +82,12 @@
                     <div class="container">
                         <div class="shadow">
                             <div class="view-box">
-                                <table class="table table-striped display" id="datatable">
+                                <table class="table table-striped display" id="datatable1">
                                     <thead>
                                     <tr>
                                         <th>{lang.title}}</th>
                                         <th>{lang.startDate}}</th>
                                         <th>{lang.endDate}}</th>
-                                        <th>{lang.Status}}</th>
                                         <th>{lang.themes}}</th>
                                         <th>{lang.mark}}</th>
                                         <th></th>
@@ -99,10 +100,56 @@
                     </div>
                 </div>
             </div>
+            <div role="tabpanel" class="tab-pane" id="tab3">
+                <div class="jumbotron">
+                    <div class="container">
+                        <div class="shadow">
+                            <div class="view-box">
+                                <table class="table table-striped display" id="datatable2">
+                                    <thead>
+                                    <tr>
+                                        <th>{lang.title}}</th>
+                                        <th>{lang.startDate}}</th>
+                                        <th>{lang.endDate}}</th>
+                                        <th>{lang.themes}}</th>
+                                        <th>{lang.mark}}</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="tab4">
+                <div class="jumbotron">
+                    <div class="container">
+                        <div class="shadow">
+                            <div class="view-box">
+                                <table class="table table-striped display" id="datatable3">
+                                    <thead>
+                                    <tr>
+                                        <th>{lang.title}}</th>
+                                        <th>{lang.startDate}}</th>
+                                        <th>{lang.endDate}}</th>
+                                        <th>{lang.themes}}</th>
+                                        <th>{lang.mark}}</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-<%@ include file="/WEB-INF/fragments/user_fragments/footer.jspf" %>
+<%@ include file="/WEB-INF/fragments/footer.jspf" %>
 <%@ include file="/WEB-INF/fragments/user_fragments/modal.jspf" %>
 <script src="assets/js/courseListDataTable.js" type="text/javascript"></script>
+<%@ include file="/WEB-INF/fragments/user_fragments/userScripts.jsp" %>
 </body>
 </html>

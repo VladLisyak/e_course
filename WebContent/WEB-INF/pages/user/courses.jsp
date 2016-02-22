@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
-<%@include file="/WEB-INF/fragments/user_fragments/headTag.jspf" %>
+<%@include file="/WEB-INF/fragments/headTag.jspf" %>
 <body ng-app="app" ng-cloak ng-controller="coursesController" <%--nv-file-drop="" uploader="uploader"--%>>
 
 <%@include file="/WEB-INF/fragments/user_fragments/bodyHeader.jspf" %>
@@ -105,7 +105,8 @@
 <div class="row">
 <dir-pagination-controls class = "col-md-4 col-md-offset-5" on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
 </div>
-<%@ include file="/WEB-INF/fragments/user_fragments/footer.jspf" %>
+<%@ include file="/WEB-INF/fragments/footer.jspf" %>
+<%@ include file="/WEB-INF/fragments/user_fragments/userScripts.jsp" %>
 <%@ include file="/WEB-INF/fragments/user_fragments/modal.jspf" %>
 </body>
 </html>

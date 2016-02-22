@@ -10,6 +10,7 @@ import ua.nure.lisyak.SummaryTask4.model.enums.Status;
 import ua.nure.lisyak.SummaryTask4.model.enums.Theme;
 import ua.nure.lisyak.SummaryTask4.repository.CourseRepository;
 import ua.nure.lisyak.SummaryTask4.repository.UserRepository;
+import ua.nure.lisyak.SummaryTask4.transferObjects.CourseWithSubscription;
 import ua.nure.lisyak.SummaryTask4.util.Tuple;
 
 import java.sql.Date;
@@ -43,6 +44,7 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
     private static final String DELETE_TUTOR = "course.tutor.delete";
     private static final String GET_COURSE_COUNT = "course.count";
     private static final String AVERAGE_MARK = "student.average.mark";
+    private static final String GET_ALL_BY_STATUS_AND_TUTOR_ID = "courses.get.by.status.and.tutor.id";
 
     @Autowired
     private UserRepository userRep;
@@ -138,9 +140,8 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
     @Override
     public Course get(int id) {
         String sql = QueryStorage.get(GET_COURSE);
-        Course course = (Course) get(id, sql);
 
-        return course;
+        return (Course) get(id, sql);
     }
 
     @Override
@@ -188,6 +189,22 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
             throw new DataAccessException(getMessage(query), e);
         }
     }
+
+    @Override
+    public List<CourseWithSubscription> getByStatusAndTutorId(String s, int id) {
+        String query = QueryStorage.get(GET_ALL_BY_STATUS_AND_TUTOR_ID);
+        try(PreparedStatement ps = getConnection().prepareStatement(query)){
+            ps.setString(1, s);
+            ps.setInt(2, id);
+
+
+            return extractListFromPreparedStatement(ps);
+        } catch (SQLException e) {
+            LOGGER.warn(ERROR_MESSAGE, query, e);
+            throw new DataAccessException(getMessage(query), e);
+        }
+    }
+
 
     @Override
     protected Course extractFromResultSet(ResultSet resultSet) throws SQLException {

@@ -5,6 +5,7 @@ import ua.nure.lisyak.SummaryTask4.annotation.Service;
 import ua.nure.lisyak.SummaryTask4.model.Course;
 import ua.nure.lisyak.SummaryTask4.repository.CourseRepository;
 import ua.nure.lisyak.SummaryTask4.service.CourseService;
+import ua.nure.lisyak.SummaryTask4.transferObjects.CourseWithSubscription;
 import ua.nure.lisyak.SummaryTask4.util.Tuple;
 import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
 
@@ -63,6 +64,12 @@ public class JdbcCourseService implements CourseService {
     public Float getStudentAverageMark(int id) {
         return repository.getStudentAverageMark(id);
     }
+
+    @Override
+    public List<CourseWithSubscription> getByStatusAndTutorId(String s, int id) {
+        return repository.getByStatusAndTutorId(s, id);
+    }
+
 
     @Override
     public List<Course> getAllByTutorId(int id) {

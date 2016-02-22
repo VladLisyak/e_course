@@ -121,6 +121,22 @@ app.controller('loginRegisterController',
             });
         };
 
+        $scope.sendEmailReminder = function(){
+            $http({
+                method  : 'POST',
+                url     : '/user/forgetPassword',
+                data    : $.param($scope.formData),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }  // set the headers so angular passing info as form data (not request payload)
+            }).success(function (){
+                $rootScope.successNoty($rootScope.lang['remindSent']);
+                setTimeout($scope.locationChange, 3000);
+
+            }).error(function (data){
+                $scope.message = data;
+                $rootScope.failNoty($scope.message.substring($scope.message.indexOf('<u>'), $scope.message.indexOf('</u>')));
+            });
+        };
+
         $scope.locationChange = function(){
             window.location.href = 'user/home';
         };
@@ -135,7 +151,7 @@ app.controller('coursesController',
 
 
         $scope.subscribeToCourse = function(id){
-            $http.post("/ajax/subscription/"+id, {})
+            $http.post("/ajax/subscription/"+id, {headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }})
                 .success(function(data) {
                     $rootScope.successNoty($scope.lang['operationSuccess']);
                     filter($scope.pagination.current);
@@ -207,7 +223,7 @@ app.controller('profileController',
            });
         };
 
-        $scope.details = function(id){
+        $rootScope.details = function(id){
             $http({
                 method: 'GET',
                 url: '/ajax/course/'+id

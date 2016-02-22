@@ -2,6 +2,7 @@ package ua.nure.lisyak.SummaryTask4.repository;
 
 import ua.nure.lisyak.SummaryTask4.model.Course;
 import ua.nure.lisyak.SummaryTask4.model.enums.Theme;
+import ua.nure.lisyak.SummaryTask4.transferObjects.CourseWithSubscription;
 import ua.nure.lisyak.SummaryTask4.util.Tuple;
 
 import java.util.List;
@@ -40,4 +41,6 @@ public interface CourseRepository {
     Course getByTitleAndTutor(String title, int tutorId);
 
     Float getStudentAverageMark(int id);
+
+    List<CourseWithSubscription> getByStatusAndTutorId(String s, int id);
 }

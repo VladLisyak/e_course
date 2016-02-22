@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
-<%@include file="/WEB-INF/fragments/user_fragments/headTag.jspf"%>
+<%@include file="/WEB-INF/fragments/headTag.jspf"%>
 <body ng-app="app" ng-cloak ng-controller="loginRegisterController" <%--nv-file-drop="" uploader="uploader"--%>>
 
 <%@include file="/WEB-INF/fragments/user_fragments/bodyHeader.jspf"%>
@@ -11,8 +11,8 @@
     <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="panel panel-info" >
             <div class="panel-heading">
-                <div class="panel-title">Sign In</div>
-                <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">Forgot password?</a></div>
+                <div class="panel-title">{lang.login}}</div>
+                <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="${pageContext.request.contextPath}/user/forgetPassword">{lang.forgotPassword}}</a></div>
             </div>
 
             <div style="padding-top:30px" class="panel-body" >
@@ -172,6 +172,7 @@
         </div>
     </div>
 </div>
-<%@ include file="/WEB-INF/fragments/user_fragments/footer.jspf"%>
+<%@ include file="/WEB-INF/fragments/footer.jspf"%>
+<%@ include file="/WEB-INF/fragments/user_fragments/userScripts.jsp" %>
 </body>
 </html>

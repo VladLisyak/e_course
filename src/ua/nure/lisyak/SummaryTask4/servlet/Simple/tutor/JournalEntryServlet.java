@@ -13,6 +13,11 @@ import java.io.IOException;
 public class JournalEntryServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-            forward(Constants.Pages.Tutor.JOURNAL, req, resp);
+            if(getCurrentUser(req)!=null){
+                req.setAttribute(Constants.Attributes.COURSES_OF_CURRENT_USER_COUNT, getCourseService().getAllByTutorId(getCurrentUser(req).getId()).size());
+                forward(Constants.Pages.Tutor.JOURNAL, req, resp);
+                return;
+            }
+        redirectToAction(Constants.ServletPaths.Tutor.LOGIN, req, resp);
     }
 }

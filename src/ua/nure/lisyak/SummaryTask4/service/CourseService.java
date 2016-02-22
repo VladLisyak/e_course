@@ -4,6 +4,7 @@ import ua.nure.lisyak.SummaryTask4.annotation.Cacheable;
 import ua.nure.lisyak.SummaryTask4.annotation.EvictCache;
 import ua.nure.lisyak.SummaryTask4.annotation.Transactional;
 import ua.nure.lisyak.SummaryTask4.model.Course;
+import ua.nure.lisyak.SummaryTask4.transferObjects.CourseWithSubscription;
 import ua.nure.lisyak.SummaryTask4.util.Tuple;
 
 import java.util.List;
@@ -51,4 +52,6 @@ public interface CourseService {
     Course getByTitleAndTutor(String title, int tutorId);
 
     Float getStudentAverageMark(int id);
+
+    List<CourseWithSubscription> getByStatusAndTutorId(String s, int id);
 }

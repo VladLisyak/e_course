@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
-<%@include file="/WEB-INF/fragments/user_fragments/headTag.jspf" %>
+<%@include file="/WEB-INF/fragments/headTag.jspf" %>
 <body ng-app="app" id = "body" ng-cloak ng-controller="tutorDetailsController">
 <%@include file="/WEB-INF/fragments/user_fragments/bodyHeader.jspf" %>
 <div class="container">
@@ -76,16 +76,19 @@
             <td><span>{{course.startDate}}</span></td>
             <td><h4 ng-repeat="theme in course.themes" ><span class="label label-default">{{theme}}</span></h4></td>
             <td><a class="btn btn-xs btn-success details-btn" ng-click = "courseDetails(course)"><i class = "glyphicon glyphicon-search"></i></a></td>
-            <td><a href="#" ng-if="(!course.subscribed) && (course.status.localeCompare('FINISHED')!=0)"
+            <c:if test="${not empty currentUser}">
+                <td><a href="#" ng-if="(!course.subscribed) && (course.status.localeCompare('FINISHED')!=0)"
                    ng-click="subscribeToCourse(course.id)" class="btn btn-xs btn-primary" role="button"><i class = "glyphicon glyphicon-pencil"></i></a></td>
+            </c:if>
             </tbody>
             </table>
             </div>
         </div>
     </div>
 </div>
-<%@ include file="/WEB-INF/fragments/user_fragments/footer.jspf" %>
+<%@ include file="/WEB-INF/fragments/footer.jspf" %>
 <%@ include file="/WEB-INF/fragments/user_fragments/modal.jspf" %>
 <script src="assets/js/courseListDataTable.js" type="text/javascript"></script>
+<%@ include file="/WEB-INF/fragments/user_fragments/userScripts.jsp" %>
 </body>
 </html>

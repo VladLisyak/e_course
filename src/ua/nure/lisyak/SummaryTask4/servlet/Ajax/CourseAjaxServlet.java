@@ -2,6 +2,7 @@ package ua.nure.lisyak.SummaryTask4.servlet.Ajax;
 
 import ua.nure.lisyak.SummaryTask4.model.Course;
 import ua.nure.lisyak.SummaryTask4.model.User;
+import ua.nure.lisyak.SummaryTask4.model.enums.Role;
 import ua.nure.lisyak.SummaryTask4.transferObjects.CourseWithSubscription;
 import ua.nure.lisyak.SummaryTask4.util.LocaleUtil;
 import ua.nure.lisyak.SummaryTask4.util.Tuple;
@@ -31,54 +32,68 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
         Integer tutorId = getIntParam(req, Constants.Attributes.TUTOR_ID);
         List<Course> studentSubscriptions = new ArrayList<>();
         User user = getCurrentUser(req);
+
+        String param = getStringParam(req, Constants.Attributes.SORT_BY);
+
         if(user!=null){
-            studentSubscriptions = getCourseService().getAllByStudentId(user.getId());
-        }
+                studentSubscriptions = getCourseService().getAllByStudentId(user.getId());
+            if(tutorId != null){
+                List<Course> tutorCourses = getCourseService().getAllByTutorId(tutorId);
 
-        if(tutorId != null){
-            List<Course> tutorCourses = getCourseService().getAllByTutorId(tutorId);
+                for (Course course : tutorCourses) {
+                    courses.add(studentSubscriptions.contains(course)
+                            ? new CourseWithSubscription(course, true)
+                            : new CourseWithSubscription(course, false));
+                }
 
-            for (Course course : tutorCourses) {
-                courses.add(studentSubscriptions.contains(course)
-                        ? new CourseWithSubscription(course, true)
-                        : new CourseWithSubscription(course, false));
-            }
-
-            print(req, resp, courses);
-            return;
-        }
-        if(id!=null){
-            Course course = getCourseService().get(id);
-            if(course!=null){
-                 print(req, resp, getCourseService().get(id));
-                 return;
-            }
-
-                String locale = getLocale(req);
-                LocaleUtil translator = getTranslator();
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, translator.translate("object.notFound",locale));
+                print(req, resp, courses);
                 return;
-        }
-        else{
-            String searchBy = getStringParam(req, Constants.Attributes.SEARCH_BY);
-            String search = getStringParam(req, Constants.Attributes.SEARCH_PARAM);
-            Integer limit = getIntParam(req, Constants.Attributes.LIMIT, SettingsAndFolderPaths.getCoursesPerPage());
-            Integer offset = getIntParam(req, Constants.Attributes.OFFSET, 0);
-            String sort = getStringParam(req, Constants.Attributes.SORT_BY, "id");
-            String order = getStringParam(req, Constants.Attributes.ORDER, "asc");
-
-
-            Tuple<List<? extends Course>, Integer> coursesWithCount = getCourseService().getFiltered(offset,limit,searchBy,search,sort,order);
-
-            for (Course course : coursesWithCount.getFirstEntity()) {
-                courses.add(studentSubscriptions.contains(course)
-                        ? new CourseWithSubscription(course, true)
-                        : new CourseWithSubscription(course, false));
             }
-            coursesWithCount.setFirstEntity(courses);
 
-            print(req, resp, coursesWithCount);
+            if(user.getRoles().contains(Role.TUTOR) && param!=null){
+
+                courses = getCourseService().getByStatusAndTutorId(param.toUpperCase(), user.getId());
+
+                print(req, resp, courses);
+                return;
+            }
+
+            if(id!=null){
+                Course course = getCourseService().get(id);
+                if(course!=null){
+                     print(req, resp, getCourseService().get(id));
+                     return;
+                }
+
+                    String locale = getLocale(req);
+                    LocaleUtil translator = getTranslator();
+                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, translator.translate("object.notFound",locale));
+                    return;
+            }
+            else{
+                String searchBy = getStringParam(req, Constants.Attributes.SEARCH_BY);
+                String search = getStringParam(req, Constants.Attributes.SEARCH_PARAM);
+                Integer limit = getIntParam(req, Constants.Attributes.LIMIT, SettingsAndFolderPaths.getCoursesPerPage());
+                Integer offset = getIntParam(req, Constants.Attributes.OFFSET, 0);
+                String sort = getStringParam(req, Constants.Attributes.SORT_BY, "id");
+                String order = getStringParam(req, Constants.Attributes.ORDER, "asc");
+
+
+                Tuple<List<? extends Course>, Integer> coursesWithCount = getCourseService().getFiltered(offset,limit,searchBy,search,sort,order);
+
+                for (Course course : coursesWithCount.getFirstEntity()) {
+                    courses.add(studentSubscriptions.contains(course)
+                            ? new CourseWithSubscription(course, true)
+                            : new CourseWithSubscription(course, false));
+                }
+                coursesWithCount.setFirstEntity(courses);
+
+                print(req, resp, coursesWithCount);
+                return;
+            }
         }
+
+        resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "validator.error500");
     }
 
     @Override

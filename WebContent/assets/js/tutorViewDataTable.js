@@ -1,13 +1,16 @@
-ajaxUrl = "/ajax/subscription";
+courseUrl = "/ajax/course?sortBy=BEFORE_START";
+inProgressUrl = "/ajax/course?sortBy=IN_PROGRESS";
+finishedUrl = "/ajax/course?sortBy=FINISHED";
+var datatableApi;
 $(function () {
-    datatableApi = $('#datatable1').DataTable({
-        "sAjaxSource": ajaxUrl+'?sortBy=BEFORE_START',
+    datatableApi = $('#before').DataTable({
+        "sAjaxSource": courseUrl,
         "sAjaxDataProp": "",
         "bPaginate": false,
         "bInfo": false,
         "aoColumns": [
             {
-                "mData": "courseTitle",
+                "mData": "title",
                 "bSortable": false
             },
             {
@@ -18,7 +21,6 @@ $(function () {
             },
             {
                 "mData": "themes",
-                "bSortable": true,
                 "mRender": function (data, type, row) {
                     var strToReturn = "";
                     data.forEach(function(item){
@@ -28,59 +30,7 @@ $(function () {
                 }
             },
             {
-                "mData": "mark",
-                "bSortable": true
-            },
-            {
-                 "bSortable": false,
-                 "sDefaultContent": "",
-                 "mRender": renderDetailsBtn
-             },
-            {
-                "bSortable": false,
-                "sDefaultContent": "",
-                "mRender": renderDeleteBtn
-            }
-        ],
-        "aaSorting": [
-            [
-                0,
-                "asc"
-            ]
-        ]
-    });
-});
-$(function () {
-    datatableApi = $('#datatable2').DataTable({
-        "sAjaxSource": ajaxUrl+'?sortBy=IN_PROGRESS',
-        "sAjaxDataProp": "",
-        "bPaginate": false,
-        "bInfo": false,
-        "aoColumns": [
-            {
-                "mData": "courseTitle",
-                "bSortable": false
-            },
-            {
-                "mData": "startDate"
-            },
-            {
-                "mData": "endDate"
-            },
-            {
-                "mData": "themes",
-                "bSortable": true,
-                "mRender": function (data, type, row) {
-                    var strToReturn = "";
-                    data.forEach(function(item){
-                        strToReturn = strToReturn + '<h6><span class = "badge">'+ item + '</span></h6>'
-                    });
-                    return strToReturn;
-                }
-            },
-            {
-                "mData": "mark",
-                "bSortable": true
+                "mData": "subscribersCount"
             },
             {
                 "bSortable": false,
@@ -90,7 +40,7 @@ $(function () {
             {
                 "bSortable": false,
                 "sDefaultContent": "",
-                "mRender": renderDeleteBtn
+                "mRender": renderSubscribersBtn
             }
         ],
         "aaSorting": [
@@ -102,14 +52,14 @@ $(function () {
     });
 });
 $(function () {
-    datatableApi = $('#datatable3').DataTable({
-        "sAjaxSource": ajaxUrl+'?sortBy=FINISHED',
+    datatableApi = $('#active').DataTable({
+        "sAjaxSource": inProgressUrl,
         "sAjaxDataProp": "",
         "bPaginate": false,
         "bInfo": false,
         "aoColumns": [
             {
-                "mData": "courseTitle",
+                "mData": "title",
                 "bSortable": false
             },
             {
@@ -120,7 +70,6 @@ $(function () {
             },
             {
                 "mData": "themes",
-                "bSortable": true,
                 "mRender": function (data, type, row) {
                     var strToReturn = "";
                     data.forEach(function(item){
@@ -130,13 +79,17 @@ $(function () {
                 }
             },
             {
-                "mData": "mark",
-                "bSortable": true
+                "mData": "subscribersCount"
             },
             {
                 "bSortable": false,
                 "sDefaultContent": "",
                 "mRender": renderDetailsBtn
+            },
+            {
+                "bSortable": false,
+                "sDefaultContent": "",
+                "mRender": renderSubscribersBtn
             }
         ],
         "aaSorting": [
@@ -147,57 +100,78 @@ $(function () {
         ]
     });
 });
-var failedNote;
-
-function closeNoty() {
-    if (failedNote) {
-        failedNote.close();
-        failedNote = undefined;
-    }
-}
-
-function successNoty(text) {
-    closeNoty();
-    noty({
-        text: text,
-        type: 'success',
-        layout: 'bottomRight',
-        timeout: 1000
+$(function () {
+    datatableApi = $('#finished').DataTable({
+        "sAjaxSource": finishedUrl,
+        "sAjaxDataProp": "",
+        "bPaginate": false,
+        "bInfo": false,
+        "aoColumns": [
+            {
+                "mData": "title",
+                "bSortable": false
+            },
+            {
+                "mData": "startDate"
+            },
+            {
+                "mData": "endDate"
+            },
+            {
+                "mData": "themes",
+                "mRender": function (data, type, row) {
+                    var strToReturn = "";
+                    data.forEach(function(item){
+                        strToReturn = strToReturn + '<h6><span class = "badge">'+ item + '</span></h6>'
+                    });
+                    return strToReturn;
+                }
+            },
+            {
+                "mData": "subscribersCount"
+            },
+            {
+                "bSortable": false,
+                "sDefaultContent": "",
+                "mRender": renderDetailsBtn
+            },
+            {
+                "bSortable": false,
+                "sDefaultContent": "",
+                "mRender": renderMarksBtn
+            }
+        ],
+        "aaSorting": [
+            [
+                0,
+                "asc"
+            ]
+        ]
     });
-}
+});
 
-function renderDeleteBtn(data, type, row) {
-    console.log(row);
-        return '<a class="btn btn-xs btn-danger" onclick="deleteRow(' + row.id + ');"><i class = "glyphicon glyphicon-remove"></i></a>';
-
-    return data;
-}
 
 function renderDetailsBtn(data, type, row) {
-       return '<a class="btn btn-xs btn-success details-btn" onclick = "details(' + row.courseId + ')"><i class = "glyphicon glyphicon-search"></i></a>';
- }
-
-function deleteRow(id) {
-    $.ajax({
-        url: ajaxUrl + id,
-        type: 'DELETE',
-        success: function () {
-            updateTable();
-            successNoty('Deleted');
-        }
-    });
+    return '<a class="btn btn-primary details-btn" onclick = "details(' + row.id + ')"><i class = "glyphicon glyphicon-search"></i></a>';
 }
+
+function renderMarksBtn(data, type, row) {
+    return '<a class="btn btn-default details-btn" onclick = "showJournal(' + row.id + ')"><i class = "glyphicon glyphicon-pencil"></i></a>';
+}
+
+function renderSubscribersBtn(data, type, row) {
+    return '<a class="btn btn-default details-btn" onclick = "showSubscribers(' + row.id + ')"><i class = "glyphicon glyphicon-pencil"></i></a>';
+}
+
 
 function details(id) {
     angular.element(document.getElementById('body')).scope().details(id);
 }
 
-function updateTable() {
-    $.get(ajaxUrl, function (data) {
-        updateTableByData(data);
-    });
+function showJournal(id){
+    angular.element(document.getElementById('body')).scope().get(id, 'journal');
 }
 
-function updateTableByData(data) {
-    datatableApi.clear().rows.add(data).draw();
+function showSubscribers(id){
+    angular.element(document.getElementById('body')).scope().get(id, 'subscribers');
 }

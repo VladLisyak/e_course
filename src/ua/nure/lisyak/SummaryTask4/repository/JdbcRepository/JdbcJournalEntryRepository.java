@@ -28,6 +28,7 @@ public class JdbcJournalEntryRepository extends JdbcAbstractRepository implement
     private static final String GET_JOURNAL_ENTRY_BY_STUDENT = "journal.get.by.student";
     private static final String DELETE_BY_STUDENT = "journal.delete.by.student";
     private static final String GET_BY_TUTOR_ID = "journal.get.by.tutor";
+    private static final String GET_BY_TUTOR_ID_AND_STATUS = "journal.get.by.tutor.and.status";
 
     @Autowired
     private CourseRepository courseRep;
@@ -116,8 +117,24 @@ public class JdbcJournalEntryRepository extends JdbcAbstractRepository implement
     }
 
     @Override
+    public List<JournalEntry> getAllByTutorIdWithStatus(int id, String param) {
+        String sql = QueryStorage.get(GET_BY_TUTOR_ID_AND_STATUS);
+        try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.setString(2, param);
+
+            return extractListFromPreparedStatement(ps);
+        }
+        catch (SQLException e) {
+            LOGGER.warn(ERROR_MESSAGE, sql, e);
+            throw new DataAccessException(getMessage(sql), e);
+        }
+    }
+
+    @Override
     public List<JournalEntry> getAllByStudentId(int id) {
         String sql = QueryStorage.get(GET_JOURNAL_ENTRY_BY_STUDENT);
+
         return getAllBy( id, sql);
     }
 
@@ -169,7 +186,7 @@ public class JdbcJournalEntryRepository extends JdbcAbstractRepository implement
         entry.setStudentEmail(rs.getString("email"));
         entry.setStatus(Status.valueOf(rs.getString("status")));
 
-        entry.setThemes(courseRep.getThemes(entry.getId()));
+        entry.setThemes(courseRep.getThemes(entry.getCourseId()));
 
         return entry;
     }

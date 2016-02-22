@@ -21,6 +21,7 @@ public abstract class BaseAjaxServlet<T> extends BaseServlet {
             return null;
         }
         try {
+            LOGGER.debug(request.getInputStream().toString());
             instance = serializer.deserialize(request.getInputStream(), c);
         } catch (SerializerException e) {
             LOGGER.warn("Cannot deserialize object", e);

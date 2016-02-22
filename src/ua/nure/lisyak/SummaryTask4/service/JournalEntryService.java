@@ -36,4 +36,6 @@ public interface JournalEntryService {
     List<JournalEntry> getAllByTutorId(int id);
 
     JournalEntry getByTutorId(int tutorId, int entryId);
+
+    List<JournalEntry> getAllByTutorIdWithStatus(int id, String param);
 }

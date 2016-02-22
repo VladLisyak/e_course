@@ -3,6 +3,7 @@ package ua.nure.lisyak.SummaryTask4.servlet.Ajax;
 import ua.nure.lisyak.SummaryTask4.model.JournalEntry;
 import ua.nure.lisyak.SummaryTask4.model.User;
 import ua.nure.lisyak.SummaryTask4.model.enums.Role;
+import ua.nure.lisyak.SummaryTask4.model.enums.Status;
 import ua.nure.lisyak.SummaryTask4.util.LocaleUtil;
 import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
 
@@ -11,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(urlPatterns = {Constants.ServletPaths.SUBSCRIPTION})
@@ -53,7 +55,7 @@ public class JournalEntryAjaxServlet extends BaseAjaxServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = getUserService().get(getIntParam(req, Constants.Attributes.ID));
+        User user = getCurrentUser(req);
         JournalEntry entry = (JournalEntry) getEntityFromRequest(req, JournalEntry.class);
         LocaleUtil translator = getTranslator();
         String locale = getStringParam(req,Constants.Attributes.LANG);
@@ -70,23 +72,47 @@ public class JournalEntryAjaxServlet extends BaseAjaxServlet {
         resp.sendError(HttpServletResponse.SC_NOT_FOUND, translator.translate("object.notFound",locale));
     }
 
+    /**
+     * Sorting by status are held in servlet instead of sorting in database because of cashing system,
+     * as example of performance enhancing through single call to database and further retrieving data from cache
+     * for operations instead of multiple calls to DB
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Integer courseId = getEntityId(request);
         User user = getCurrentUser(request);
         String locale = getLocale(request);
-
+        String param = getStringParam(request, Constants.Attributes.SORT_BY);
         List<JournalEntry> courses;
+        List<JournalEntry> filteredCourses = new ArrayList<>();
+
+
         if(user!=null){
             if(user.getRoles().contains(Role.TUTOR)){
-                courses = getJournalEntryService().getAllByTutorId(user.getId());
+                    courses = getJournalEntryService().getAllByCourseId(courseId);
             }else{
                 courses = getJournalEntryService().getAllByStudentId(user.getId());
+                Status stat =  param!=null?Status.valueOf(param.toUpperCase()):null;
+                if(stat!=null){
+                    for (JournalEntry entry:courses) {
+                        if (entry.getStatus().equals(stat)){
+                            filteredCourses.add(entry);
+                        }
+                    }
+                    print(request, response, filteredCourses);
+                    return;
+                }
             }
             print(request, response, courses);
             return;
         }
 
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST, getTranslator().translate("object.error", locale));
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST, getTranslator().translate("txt.nothingFound", locale));
     }
 
 
