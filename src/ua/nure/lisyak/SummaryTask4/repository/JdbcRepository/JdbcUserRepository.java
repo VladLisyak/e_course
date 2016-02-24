@@ -32,6 +32,7 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
     private static final String DELETE_OLD = "user.role.delete.old";
     private static final String ADD_ROLE = "user.role.add";
     private static final String GET_BY_LOGIN = "user.get.by.login";
+    private static final String GET_ALL_BY_STATUS = "user.by.status";
 
     /**
      * Creates a new repository.
@@ -101,9 +102,6 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
         String sql = QueryStorage.get(GET_USER);
         User user = (User) get(id, sql);
 
-        if(user != null){
-        user.setRoles(getRoles(id));
-        }
 
         return user;
 
@@ -118,8 +116,7 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
             ResultSet rs = ps.executeQuery();
 
             if(rs.next()){
-            user = extractFromResultSet(rs);
-            user.setRoles(getRoles(user.getId()));
+              user = extractFromResultSet(rs);
             }
 
             return user;
@@ -146,7 +143,6 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
 
             while (rs.next()){
                 user = extractFromResultSet(rs);
-                user.setRoles(getRoles(user.getId()));
                 allUsers.add(user);
             }
 
@@ -169,7 +165,6 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
 
             if(rs.next()) {
                 user = extractFromResultSet(rs);
-                user.setRoles(getRoles(user.getId()));
             }
 
             return user;
@@ -177,6 +172,12 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
             LOGGER.warn(ERROR_MESSAGE, sql, e);
             throw new DataAccessException(getMessage(sql), e);
         }
+    }
+
+    @Override
+    public List<User> getAllByStatus(String param) {
+        String query = QueryStorage.get(GET_ALL_BY_STATUS);
+        return getAllByEnum(param, query);
     }
 
     @Override
@@ -191,6 +192,7 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
         user.setPassword(resultSet.getString("password"));
         user.setEnabled(Enabled.valueOf(resultSet.getString("enabled").toUpperCase()));
         user.setImage(user.getImage());
+        user.setRoles(getRoles(user.getId()));
 
         return user;
     }

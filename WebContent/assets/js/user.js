@@ -14,11 +14,6 @@ app.run(function($rootScope, $http, $location) {
 
     $rootScope.detailsData = {};
 
-    $rootScope.courseDetails = function(object){
-        $rootScope.detailsData = object;
-        $('#editRow').modal();
-    };
-
     $rootScope.defineLang = function(){
         $http.get("/locale", {}).success(function(data) {
             $rootScope.changeLang(data);
@@ -29,6 +24,11 @@ app.run(function($rootScope, $http, $location) {
         if (lang== $rootScope.lang['language']){
             return true;
         }
+    };
+
+    $rootScope.courseDetails = function(object){
+        $rootScope.detailsData = object;
+        $('#editRow').modal();
     };
 
     $rootScope.hide = function(){

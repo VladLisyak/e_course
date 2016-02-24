@@ -2,8 +2,10 @@ package ua.nure.lisyak.SummaryTask4.util.validation;
 
 
 import ua.nure.lisyak.SummaryTask4.model.User;
+import ua.nure.lisyak.SummaryTask4.model.enums.Role;
 import ua.nure.lisyak.SummaryTask4.util.constant.Constants.Validation;
 
+import java.util.Set;
 import java.util.regex.Pattern;
 /**
  * Performs validation of {@link User} objects.
@@ -31,6 +33,7 @@ public class UserValidator extends AbstractValidator {
         putIssue("email", validateEmail(user.getEmail()));
         putIssue("login", validateLogin(user.getLogin()));
         putIssue("password", validatePassword(user.getPassword()));
+        putIssue("roles", validateRoles(user.getRoles()));
     }
 
     /**
@@ -55,6 +58,13 @@ public class UserValidator extends AbstractValidator {
         }
         if (name.length() < 3 || name.length() > 100) {
             return Validation.LEN_3_TO_100;
+        }
+        return null;
+    }
+
+    private String validateRoles(Set<Role> roles) {
+        if (roles == null || roles.size() == 0) {
+            return Validation.CANT_BE_EMPTY;
         }
         return null;
     }

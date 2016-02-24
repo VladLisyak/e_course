@@ -4,5 +4,6 @@
   "userLogin": "Login",
   "userPassword": "Password",
   "registered": "Registered. Confirmation letter was sent to email.",
-  "logged": "Logged"
+  "logged": "Logged",
+  "subscribersCount": "Students count"
 }

@@ -143,7 +143,7 @@ public abstract class BaseServlet extends AbstractServlet {
         StringBuilder error = new StringBuilder();
 
         for (Map.Entry<String, String> errorEntry :validator.getMessages().entrySet()) {
-            error.append(errorEntry.getValue()).append("\n");
+            error.append(errorEntry.getKey()).append(": ").append(errorEntry.getValue()).append("\n");
         }
 
         response.sendError(HttpServletResponse.SC_BAD_REQUEST,error.toString());
@@ -161,14 +161,14 @@ public abstract class BaseServlet extends AbstractServlet {
         return savedUser;
     }
 
-    private boolean updateUser(String image, User user) {
-        User savedUser = getUserService().get(user.getId());
+    protected User updateUser(String image, User user) {
+
         if (image != null) {
-            String imageName = getFileService().saveFile(savedUser.getId(), SettingsAndFolderPaths.getUploadUsersDirectory(), image);
-            savedUser.setImage(imageName);
+            String imageName = getFileService().saveFile(user.getId(), SettingsAndFolderPaths.getUploadUsersDirectory(), image);
+            user.setImage(imageName);
         }
 
-        return getUserService().update(savedUser)!=null;
+        return getUserService().update(user);
     }
 
     protected void checkUserUniqueness(User user, Validator validator) {

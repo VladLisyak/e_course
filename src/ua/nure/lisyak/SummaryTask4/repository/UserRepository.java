@@ -25,4 +25,6 @@ public interface UserRepository {
     List<User> getAll();
 
     User getByLogin(String login);
+
+    List<User> getAllByStatus(String param);
 }

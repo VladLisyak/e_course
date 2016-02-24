@@ -15,9 +15,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @MultipartConfig(
         location = SettingsAndFolderPaths.Images.TEMP_DIRECTORY,
@@ -40,14 +39,20 @@ public class UserAjaxServlet extends BaseAjaxServlet{
             String locale = getLocale(req);
             LocaleUtil translator = getTranslator();
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, translator.translate("object.notFound",locale));
+
             return;
         }
         else{
-            Map<String, List<User>> users = new HashMap<>();
+            List<User> users = new ArrayList<>();
 
-            users.put("tutors", getUserService().getAllByRole(Role.TUTOR));
-            users.put("students", getUserService().getAllByRole(Role.STUDENT));
-            users.put("admins", getUserService().getAllByRole(Role.ADMIN));
+            String param = getStringParam(req, Constants.Attributes.GET_BY);
+            if(param!=null && Enabled.valueOf(param)!=null){
+                users = getUserService().getAllByStatus(param);
+            }
+            param = getStringParam(req, Constants.Attributes.ROLE);
+            if(param!=null && Role.valueOf(param)!=null){
+                users = getUserService().getAllByRole(Role.valueOf(param));
+            }
 
             print(req, resp, users);
         }
@@ -60,6 +65,14 @@ public class UserAjaxServlet extends BaseAjaxServlet{
         LocaleUtil translator = getTranslator();
 
         String imagePart = getStringParam(req, Constants.Attributes.IMAGE);
+
+        if(imagePart==null){
+            imagePart = user.getImage();
+        }
+
+            if(user==null){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "txt.nothingFound");
+        }
 
         Validator validator = new UserValidator(user, locale);
 
@@ -78,7 +91,6 @@ public class UserAjaxServlet extends BaseAjaxServlet{
             return;
         }
 
-        user.addRole(Role.STUDENT);
         user.addRole(Role.TUTOR);
         user.setEnabled(Enabled.ACTIVE);
 
@@ -96,11 +108,15 @@ public class UserAjaxServlet extends BaseAjaxServlet{
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User)getEntityFromRequest(req, User.class);
-        String locale = getStringParam(req,Constants.Attributes.LANG);
+        String locale = getLocale(req);
 
         String imagePart = getStringParam(req, Constants.Attributes.IMAGE);
 
         Validator validator = new UserValidator(user, locale);
+
+        if(imagePart==null && !user.getImage().equals(getUserService().get(user.getId()))){
+            imagePart = user.getImage();
+        }
 
         if (imagePart != null && !SettingsAndFolderPaths.isImage(imagePart)) {
             validator.putIssue(Constants.Attributes.IMAGE, "validator.invalidFileFormat");
@@ -111,7 +127,7 @@ public class UserAjaxServlet extends BaseAjaxServlet{
             return;
         }
 
-        User savedUser = saveUser(imagePart, user);
+        User savedUser = updateUser(imagePart, user);
 
         if (savedUser == null) {
             validator.putIssue("error", "object.error");

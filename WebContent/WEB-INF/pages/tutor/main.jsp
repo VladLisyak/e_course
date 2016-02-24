@@ -77,7 +77,7 @@
                                     <th>{lang.startDate}}</th>
                                     <th>{lang.endDate}}</th>
                                     <th>{lang.themes}}</th>
-                                    <th></th>
+                                    <th>{{lang.subscribersCount}}</th>
                                     <th></th>
                                     <th></th>
                                 </tr>
@@ -101,7 +101,7 @@
                                     <th>{lang.startDate}}</th>
                                     <th>{lang.endDate}}</th>
                                     <th>{lang.themes}}</th>
-                                    <th></th>
+                                    <th>{{lang.subscribersCount}}</th>
                                     <th></th>
                                     <th></th>
                                 </tr>
@@ -125,7 +125,9 @@
                                     <th>{lang.startDate}}</th>
                                     <th>{lang.endDate}}</th>
                                     <th>{lang.themes}}</th>
-                                    <th>{lang.subscribersCount}}</th>
+                                    <th>{{lang.subscribersCount}}</th>
+                                    <th></th>
+                                    <th></th>
                                     <th></th>
                                     <th></th>
                                 </tr>
@@ -143,6 +145,17 @@
 <%@ include file="/WEB-INF/fragments/tutor_fragments/subscribersModal.jspf" %>
 <%@ include file="/WEB-INF/fragments/tutor_fragments/tutorModal.jspf" %>
 <script src="/assets/js/tutorViewDataTable.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).on('show.bs.modal', '.modal', function (event) {
+            var zIndex = 1040 + (10 * $('.modal:visible').length);
+            $(this).css('z-index', zIndex);
+            setTimeout(function() {
+                $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+            }, 0);
+        });
+    });
+</script>
 <%@ include file="/WEB-INF/fragments/tutor_fragments/tutorScripts.jspf" %>
 </body>
 </html>

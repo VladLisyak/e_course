@@ -110,6 +110,8 @@ public final class Constants {
         public static final String ELSE_USER_COURSES = "elseUserCourses";
         public static final String TUTOR_ID = "tId";
         public static final String EMAIL = "email";
+        public static final java.lang.String GET_BY = "getBy";
+        public static final java.lang.String ROLE = "role";
 
         private Attributes() {
         }
@@ -169,10 +171,12 @@ public final class Constants {
 
 
         public class Admin {
-            private static final String ADMIN = "/admin/";
+            public static final String ADMIN = "/admin/";
 
             public static final String COURSES = ADMIN + "courses";
             public static final String USERS = ADMIN + "users";
+            public static final String MAIN = ADMIN + "main/";
+            public static final String THEMES = ADMIN + "themes";
         }
 
         public class Tutor {
@@ -182,6 +186,7 @@ public final class Constants {
             public static final String PROFILE = TUTOR + "profile";
             public static final String MESSAGES = TUTOR + "messages";
             public static final String LOGIN = TUTOR + "login";
+            public static final String REPORT = TUTOR + "report/*";
         }
     }
 
@@ -196,7 +201,7 @@ public final class Constants {
             public static final String LOGIN = USER_PREFIX + "login.jsp";
             public static final String REGISTRATION = USER_PREFIX +"registration.jsp";
             public static final String HOME = PREFIX + "index.jsp";
-            public static final String COURSES = USER_PREFIX + "courses.jsp";
+            public static final String COURSES = USER_PREFIX + "courses.htm";
             public static final String PROFILE = USER_PREFIX + "profile.jsp";
             public static final String DIALOG = USER_PREFIX + "dialog.jsp";
             public static final String UNREAD = USER_PREFIX + "unread.jsp";
@@ -207,8 +212,9 @@ public final class Constants {
         public class Admin {
             private static final String ADMIN_PREFIX = PREFIX + "admin/";
 
-            public static final String COURSES = ADMIN_PREFIX + "courses.jsp";
+            public static final String COURSES = ADMIN_PREFIX + "courses.htm";
             public static final String USERS = "user.jsp";
+            public static final String MAIN_PAGE = ADMIN_PREFIX + "adminPage.jsp";
         }
 
         public class Tutor {

@@ -37,4 +37,7 @@ public interface UserService {
     List<User> getAll();
 
     User getByLogin(String login);
+
+    @Cacheable
+    List<User> getAllByStatus(String param);
 }
