@@ -35,8 +35,10 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
 
         String param = getStringParam(req, Constants.Attributes.SORT_BY);
 
-        if(user!=null){
-                studentSubscriptions = getCourseService().getAllByStudentId(user.getId());
+        if(user!=null) {
+            studentSubscriptions = getCourseService().getAllByStudentId(user.getId());
+        }
+        /*if(true){*/
             if(tutorId != null){
                 List<Course> tutorCourses = getCourseService().getAllByTutorId(tutorId);
 
@@ -49,8 +51,9 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
                 print(req, resp, courses);
                 return;
             }
+         /*studentSubscriptions = getCourseService().getAllByStudentId(user.getId());//TODO Uncomment and delete*/
 
-            if(user.getRoles().contains(Role.TUTOR) && param!=null){
+        if(user!=null && user.getRoles().contains(Role.TUTOR) && param!=null){
 
                 courses = getCourseService().getByStatusAndTutorId(param.toUpperCase(), user.getId());
 
@@ -91,9 +94,8 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
                 print(req, resp, coursesWithCount);
                 return;
             }
-        }
 
-        resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "validator.error500");
+       /* resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "validator.error500");*/
     }
 
     @Override
@@ -122,8 +124,8 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Course course = (Course) getEntityFromRequest(req, Course.class);
-        String locale = getStringParam(req,Constants.Attributes.LANG);
+        Course course = (Course) getEntityFromRequest(req, CourseWithSubscription.class);
+        String locale = getLocale(req);
         LocaleUtil translator = getTranslator();
         String imagePart = getStringParam(req, Constants.Attributes.IMAGE);
 
@@ -170,13 +172,12 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
 
 
     private boolean updateCourse(String image, Course course) {
-        Course savedCourse = getCourseService().get(course.getId());
         if (image != null) {
-            String imageName = getFileService().saveFile(savedCourse.getId(), SettingsAndFolderPaths.getUploadCoursesDirectory(), image);
-            savedCourse.setImage(imageName);
+            String imageName = getFileService().saveFile(course.getId(), SettingsAndFolderPaths.getUploadCoursesDirectory(), image);
+            course.setImage(imageName);
         }
 
-        return getCourseService().update(savedCourse)!=null;
+        return getCourseService().update(course)!=null;
     }
 
 }

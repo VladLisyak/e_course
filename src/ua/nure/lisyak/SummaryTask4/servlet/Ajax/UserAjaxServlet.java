@@ -72,6 +72,7 @@ public class UserAjaxServlet extends BaseAjaxServlet{
 
             if(user==null){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "txt.nothingFound");
+                return;
         }
 
         Validator validator = new UserValidator(user, locale);
@@ -90,8 +91,10 @@ public class UserAjaxServlet extends BaseAjaxServlet{
             sendError(req, resp, validator);
             return;
         }
-
-        user.addRole(Role.TUTOR);
+        User currentUser = getCurrentUser(req);
+        user.addRole(((getCurrentUser(req)!=null)&&(currentUser.getRoles().contains(Role.ADMIN)))?
+        Role.TUTOR:
+        Role.STUDENT);
         user.setEnabled(Enabled.ACTIVE);
 
         User savedUser = saveUser(imagePart, user);
@@ -114,7 +117,7 @@ public class UserAjaxServlet extends BaseAjaxServlet{
 
         Validator validator = new UserValidator(user, locale);
 
-        if(imagePart==null && !user.getImage().equals(getUserService().get(user.getId()))){
+        if(imagePart==null && !(user.getImage().equals(getUserService().get(user.getId()).getImage()))){
             imagePart = user.getImage();
         }
 

@@ -116,7 +116,7 @@ public abstract class JdbcAbstractRepository<T> {
         try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
             ps.setInt(1, firstParam);
             ps.setInt(2, secondParam);
-
+            LOGGER.debug(ps.toString());
             return extractListFromPreparedStatement(ps);
         }catch (SQLException e){
             LOGGER.warn(ERROR_MESSAGE, sql, e);

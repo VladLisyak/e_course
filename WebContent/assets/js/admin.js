@@ -5,7 +5,12 @@
 var app = angular.module('admin.controllers', [ 'ngRoute', 'ngResource' ]);
 
 
-app.controller('notConfirmedCtrl',
+app.controller('homeCtrl',
+    function ($scope, $location, UserFactory, $rootScope, UsersFactory) {
+
+    }
+);
+   app.controller('notConfirmedCtrl',
     function ($scope, $location, UserFactory, $rootScope, UsersFactory) {
         $scope.message = "";
 
@@ -13,7 +18,6 @@ app.controller('notConfirmedCtrl',
 
         $scope.updateWaiting = function(){
             $rootScope.usersFromDb = UsersFactory.waiting();
-            console.log($rootScope.usersFromDb);
         };
 
         $scope.ban = function(user){
@@ -55,7 +59,6 @@ app.controller('activeCtrl',
 
         $scope.updateActive = function(){
             $rootScope.usersFromDb = UsersFactory.active();
-            console.log($scope.usersFromDb);
         };
 
         $scope.ban = function(user){
@@ -95,7 +98,7 @@ app.controller('blackListCtrl',
 
         $scope.updateBanned = function(){
             $rootScope.usersFromDb = UsersFactory.banned();
-            console.log($scope.usersFromDb);
+
         };
 
         $scope.unban = function(user){
@@ -112,25 +115,68 @@ app.controller('blackListCtrl',
 
     });
 app.controller('tutorsCtrl',
-    function ($scope, $location, UserFactory, CourseFactory) {
+    function ($scope, $location, UserFactory, CourseFactory, $rootScope) {
+
         $scope.newImage = "";
-        $scope.usersFromDb = UserFactory.tutors();
+        $scope.currUser = 0;
+        $scope.updateTutors = function(){
+            $scope.usersFromDb = UserFactory.tutors(function success(){
+                $scope.usersFromDb.forEach(function(item, i, arr){
+                    $scope.usersWithCourses[item.id+""] = CourseFactory.byTutor({tId : item.id});
+                });
+            });
+        };
+        $scope.usersFromDb = {};
+
         $scope.usersWithCourses ={};
-        $scope.usersFromDb.forEach(function(item, i, arr){
-            $scope.usersWithCourses[item.id+""] = CourseFactory.byTutor({tId : $scope.usersFromDb.id});
-        });
 
-        $scope.submit = new function (){
+        function updateTutors(){
+           $scope.updateTutors();
+        }
 
+        updateTutors();
+
+        $scope.submit = function(){
+            var user = $rootScope.detailsData;
+            console.log(user);
+            $rootScope.detailsData = {};
+            if($scope.newImage.length>0){
+                user.image = $scope.newImage;
+            }
+            $scope.newImage = "";
+
+            delete user['$$hashKey'];
+            UserFactory.update(user, function success(data) {
+                $rootScope.successNoty($rootScope.lang['success']);
+                $scope.updateTutors();
+            }, function error(data) {
+                $scope.message = data.data;
+                $rootScope.failNoty($scope.message);
+
+            });
+            $rootScope.hide();
         };
 
+        $scope.getCount = function(id){
+            return $scope.usersWithCourses[id].length
+        };
 
         $scope.delete = function (user){
-
+            user.image = $scope.newImage;
+            delete user['$$hashKey'];
+            console.log(user);
+            UserFactory.delete(user, function success(data) {
+                $rootScope.successNoty($rootScope.lang['success']);
+                $scope.updateTutors();
+            }, function error(data) {
+                $rootScope.failNoty($rootScope.lang['deletingError']);
+            });
+            $rootScope.hide();
         };
 
-        $scope.showCourses = function(courses){
-            /*'modal2'*/
+        $scope.showCourses = function(user){
+            $scope.currUser = user.id;
+            $rootScope.showWithName(user, "modal2");
         }
 
 
@@ -144,21 +190,55 @@ app.controller('administratorsCtrl', ['$scope', '$location',
 app.controller('coursesCtrl',
     function ($scope, $location, UserFactory, $http, $rootScope, CourseFactory) {
             $scope.newImage = "";
-            $scope.themes = $http.get("/ajax/themes", {});
+            $scope.themes = "";
+            $scope.minDate = new Date();
+            $scope.minDate.setDate($scope.minDate.getDate());
+
+            $scope.open1 = function() {
+                $scope.popup1.opened = true;
+            };
+
+            $scope.popup1 = {
+                opened: false
+            };
+
+            $scope.open2 = function() {
+                $scope.popup2.opened = true;
+            };
+
+            $scope.popup2 = {
+                opened: false
+            };
+
+            $scope.getDate = function(){
+                var max = new Date($rootScope.detailsData.startDate);
+                max.setDate(max.getDate()+1);
+
+                return new Date($rootScope.detailsData.startDate.getDate() + 1);
+            };
+
+
+
+        $http.get("/ajax/themes")
+                .then(function(response){
+                $scope.themes = response.data;
+            });
 
             $scope.submit = function(){
                 if($scope.newImage.localeCompare("")!=0){
                     $rootScope.detailsData.image = $scope.newImage;
                 }
-                CourseFactory.put($rootScope.detailsData, function success(){
-                    $rootScope.updateTutors();
+                console.log($rootScope.detailsData);
+                CourseFactory.update($rootScope.detailsData, function success(){
+                    $rootScope.successNoty($rootScope.lang['success']);
+                    $scope.updateTutors();
+                }, function error(data) {
+                    $rootScope.failNoty(data);
                 });
+                $rootScope.hideWithName('courseModal');
                 $scope.newImage = "";
                 $rootScope.detailsData = {};
-            }
-
-
-
+            };
 
 
     });
@@ -175,11 +255,11 @@ services.factory('UsersFactory', function ($resource) {
 
 services.factory('UserFactory', function ($resource) {
     return $resource('/ajax/user/:id', {id:'@id'}, {
-        admins: { method: 'GET', params:{role:'ADMIN'}},
-        students: { method: 'GET', params:{role:'STUDENT'}},
-        tutors: { method: 'GET', params:{role:'TUTOR'}},
+        admins: { method: 'GET', params:{role:'ADMIN'}, isArray: true},
+        students: { method: 'GET', params:{role:'STUDENT'}, isArray: true},
+        tutors: { method: 'GET', params:{role:'TUTOR'}, isArray: true},
         delete: { method: 'DELETE'},
-        update: { method: 'PUT'},
+        update: { method: 'PUT'}
     })
 });
 
@@ -192,13 +272,13 @@ services.factory('CourseFactory', function ($resource) {
         delete: { method: 'DELETE'},
         update: { method: 'PUT', headers : { 'Content-Type': 'application/json; charset=UTF-8' }  // set the headers so angular passing info as form data (not request payload)
         },
-        byTutor: {method: 'GET', params: {tId : '@tId'}}
+        byTutor: {method: 'GET', params: {tId : '@tId'}, isArray:true}
     })
 });
 
 
 
-var main = angular.module('adminApp', ['admin.controllers', 'admin.services', 'angular.chosen', 'ui.bootstrap'])
+var main = angular.module('adminApp', ['admin.controllers', 'ngMessages', 'admin.services', 'angular.chosen', 'ui.bootstrap', 'ngAnimate'])
     .config(function($routeProvider) {
 
         $routeProvider.when('/home', {
@@ -211,7 +291,7 @@ var main = angular.module('adminApp', ['admin.controllers', 'admin.services', 'a
             templateUrl : 'static/active.html',
             controller : 'activeCtrl'
         }).when('/users/tutors', {
-            templateUrl : 'static/tutors.jsp',
+            templateUrl : 'static/tutors.html',
             controller : 'tutorsCtrl'
         }).when('/users/administrators', {
             templateUrl : 'static/administrators.htm',
@@ -297,14 +377,20 @@ main.run(function($rootScope, $http, $location, UserFactory) {
     };
 
     $rootScope.detailsData = {};
+    $rootScope.selectedTutor = {};
 
     $rootScope.showDetails = function(object){
-        $rootScope.detailsData = object;
+        $rootScope.detailsData = $rootScope.clone(object);
         $('#modal').modal();
     };
 
-    $rootScope.showDetails = function(object, name){
-        $rootScope.detailsData = object;
+    $rootScope.endMinDate = "";
+    $rootScope.showWithName = function(object, name){
+        $rootScope.detailsData = $rootScope.clone(object);
+
+        $rootScope.detailsData.startDate = new Date($rootScope.detailsData.startDate);
+        $rootScope.detailsData.endDate = new Date($rootScope.detailsData.endDate);
+
         $('#'+name).modal();
     };
 
@@ -313,7 +399,7 @@ main.run(function($rootScope, $http, $location, UserFactory) {
         $('#modal').modal('hide');
     };
 
-    $rootScope.hide = function(name){
+    $rootScope.hideWithName = function(name){
         $rootScope.detailsData = {};
         $('#'+name).modal('hide');
     };
@@ -328,6 +414,9 @@ main.run(function($rootScope, $http, $location, UserFactory) {
 
     $rootScope.failNoty = function(reason) {
         var message = reason.substring(reason.indexOf('<u>'), reason.indexOf('</u>'));
+        if(message.length==0){
+            message = reason;
+        }
         $rootScope.closeNoty();
         $rootScope.failedNote = noty({
             text: message,
@@ -336,6 +425,10 @@ main.run(function($rootScope, $http, $location, UserFactory) {
             timeout: 2500
         });
         $rootScope.message = "";
+    };
+
+    $rootScope.clone = function(object){
+        return jQuery.extend(true, {}, object);
     };
 
     $rootScope.successNoty = function(reason) {
@@ -353,3 +446,12 @@ main.run(function($rootScope, $http, $location, UserFactory) {
     });
 
 });
+
+function clone(obj) {
+    if (null == obj || "object" != typeof obj) return obj;
+    var copy = obj.constructor();
+    for (var attr in obj) {
+        if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+    }
+    return copy;
+}

@@ -19,13 +19,13 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div style="margin-bottom: 25px"  ng-class="{ 'has-error': courseForm.password.$touched && courseForm.password.$invalid }">
-                            <label class="control-label" for="name">{lang.title}}</label>
-                            <input type="text" id = "name" ng-model = "detailsData.title" class="form-control"
+                        <div style="margin-bottom: 25px"  ng-class="{ 'has-error': courseForm.title.$touched && courseForm.title.$invalid }">
+                            <label class="control-label" for="title">{lang.title}}</label>
+                            <input type="text" id = "title" name = "title" ng-model = "detailsData.title" class="form-control"
                                    ng-minlength="5"
                                    ng-maxlength="20"
                                    required>
-                            <div class="help-block" ng-messages="courseForm.name.$error" ng-show="courseForm.name.$touched">
+                            <div class="help-block" ng-messages="courseForm.title.$error" ng-show="courseForm.title.$touched">
                                 <p ng-message="minlength">{lang.tooShort}}</p>
                                 <p ng-message="maxlength">{lang.tooLong}}</p>
                                 <p ng-message="required">{lang.required}}</p>
@@ -34,8 +34,8 @@
 
                         <div style="margin-bottom: 25px"  ng-class="{ 'has-error': courseForm.desc.$touched && courseForm.desc.$invalid }">
                         <label class="control-label" for="desc">{lang.description}}</label>
-                        <textarea id = "desc" class="form-control" ng-model = "detailsData.description" class="form-control"
-                                  required />
+                        <textarea id = "desc" class="form-control" name = "desc" ng-model = "detailsData.description" class="form-control"
+                                  required></textarea>
                             <div class="help-block" ng-messages="courseForm.desc.$error" ng-show="courseForm.desc.$touched">
                                 <p ng-message="required">{lang.required}}</p>
                             </div>
@@ -44,43 +44,64 @@
                          <label class="control-label" for="count">{lang.subscribers}}</label>
                          <span id = "count" class="form-control" ng-model = "detailsData.subscribersCount" class="form-control">{{detailsData.subscribersCount}}</span>
 
-                        <label class="control-label" for="date">{lang.when}}</label>
-                            <div class="form-control" id = "date">
-                                {lang.from}}
-                                <uib-datepicker ng-model="detailsData.startDate" min-date="now" show-weeks="false" class="well well-sm"></uib-datepicker>
-                                {lang.to}}
-                                <uib-datepicker ng-model="detailsData.startDate" min-date="now + 1" show-weeks="false" class="well well-sm"></uib-datepicker>
-                            </div>
+                        <label class="control-label" for="startDate">{lang.startDate}}</label>
+                           <%-- <div id = "date" ng-class="{ 'has-error': courseForm.start.$touched && courseForm.start.$invalid }">
+                                    <p class="">
+                                        <input class="form-control" id = "start" name = "start" type="date" ng-model = "detailsData.startDate" min="{{minDate | date:'yyyy-MM-dd'}}">
+                                    </p>
+                                <p class="">
+                                    <input class="form-control" id = "end" name = "end" type="date" ng-model = "detailsData.endDate" min="{{endMinDate | date:'yyyy-MM-dd'}}">
+                                </p>
+                             </div>--%>
+
+                        <div id = "startDate"  ng-class="{ 'has-error': courseForm.start.$touched && courseForm.start.$invalid }">
+                            <p class="input-group">
+                                <input type="text" class="form-control" name = "start" id = "start" uib-datepicker-popup="yyyy-MM-dd" ng-model="detailsData.startDate" is-open="popup1.opened" min-date="minDate" ng-required="true" close-text="Close" />
+                                 <span class="input-group-btn">
+                                     <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                 </span>
+                            </p>
+                        </div>
+
+                        <div id = "endDate"  ng-class="{ 'has-error': courseForm.end.$touched && courseForm.end.$invalid }">
+                            <p class="input-group">
+                                <input type="text" class="form-control" name = "start" uib-datepicker-popup="yyyy-MM-dd" ng-model="detailsData.endDate" is-open="popup2.opened" min-date="getDate()" ng-required="true" close-text="Close" />
+                                 <span class="input-group-btn">
+                                     <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                 </span>
+                            </p>
+                        </div>
 
                         <div style="margin-bottom: 25px"  ng-class="{ 'has-error': courseForm.tutor.$touched && courseForm.tutor.$invalid }">
                             <label class="control-label" for="tutor">{lang.tutor}}</label>
-                        <select class="form-control" id = "tutor" ng-model = "detailsData.tutor"
-                                ng-multiple="false" data-placeholder="{lang.roles}}"
-                                chosen
-                                class="form-control chosen"
-                                ng-options="tutor for tutor in tutors" required>
-                        </select>
+                            <select class="form-control" name = "tutor" id = "tutor" ng-model = "detailsData.tutor"
+                                    ng-multiple="false" data-placeholder="{lang.tutor}}"
+                                    chosen
+                                    class="form-control"
+                                    ng-options="tutor.name for tutor in tutors"
+                                    required>
+                            </select>
                         </div>
 
-                        <div style="margin-bottom: 25px"  ng-class="{ 'has-error': courseForm.themes.$touched && courseForm.themes.$invalid }">
+                        <div style="margin-bottom: 25px" ng-class="{ 'has-error': courseForm.themes.$touched && courseForm.themes.$invalid }">
                         <label class="control-label" for="themes">{lang.themes}}</label>
-                        <select class="form-control" id = "themes" ng-model = "detailsData.themes"
-                                ng-multiple="true" multiple data-placeholder="{lang.roles}}"
-                                chosen
-                                class="form-control"
-                                ng-options="theme for theme in themes" required>
-                        </select>
+                            <select id = "themes" name = ""ng-model = "detailsData.themes"
+                                    ng-multiple="true" multiple data-placeholder="{lang.themes}}"
+                                    chosen
+                                    class="form-control"
+                                    ng-options="theme for theme in themes" required>
+                            </select>
                         </div>
-                        <div class="form-control" class="row" ng-show = "newImage.localeCompare('')==0" style="margin: 0 auto;">
-                            <img src="/uploads/courses/{{detailsData.image}}" width="300" height="300">
-                        </div>
-                        <input type="file" class="form-control" name="image" placeholder="{image}}" ng-model="newImage" accept="image/*" app-filereader/>
 
+                        <div class="row" ng-show = "newImage.localeCompare('')==0" style="margin: 0 auto;">
+                            <img src="/uploads/courses/{{detailsData.image}}" width="100" height="100">
+                            <input type="file" name="image" placeholder="{image}}" ng-model="newImage" accept="image/*" app-filereader/>
+                        </div>
                     </div>
                  </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary"  ng-show="!courseForm.$invalid" ng-click="submit()">{lang.Update}}</button>
-                        <button type="button" class="btn btn-default" ng-click="hide('courseModal')">{lang.Cancel}}</button>
+                        <button type="button" class="btn btn-default" ng-click="hideWithName('courseModal')">{lang.Cancel}}</button>
                     </div>
             </div>
             </form>
