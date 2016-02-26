@@ -63,7 +63,7 @@ public class UserValidator extends AbstractValidator {
     }
 
     private String validateRoles(Set<Role> roles) {
-        if (roles == null || roles.size() == 0) {
+        if (roles == null) {
             return Validation.CANT_BE_EMPTY;
         }
         return null;

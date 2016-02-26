@@ -61,7 +61,8 @@ public class UserAjaxServlet extends BaseAjaxServlet{
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) getEntityFromRequest(req, User.class);
-        String locale = getStringParam(req,Constants.Attributes.LANG);
+        String locale = getLocale(req);
+
         LocaleUtil translator = getTranslator();
 
         String imagePart = getStringParam(req, Constants.Attributes.IMAGE);
@@ -77,7 +78,7 @@ public class UserAjaxServlet extends BaseAjaxServlet{
 
         Validator validator = new UserValidator(user, locale);
 
-        if (imagePart != null && !SettingsAndFolderPaths.isImage(imagePart)) {
+        if (imagePart != null && imagePart.length()>0 && !SettingsAndFolderPaths.isImage(imagePart)) {
             validator.putIssue(Constants.Attributes.IMAGE, "validator.invalidFileFormat");
         }
 
@@ -92,11 +93,14 @@ public class UserAjaxServlet extends BaseAjaxServlet{
             return;
         }
         User currentUser = getCurrentUser(req);
-        user.addRole(((getCurrentUser(req)!=null)&&(currentUser.getRoles().contains(Role.ADMIN)))?
-        Role.TUTOR:
-        Role.STUDENT);
-        user.setEnabled(Enabled.ACTIVE);
-
+        if(currentUser!=null) {
+            user.addRole(((currentUser.getRoles().contains(Role.ADMIN))) ?
+                    Role.TUTOR :
+                    Role.STUDENT);
+            user.setEnabled(Enabled.ACTIVE);
+        }else{
+            user.setEnabled(Enabled.WAITING);
+        }
         User savedUser = saveUser(imagePart, user);
 
         if (savedUser == null) {
@@ -117,7 +121,8 @@ public class UserAjaxServlet extends BaseAjaxServlet{
 
         Validator validator = new UserValidator(user, locale);
 
-        if(imagePart==null && !(user.getImage().equals(getUserService().get(user.getId()).getImage()))){
+        String image = user.getImage();
+        if(imagePart==null && !(image == null || user.getImage().equals(getUserService().get(user.getId()).getImage()))){
             imagePart = user.getImage();
         }
 

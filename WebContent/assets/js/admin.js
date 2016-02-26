@@ -26,7 +26,7 @@ app.controller('homeCtrl',
                 $rootScope.successNoty($rootScope.lang['success']);
                 $scope.updateWaiting();
             }, function error(data) {
-                $scope.message = data.data;
+                $scope.message = data;
                 $rootScope.failNoty($scope.message);
 
             });
@@ -34,7 +34,7 @@ app.controller('homeCtrl',
 
 
         $scope.confirm = function(user){
-            var user = $rootScope.detailsData;
+            var user = user;
             $rootScope.detailsData = {};
             delete user['$$hashKey'];
             user.enabled = 'ACTIVE';
@@ -43,7 +43,7 @@ app.controller('homeCtrl',
                 $rootScope.successNoty($rootScope.lang['success']);
                 $scope.updateWaiting();
             }, function error(data) {
-                $scope.message = data.data;
+                $scope.message = data;
                 $rootScope.failNoty($scope.message);
 
             });
@@ -67,7 +67,7 @@ app.controller('activeCtrl',
                 $rootScope.successNoty($rootScope.lang['success']);
                 $scope.updateActive();
             }, function error(data) {
-                $scope.message = data.data;
+                $scope.message = data;
                 $rootScope.failNoty($scope.message);
 
             });
@@ -83,7 +83,7 @@ app.controller('activeCtrl',
                 $rootScope.successNoty($rootScope.lang['success']);
                 $scope.updateActive();
             }, function error(data) {
-                $scope.message = data.data;
+                $scope.message = data;
                 $rootScope.failNoty($scope.message);
 
             });
@@ -107,7 +107,7 @@ app.controller('blackListCtrl',
                 $rootScope.successNoty($rootScope.lang['success']);
                 $scope.updateBanned();
             }, function error(data) {
-                $scope.message = data.data;
+                $scope.message = data;
                 $rootScope.failNoty($scope.message);
 
             });
@@ -116,19 +116,15 @@ app.controller('blackListCtrl',
     });
 app.controller('tutorsCtrl',
     function ($scope, $location, UserFactory, CourseFactory, $rootScope) {
+        $scope.emailTemplate = "^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$";
+        $scope.nameTemplate = "^[A-ZА-Яа-яa-z]+$";
+        $scope.loginTemplate = "^[A-ZА-Яа-яa-z0-9_-]+$";
+        $scope.passwordTemplate = "^[A-ZА-Яа-яa-z0-9_-]+[-\s][A-ZА-Яа-яa-z0-9_-]+$";
 
         $scope.newImage = "";
         $scope.currUser = 0;
-        $scope.updateTutors = function(){
-            $scope.usersFromDb = UserFactory.tutors(function success(){
-                $scope.usersFromDb.forEach(function(item, i, arr){
-                    $scope.usersWithCourses[item.id+""] = CourseFactory.byTutor({tId : item.id});
-                });
-            });
-        };
-        $scope.usersFromDb = {};
-
-        $scope.usersWithCourses ={};
+       
+        
 
         function updateTutors(){
            $scope.updateTutors();
@@ -148,17 +144,40 @@ app.controller('tutorsCtrl',
             delete user['$$hashKey'];
             UserFactory.update(user, function success(data) {
                 $rootScope.successNoty($rootScope.lang['success']);
-                $scope.updateTutors();
+                updateTutors();
             }, function error(data) {
-                $scope.message = data.data;
+                $scope.message = data;
                 $rootScope.failNoty($scope.message);
 
             });
             $rootScope.hide();
         };
 
+        $scope.postTutor = function(){
+            var user = $rootScope.detailsData;
+            console.log(user);
+            $rootScope.detailsData = {};
+                user.image = $scope.newImage;
+            $scope.addTutorForm.$setUntouched();
+
+            $scope.message = "";
+            delete user['$$hashKey'];
+            UserFactory.post(user, function success(data) {
+                $rootScope.successNoty($rootScope.lang['success']);
+                updateTutors();
+            }, function error(data) {
+                $scope.message = data;
+                console.log($scope.message);
+                $rootScope.failNoty($scope.message);
+
+            });
+            user = "";
+            $scope.newImage = "";
+            $rootScope.hideWithName('addTutor');
+        };
+
         $scope.getCount = function(id){
-            return $scope.usersWithCourses[id].length
+            return $rootScope.usersWithCourses[id].length
         };
 
         $scope.delete = function (user){
@@ -193,6 +212,10 @@ app.controller('coursesCtrl',
             $scope.themes = "";
             $scope.minDate = new Date();
             $scope.minDate.setDate($scope.minDate.getDate());
+            $scope.courses = "";
+            CourseFactory.query(function success(data){
+                $scope.courses = data;
+            });
 
             $scope.open1 = function() {
                 $scope.popup1.opened = true;
@@ -210,14 +233,30 @@ app.controller('coursesCtrl',
                 opened: false
             };
 
-            $scope.getDate = function(){
+           /* $scope.getDate = function(){
                 var max = new Date($rootScope.detailsData.startDate);
                 max.setDate(max.getDate()+1);
 
-                return new Date($rootScope.detailsData.startDate.getDate() + 1);
-            };
+                return max;
+            };*/
 
 
+        $scope.postCourse = function(){
+            if($scope.newImage.localeCompare("")!=0){
+                $rootScope.detailsData.image = $scope.newImage;
+            }
+            CourseFactory.post($rootScope.detailsData, function success(){
+                $rootScope.successNoty($rootScope.lang['success']);
+                $rootScope.updateTutors();
+                $rootScope.detailsData = {};
+                $rootScope.hideWithName('addCourseModal');
+
+            }, function error(data) {
+                $rootScope.failNoty(data);
+            });
+            $scope.courseForm.$setUntouched();
+            $scope.newImage = "";
+        };
 
         $http.get("/ajax/themes")
                 .then(function(response){
@@ -231,13 +270,13 @@ app.controller('coursesCtrl',
                 console.log($rootScope.detailsData);
                 CourseFactory.update($rootScope.detailsData, function success(){
                     $rootScope.successNoty($rootScope.lang['success']);
-                    $scope.updateTutors();
+                    $rootScope.updateTutors();
+                    $rootScope.detailsData = {};
+                    $rootScope.hideWithName('courseModal');
                 }, function error(data) {
                     $rootScope.failNoty(data);
                 });
-                $rootScope.hideWithName('courseModal');
                 $scope.newImage = "";
-                $rootScope.detailsData = {};
             };
 
 
@@ -258,6 +297,8 @@ services.factory('UserFactory', function ($resource) {
         admins: { method: 'GET', params:{role:'ADMIN'}, isArray: true},
         students: { method: 'GET', params:{role:'STUDENT'}, isArray: true},
         tutors: { method: 'GET', params:{role:'TUTOR'}, isArray: true},
+        post: { method: 'POST', headers : { 'Content-Type': 'application/json; charset=UTF-8' }  // set the headers so angular passing info as form data (not request payload)
+        },
         delete: { method: 'DELETE'},
         update: { method: 'PUT'}
     })
@@ -265,7 +306,7 @@ services.factory('UserFactory', function ($resource) {
 
 services.factory('CourseFactory', function ($resource) {
     return $resource('/ajax/course/:id', {id:'@id'}, {
-        query: { method: 'GET', isArray : true},
+        query: { method: 'GET', isArray: true},
         get: { method: 'GET'},
         post: { method: 'POST', headers : { 'Content-Type': 'application/json; charset=UTF-8' }  // set the headers so angular passing info as form data (not request payload)
         },
@@ -297,10 +338,10 @@ var main = angular.module('adminApp', ['admin.controllers', 'ngMessages', 'admin
             templateUrl : 'static/administrators.htm',
             controller : 'administratorsCtrl'
         }).when('/users/blackList', {
-            templateUrl : 'static/blackList.htm',
+            templateUrl : 'static/blackList.html',
             controller : 'blackListCtrl'
         }).when('/courses', {
-            templateUrl : 'static/courses.htm',
+            templateUrl : 'static/courses.html',
             controller : 'coursesCtrl'
         }).otherwise('/home');
 
@@ -348,19 +389,21 @@ main.directive('appFilereader', function($q) {
     }; //return
 });
 
-main.run(function($rootScope, $http, $location, UserFactory) {
+main.run(function($rootScope, $http, $location, UserFactory, CourseFactory) {
     $rootScope.message = "";
     $rootScope.tutors = UserFactory.tutors();
     $rootScope.roles = ["STUDENT", "TUTOR"];
+    $rootScope.lang = {};
 
-    $rootScope.updateTutors = function(){
+   /* $rootScope.updateTutors = function(){
      $rootScope.tutors = UserFactory.tutors();
-    };
+    };*/
 
     $rootScope.changeLang = function (id) {
         $http.post("/locale?newLocale=" + id, {}).success(function (data, status) {
             $rootScope.locale = id;
             $rootScope.lang = data;
+            console.log($rootScope.lang);
         })
     };
 
@@ -379,6 +422,19 @@ main.run(function($rootScope, $http, $location, UserFactory) {
     $rootScope.detailsData = {};
     $rootScope.selectedTutor = {};
 
+    $rootScope.updateTutors = function(){
+        $rootScope.tutors = UserFactory.tutors();
+        $rootScope.usersFromDb = UserFactory.tutors(function success(){
+            $rootScope.usersFromDb.forEach(function(item, i, arr){
+                $rootScope.usersWithCourses[item.id+""] = CourseFactory.byTutor({tId : item.id});
+            });
+        });
+    };
+
+    $rootScope.usersFromDb = {};
+
+    $rootScope.usersWithCourses ={};
+
     $rootScope.showDetails = function(object){
         $rootScope.detailsData = $rootScope.clone(object);
         $('#modal').modal();
@@ -387,9 +443,9 @@ main.run(function($rootScope, $http, $location, UserFactory) {
     $rootScope.endMinDate = "";
     $rootScope.showWithName = function(object, name){
         $rootScope.detailsData = $rootScope.clone(object);
-
+        if($rootScope.detailsData.startDate!=undefined){
         $rootScope.detailsData.startDate = new Date($rootScope.detailsData.startDate);
-        $rootScope.detailsData.endDate = new Date($rootScope.detailsData.endDate);
+        $rootScope.detailsData.endDate = new Date($rootScope.detailsData.endDate);}
 
         $('#'+name).modal();
     };
@@ -413,8 +469,10 @@ main.run(function($rootScope, $http, $location, UserFactory) {
     };
 
     $rootScope.failNoty = function(reason) {
-        var message = reason.substring(reason.indexOf('<u>'), reason.indexOf('</u>'));
-        if(message.length==0){
+        if(reason.data!=undefined){
+        reason = reason.data;
+        var message = reason.substring(reason.indexOf('<u>'), reason.indexOf('</u>'));}else{
+
             message = reason;
         }
         $rootScope.closeNoty();
@@ -444,7 +502,6 @@ main.run(function($rootScope, $http, $location, UserFactory) {
     angular.element(document).ready(function () {
         $rootScope.defineLang();
     });
-
 });
 
 function clone(obj) {

@@ -45,6 +45,7 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
     private static final String GET_COURSE_COUNT = "course.count";
     private static final String AVERAGE_MARK = "student.average.mark";
     private static final String GET_ALL_BY_STATUS_AND_TUTOR_ID = "courses.get.by.status.and.tutor.id";
+    private static final String GET_BY_TITLE = "course.get.by.title";
 
     @Autowired
     private UserRepository userRep;
@@ -205,6 +206,34 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
         }
     }
 
+    @Override
+    public Course getByTitle(String title) {
+        String query = QueryStorage.get(GET_BY_TITLE);
+        try(PreparedStatement ps = getConnection().prepareStatement(query)){
+            ps.setString(1, title);
+            ResultSet rs = ps.executeQuery();
+            Course course = null;
+            if(rs.next()){
+                course = extractFromResultSet(rs);
+            }
+            return course;
+        } catch (SQLException e) {
+            LOGGER.warn(ERROR_MESSAGE, query, e);
+            throw new DataAccessException(getMessage(query), e);
+        }
+    }
+
+    @Override
+    public List<Course> getAll() {
+        String query = QueryStorage.get(GET_ALL);
+        try(PreparedStatement ps = getConnection().prepareStatement(query)){
+            return extractListFromPreparedStatement(ps);
+        } catch (SQLException e) {
+            LOGGER.warn(ERROR_MESSAGE, query, e);
+            throw new DataAccessException(getMessage(query), e);
+        }
+    }
+
 
     @Override
     protected Course extractFromResultSet(ResultSet resultSet) throws SQLException {
@@ -273,7 +302,8 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
     }
 
     private boolean deleteOldThemes(int userId){
-        return super.delete(userId, DELETE_OLD_THEME);
+        String query = QueryStorage.get(DELETE_OLD_THEME);
+        return super.delete(userId, query);
     }
 
     @Override

@@ -70,6 +70,16 @@ public class JdbcCourseService implements CourseService {
         return repository.getByStatusAndTutorId(s, id);
     }
 
+    @Override
+    public Course getByTitle(String title) {
+        return repository.getByTitle(title);
+    }
+
+    @Override
+    public List<Course> getAll() {
+        return repository.getAll();
+    }
+
 
     @Override
     public List<Course> getAllByTutorId(int id) {
@@ -85,11 +95,6 @@ public class JdbcCourseService implements CourseService {
     public boolean setAllFinished() {
         return repository.setAllFinished();
     }
-
-    /*@Override
-    public List<Course> getAll() {
-        return repository.getAll();
-    }*/
 
     @Override
     public List<Course> getAllByStudentId(int id) {

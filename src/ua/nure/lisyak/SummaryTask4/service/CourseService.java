@@ -54,4 +54,8 @@ public interface CourseService {
     Float getStudentAverageMark(int id);
 
     List<CourseWithSubscription> getByStatusAndTutorId(String s, int id);
+
+    Course getByTitle(String title);
+
+    List<Course> getAll();
 }

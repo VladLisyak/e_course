@@ -23,6 +23,8 @@
 </div>
 
 <%@include file="../../fragments/admin_fragments/coursesModal.jsp" %>
+<%@include file="../../fragments/admin_fragments/addTutorModal.jsp" %>
+<%@include file="../../fragments/admin_fragments/addCourseModal.jsp" %>
 <%@include file="../../fragments/footer.jspf" %>
 <script src="assets/js/admin.js" type="text/javascript"></script>
 <script type="text/javascript">

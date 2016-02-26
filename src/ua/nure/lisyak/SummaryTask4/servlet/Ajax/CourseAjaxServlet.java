@@ -3,11 +3,13 @@ package ua.nure.lisyak.SummaryTask4.servlet.Ajax;
 import ua.nure.lisyak.SummaryTask4.model.Course;
 import ua.nure.lisyak.SummaryTask4.model.User;
 import ua.nure.lisyak.SummaryTask4.model.enums.Role;
+import ua.nure.lisyak.SummaryTask4.model.enums.Status;
 import ua.nure.lisyak.SummaryTask4.transferObjects.CourseWithSubscription;
 import ua.nure.lisyak.SummaryTask4.util.LocaleUtil;
-import ua.nure.lisyak.SummaryTask4.util.Tuple;
 import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
 import ua.nure.lisyak.SummaryTask4.util.constant.SettingsAndFolderPaths;
+import ua.nure.lisyak.SummaryTask4.util.validation.CourseValidator;
+import ua.nure.lisyak.SummaryTask4.util.validation.Validator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @WebServlet(urlPatterns = {Constants.ServletPaths.AJAX_COURSE_LIST})
@@ -81,6 +84,10 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
                 String sort = getStringParam(req, Constants.Attributes.SORT_BY, "id");
                 String order = getStringParam(req, Constants.Attributes.ORDER, "asc");
 
+               /* if(user!=null && user.getRoles().contains(Role.ADMIN)){*/
+                    List<Course> allCourses = getCourseService().getAll();
+                    print(req, resp, allCourses);
+              /*  }
 
                 Tuple<List<? extends Course>, Integer> coursesWithCount = getCourseService().getFiltered(offset,limit,searchBy,search,sort,order);
 
@@ -89,9 +96,9 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
                             ? new CourseWithSubscription(course, true)
                             : new CourseWithSubscription(course, false));
                 }
-                coursesWithCount.setFirstEntity(courses);
+                coursesWithCount.setFirstEntity(courses);*/
 
-                print(req, resp, coursesWithCount);
+               /* print(req, resp, coursesWithCount);*/
                 return;
             }
 
@@ -101,16 +108,40 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Course course = (Course) getEntityFromRequest(req, Course.class);
-        String locale = getStringParam(req,Constants.Attributes.LANG);
+        String locale = getLocale(req);
 
         LocaleUtil translator = getTranslator();
+
+        course = resolveStatus(course);
 
         if(!isCourseUnique(course)){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, translator.translate("object.existing", locale));
             return;
         }
+        if(course.getTutor()!=null){
+            course.setTutorId(course.getTutor().getId());
+        }
 
-        String imagePart = getStringParam(req,Constants.Attributes.IMAGE);
+        Validator courseValidator = new CourseValidator(course, locale);
+
+        String imagePart = getStringParam(req, Constants.Attributes.IMAGE);
+
+        if(imagePart==null){
+            imagePart = course.getImage();
+        }
+
+
+        if (courseValidator.hasErrors()) {
+            sendError(req, resp, courseValidator);
+            return;
+        }
+
+        checkCourseUniqueness(course, courseValidator);
+
+        if (courseValidator.hasErrors()) {
+            sendError(req, resp, courseValidator);
+            return;
+        }
 
         if (saveCourse(imagePart, course)!=null){
             print(req, resp,  translator.translate("object.saved", locale));
@@ -127,7 +158,30 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
         Course course = (Course) getEntityFromRequest(req, CourseWithSubscription.class);
         String locale = getLocale(req);
         LocaleUtil translator = getTranslator();
+
+        course = resolveStatus(course);
+
+        if(course.getTutor()!=null){
+            course.setTutorId(course.getTutor().getId());
+        }
+
+        Validator courseValidator = new CourseValidator(course, locale);
+
         String imagePart = getStringParam(req, Constants.Attributes.IMAGE);
+
+        if(imagePart==null && !(course.getImage().equals(getCourseService().get(course.getId()).getImage()))){
+            imagePart = course.getImage();
+        }
+
+        if (courseValidator.hasErrors()) {
+            sendError(req, resp, courseValidator);
+            return;
+        }
+
+        if (courseValidator.hasErrors()) {
+            sendError(req, resp, courseValidator);
+            return;
+        }
 
         if(updateCourse(imagePart, course)){
             print(req, resp,  translator.translate("object.saved", locale));
@@ -161,13 +215,15 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
     }
 
     private Course saveCourse(String image, Course course) {
+        course.setImage("");
+        if (image != null && image.length()==0) image = null;
         Course savedCourse = getCourseService().save(course);
         if (image != null) {
             String imageName = getFileService().saveFile(savedCourse.getId(), SettingsAndFolderPaths.getUploadCoursesDirectory(), image);
             savedCourse.setImage(imageName);
             return getCourseService().update(savedCourse);
         }
-        return null;
+        return savedCourse;
     }
 
 
@@ -178,6 +234,29 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
         }
 
         return getCourseService().update(course)!=null;
+    }
+
+    private Course resolveStatus(Course course){
+        Course courseToResolve = course;
+
+        if(course !=null && course.getStartDate()!= null && course.getEndDate()!=null){
+            if(course.getStartDate().before(new Date())){
+                if(course.getEndDate().before(new Date()) || course.getEndDate().equals(new Date())){
+                    course.setStatus(Status.FINISHED);
+                }else{
+                    if (course.getEndDate().after(new Date())){
+                        course.setStatus(Status.IN_PROGRESS);
+                    }else{
+                        if (course.getStartDate().after(new Date())){
+                            course.setStatus(Status.BEFORE_START);
+                        }
+                    }
+
+                }
+            }
+        }
+
+        return course;
     }
 
 }

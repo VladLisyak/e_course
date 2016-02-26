@@ -6,5 +6,6 @@
   "registered": "Registered. Confirmation letter was sent to email.",
   "logged": "Logged",
   "subscribersCount": "Students count",
-  "deletingError": "Error occured during deletin: entity wasn't found or there it has critical dependencies"
+  "deletingError": "Error occurred during deleting: entity wasn't found or there it has critical dependencies",
+  "success": "Operation succeeded"
 }

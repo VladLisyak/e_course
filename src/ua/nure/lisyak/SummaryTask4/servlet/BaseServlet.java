@@ -3,6 +3,7 @@ package ua.nure.lisyak.SummaryTask4.servlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.nure.lisyak.SummaryTask4.exception.SerializerException;
+import ua.nure.lisyak.SummaryTask4.model.Course;
 import ua.nure.lisyak.SummaryTask4.model.User;
 import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
 import ua.nure.lisyak.SummaryTask4.util.constant.SettingsAndFolderPaths;
@@ -151,6 +152,7 @@ public abstract class BaseServlet extends AbstractServlet {
     }
 
     protected User saveUser(String image, User user) {
+        user.setImage("");
         User savedUser = getUserService().save(user);
         if (image != null) {
             String imageName = getFileService().saveFile(savedUser.getId(), SettingsAndFolderPaths.getUploadUsersDirectory(), image);
@@ -179,6 +181,13 @@ public abstract class BaseServlet extends AbstractServlet {
         existingUser = getUserService().getByEmail(user.getEmail());
         if (existingUser != null) {
             validator.putIssue("email", "validator.emailTaken");
+        }
+    }
+
+    protected void checkCourseUniqueness(Course course, Validator validator) {
+        Course existingCourse = getCourseService().getByTitle(course.getTitle());
+        if (existingCourse != null) {
+            validator.putIssue("title", "validator.titleTaken");
         }
     }
 

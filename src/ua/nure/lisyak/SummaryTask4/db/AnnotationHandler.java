@@ -59,13 +59,14 @@ public class AnnotationHandler implements InvocationHandler {
             boolean cacheable = method.isAnnotationPresent(Cacheable.class);
 
             StringBuilder sb = new StringBuilder(method.getName());
+            if(args!=null){
             for ( Object o: args) {
                 if(o!=null){
                     sb.append(o.toString());
                 }else{
                     sb.append("null");
                 }
-            }
+            }}
 
             if (cacheable){
                 Element e = cache.get(sb.toString());

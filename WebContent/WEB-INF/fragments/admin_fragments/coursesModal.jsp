@@ -45,27 +45,21 @@
                          <span id = "count" class="form-control" ng-model = "detailsData.subscribersCount" class="form-control">{{detailsData.subscribersCount}}</span>
 
                         <label class="control-label" for="startDate">{lang.startDate}}</label>
-                           <%-- <div id = "date" ng-class="{ 'has-error': courseForm.start.$touched && courseForm.start.$invalid }">
-                                    <p class="">
-                                        <input class="form-control" id = "start" name = "start" type="date" ng-model = "detailsData.startDate" min="{{minDate | date:'yyyy-MM-dd'}}">
-                                    </p>
-                                <p class="">
-                                    <input class="form-control" id = "end" name = "end" type="date" ng-model = "detailsData.endDate" min="{{endMinDate | date:'yyyy-MM-dd'}}">
-                                </p>
-                             </div>--%>
+
 
                         <div id = "startDate"  ng-class="{ 'has-error': courseForm.start.$touched && courseForm.start.$invalid }">
                             <p class="input-group">
-                                <input type="text" class="form-control" name = "start" id = "start" uib-datepicker-popup="yyyy-MM-dd" ng-model="detailsData.startDate" is-open="popup1.opened" min-date="minDate" ng-required="true" close-text="Close" />
+                                <input type="text" class="form-control" name = "start" uib-datepicker-popup="yyyy-MM-dd" ng-model="detailsData.startDate" is-open="popup1.opened" min-date="minDate" ng-required="true" close-text="Close" />
                                  <span class="input-group-btn">
                                      <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
                                  </span>
                             </p>
                         </div>
 
+                        <label class="control-label" for="endDate">{lang.endDate}}</label>
                         <div id = "endDate"  ng-class="{ 'has-error': courseForm.end.$touched && courseForm.end.$invalid }">
                             <p class="input-group">
-                                <input type="text" class="form-control" name = "start" uib-datepicker-popup="yyyy-MM-dd" ng-model="detailsData.endDate" is-open="popup2.opened" min-date="getDate()" ng-required="true" close-text="Close" />
+                                <input type="text" class="form-control" name = "end" uib-datepicker-popup="yyyy-MM-dd" ng-model="detailsData.endDate" is-open="popup2.opened" min-date="getDate()" ng-required="true" close-text="Close" />
                                  <span class="input-group-btn">
                                      <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
                                  </span>
@@ -85,7 +79,7 @@
 
                         <div style="margin-bottom: 25px" ng-class="{ 'has-error': courseForm.themes.$touched && courseForm.themes.$invalid }">
                         <label class="control-label" for="themes">{lang.themes}}</label>
-                            <select id = "themes" name = ""ng-model = "detailsData.themes"
+                            <select id = "themes" name = "themes" ng-model = "detailsData.themes"
                                     ng-multiple="true" multiple data-placeholder="{lang.themes}}"
                                     chosen
                                     class="form-control"
@@ -100,7 +94,7 @@
                     </div>
                  </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary"  ng-show="!courseForm.$invalid" ng-click="submit()">{lang.Update}}</button>
+                        <button type="button" class="btn btn-primary"  ng-show="!courseForm.$invalid" ng-click="submit()">{lang.Submit}}</button>
                         <button type="button" class="btn btn-default" ng-click="hideWithName('courseModal')">{lang.Cancel}}</button>
                     </div>
             </div>

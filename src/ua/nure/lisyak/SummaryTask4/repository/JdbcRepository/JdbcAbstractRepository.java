@@ -45,7 +45,7 @@ public abstract class JdbcAbstractRepository<T> {
     protected boolean delete(int id, String sql) {
         try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
             ps.setInt(1, id);
-            return ps.executeUpdate()!=0;
+            return id != 0 && ps.executeUpdate() != 0;
         } catch (SQLException e) {
             LOGGER.warn(ERROR_MESSAGE, sql, e);
             throw new DataAccessException(getMessage(sql), e);

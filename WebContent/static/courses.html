@@ -1,0 +1,40 @@
+<div class="col-lg-12">
+  <div class="table-responsive">
+    <h3>{lang.tutorsCourses}}</h3>
+    <a class="btn btn-info pull-right" ng-click = "showWithName('','addCourseModal')">{lang.add}}</a>
+    <br>
+    <br>
+    <table class="table table-bordered table-hover">
+      <thead>
+      <tr>
+        <th>#id</th>
+        <th>{lang.title}}</th>
+        <th>{lang.startDate}}</th>
+        <th>{lang.endDate}}</th>
+        <th>{lang.themes}}</th>
+        <th>{lang.subscribers}}</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="course in courses">
+        <td>{{course.id}}</td>
+        <td>{{course.title}}</td>
+        <td>{{course.startDate}}</td>
+        <td>
+          {{course.endDate}}
+        </td>
+        <td>
+          <h6 ng-repeat="theme in course.themes"><span class = "badge">{{theme}}</span></h6>
+        </td>
+        <td>
+          {{course.subscribersCount}}
+        </td>
+        <td class="col-lg-1">
+          <a class="btn btn-warning btn-sm" ng-click = "showWithName(course, 'courseModal')">{lang.details}}</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

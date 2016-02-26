@@ -257,6 +257,54 @@ app.controller('tutorDetailsController',
         }
     });
 
+app.controller('contactsController',
+
+    function($scope, $http, $rootScope, $location, UserFactory, CourseFactory) {
+            $scope.tutors = {};
+            UserFactory.tutors(function success(data){
+                $scope.tutors = data;
+            });
+            $scope.getCount = function(user){
+                var count = 0;
+
+                CourseFactory.byTutor({tId : user.id}, function success(data){
+                    count = data.length;
+                });
+
+                return count;
+            }
+
+            $scope.getUnread = function(userId,  opponentId){
+
+            }
+
+    });
+
+app.factory('UserFactory', function ($resource) {
+    return $resource('/ajax/user/:id', {id:'@id'}, {
+        admins: { method: 'GET', params:{role:'ADMIN'}, isArray: true},
+        students: { method: 'GET', params:{role:'STUDENT'}, isArray: true},
+        tutors: { method: 'GET', params:{role:'TUTOR'}, isArray: true},
+        post: { method: 'POST', headers : { 'Content-Type': 'application/json; charset=UTF-8' }  // set the headers so angular passing info as form data (not request payload)
+        },
+        delete: { method: 'DELETE'},
+        update: { method: 'PUT'}
+    })
+});
+
+app.factory('CourseFactory', function ($resource) {
+    return $resource('/ajax/course/:id', {id:'@id'}, {
+        query: { method: 'GET', isArray: true},
+        get: { method: 'GET'},
+        post: { method: 'POST', headers : { 'Content-Type': 'application/json; charset=UTF-8' }  // set the headers so angular passing info as form data (not request payload)
+        },
+        delete: { method: 'DELETE'},
+        update: { method: 'PUT', headers : { 'Content-Type': 'application/json; charset=UTF-8' }  // set the headers so angular passing info as form data (not request payload)
+        },
+        byTutor: {method: 'GET', params: {tId : '@tId'}, isArray:true}
+    })
+});
+
 app.directive('appFilereader', function($q) {
     var slice = Array.prototype.slice;
 
