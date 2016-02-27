@@ -14,11 +14,15 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
             <c:choose>
-                <c:when test="${!empty sessionScope.currUser}">
-                    <a href="${pageContext.request.contextPath}/logout" id="customer_login_link"><fmt:message key="txt.log-out"/></a>
+                <c:when test="${!empty sessionScope.currentUser}">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="${pageContext.request.contextPath}/tutor/messages" id="messages_link">{lang.messages}}</a></li>
 
-                    <span class="or">&nbsp;/&nbsp;</span>
-                    <a href="${pageContext.request.contextPath}/user/profile" id="customer_register_link"><fmt:message key="txt.profile"/></a>
+                        <span class="or">&nbsp;/&nbsp;</span>
+                        <li><a href="${pageContext.request.contextPath}/tutor/journal" id="customer_register_link">{lang.profile}}</a></li>
+                        <li><a href="${pageContext.request.contextPath}/user/logout" id="customer_login_link">{lang.logout}}</a></li>
+
+                    </ul>
                 </c:when>
                 <c:otherwise>
                     <ul class="nav navbar-nav navbar-right">

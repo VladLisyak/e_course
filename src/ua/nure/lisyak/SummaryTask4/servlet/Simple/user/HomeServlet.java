@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(Constants.ServletPaths.User.HOME)
+@WebServlet({Constants.ServletPaths.User.HOME, Constants.ServletPaths.START_PATH})
 public class HomeServlet extends BaseServlet{
 
     @Override

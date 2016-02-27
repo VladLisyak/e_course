@@ -4,7 +4,7 @@
 
 <html>
 <%@include file="/WEB-INF/fragments/headTag.jspf"%>
-<body ng-app="app" ng-cloak ng-controller="loginRegisterController" <%--nv-file-drop="" uploader="uploader"--%>>
+<body ng-app="app" ng-cloak class="ng-cloak" ng-controller="loginRegisterController" <%--nv-file-drop="" uploader="uploader"--%>>
 
 <%@include file="/WEB-INF/fragments/user_fragments/bodyHeader.jspf"%>
 <div class="container">

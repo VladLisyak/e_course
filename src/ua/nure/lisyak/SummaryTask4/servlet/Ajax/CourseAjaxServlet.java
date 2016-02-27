@@ -6,6 +6,7 @@ import ua.nure.lisyak.SummaryTask4.model.enums.Role;
 import ua.nure.lisyak.SummaryTask4.model.enums.Status;
 import ua.nure.lisyak.SummaryTask4.transferObjects.CourseWithSubscription;
 import ua.nure.lisyak.SummaryTask4.util.LocaleUtil;
+import ua.nure.lisyak.SummaryTask4.util.Tuple;
 import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
 import ua.nure.lisyak.SummaryTask4.util.constant.SettingsAndFolderPaths;
 import ua.nure.lisyak.SummaryTask4.util.validation.CourseValidator;
@@ -33,6 +34,7 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
         List<CourseWithSubscription> courses = new ArrayList<>();
         Integer id = getEntityId(req);
         Integer tutorId = getIntParam(req, Constants.Attributes.TUTOR_ID);
+        String byParam = getStringParam(req, Constants.Attributes.BY_PARAM);
         List<Course> studentSubscriptions = new ArrayList<>();
         User user = getCurrentUser(req);
 
@@ -56,9 +58,9 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
             }
          /*studentSubscriptions = getCourseService().getAllByStudentId(user.getId());//TODO Uncomment and delete*/
 
-        if(user!=null && user.getRoles().contains(Role.TUTOR) && param!=null){
+            if(user!=null && user.getRoles().contains(Role.TUTOR) && byParam!=null){
 
-                courses = getCourseService().getByStatusAndTutorId(param.toUpperCase(), user.getId());
+                courses = getCourseService().getByStatusAndTutorId(byParam.toUpperCase(), user.getId());
 
                 print(req, resp, courses);
                 return;
@@ -84,10 +86,10 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
                 String sort = getStringParam(req, Constants.Attributes.SORT_BY, "id");
                 String order = getStringParam(req, Constants.Attributes.ORDER, "asc");
 
-               /* if(user!=null && user.getRoles().contains(Role.ADMIN)){*/
+               if(user!=null && user.getRoles().contains(Role.ADMIN)){
                     List<Course> allCourses = getCourseService().getAll();
                     print(req, resp, allCourses);
-              /*  }
+               }
 
                 Tuple<List<? extends Course>, Integer> coursesWithCount = getCourseService().getFiltered(offset,limit,searchBy,search,sort,order);
 
@@ -96,9 +98,9 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
                             ? new CourseWithSubscription(course, true)
                             : new CourseWithSubscription(course, false));
                 }
-                coursesWithCount.setFirstEntity(courses);*/
+                coursesWithCount.setFirstEntity(courses);
 
-               /* print(req, resp, coursesWithCount);*/
+                print(req, resp, coursesWithCount);
                 return;
             }
 

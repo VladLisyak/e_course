@@ -41,11 +41,11 @@ public class JdbcMessageRepository extends JdbcAbstractRepository implements Mes
     public Message save(Message message) {
         String sql = QueryStorage.get(SAVE_MESSAGE);
         try (PreparedStatement ps = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setDate(1, new Date(message.getDate().getTime()));
-            ps.setInt(2, message.getFromId());
-            ps.setInt(3, message.getToId());
-            ps.setString(4, message.getMessage());
-            ps.setBoolean(5, message.isRead());
+            ps.setInt(1, message.getFromId());
+            ps.setInt(2, message.getToId());
+            ps.setString(3, message.getMessage());
+            ps.setBoolean(4, message.isRead());
+            ps.setTimestamp(5, new Timestamp(message.getDate().getTime()));
             ps.executeUpdate();
 
             ResultSet generatedKeys = ps.getGeneratedKeys();
@@ -97,10 +97,11 @@ public class JdbcMessageRepository extends JdbcAbstractRepository implements Mes
     }*/
 
     @Override
-    public Integer getUnreadCount(int id) {
+    public Integer getUnreadCount(int toId, int fromId) {
         String sql = QueryStorage.get(GET_UNREAD_COUNT);
         try(PreparedStatement ps = getConnection().prepareStatement(sql)) {
-            ps.setInt(1, id);
+            ps.setInt(1, toId);
+            ps.setInt(2, fromId);
 
             Integer unreadCount = null;
 
@@ -138,7 +139,18 @@ public class JdbcMessageRepository extends JdbcAbstractRepository implements Mes
     @Override
     public List<Message> getDialog(int fId, int sId) {
         String sql = QueryStorage.get(GET_DIALOG);
-        return queryListForTwoParams(fId, sId, sql);
+        try(PreparedStatement ps = getConnection().prepareStatement(sql)) {
+            ps.setInt(1, fId);
+            ps.setInt(2, sId);
+            ps.setInt(3, sId);
+            ps.setInt(4, fId);
+            ResultSet rs = ps.executeQuery();
+
+            return getAllFromResultSet(rs);
+        }catch (SQLException e) {
+            LOGGER.warn(ERROR_MESSAGE, sql, e);
+            throw new DataAccessException(getMessage(sql), e);
+        }
     }
 
     @Override

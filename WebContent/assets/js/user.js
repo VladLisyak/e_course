@@ -3,7 +3,7 @@
  */
 // user.js
 // create angular app
-var app = angular.module('app', ['ngMessages', 'angularUtils.directives.dirPagination']);
+var app = angular.module('app', ['ngMessages', 'angularUtils.directives.dirPagination', 'ngResource']);
 app.run(function($rootScope, $http, $location) {
     $rootScope.changeLang = function(id){
         $http.post("/locale?newLocale="+id, {}).success(function(data, status) {
@@ -11,6 +11,8 @@ app.run(function($rootScope, $http, $location) {
             $rootScope.lang = data;
         })
     };
+
+    $rootScope.flag = false;
 
     $rootScope.detailsData = {};
 
@@ -32,6 +34,7 @@ app.run(function($rootScope, $http, $location) {
     };
 
     $rootScope.hide = function(){
+        $rootScope.flag = false;
         $('#editRow').modal('hide');
     };
 
@@ -82,7 +85,7 @@ app.controller('loginRegisterController',
         $scope.failedNote = undefined;
 
         $scope.sortTypes = {};
-        
+
         $scope.formData = {};
 
 
@@ -115,9 +118,9 @@ app.controller('loginRegisterController',
 
                 setTimeout($scope.locationChange, 3000);
             }).error(function (data){
-                    $scope.message = data;
-                    console.log(data);
-                    $rootScope.failNoty($scope.message.substring($scope.message.indexOf('<u>'), $scope.message.indexOf('</u>')));
+                $scope.message = data;
+                console.log(data);
+                $rootScope.failNoty($scope.message.substring($scope.message.indexOf('<u>'), $scope.message.indexOf('</u>')));
             });
         };
 
@@ -142,7 +145,7 @@ app.controller('loginRegisterController',
         };
 
 
-});
+    });
 
 app.controller('coursesController',
 
@@ -157,9 +160,9 @@ app.controller('coursesController',
                     filter($scope.pagination.current);
                     $rootScope.hide();
                 }).error(function(data){
-                    $scope.message = data;
-                    $rootScope.failNoty($scope.message.substring($scope.message.indexOf('<u>'), $scope.message.indexOf('</u>')));
-                });
+                $scope.message = data;
+                $rootScope.failNoty($scope.message.substring($scope.message.indexOf('<u>'), $scope.message.indexOf('</u>')));
+            });
         };
 
         $scope.searchData = {};
@@ -206,21 +209,21 @@ app.controller('coursesController',
             });
         }
 
-});
+    });
 
 app.controller('profileController',
 
     function($scope, $http, $rootScope) {
 
-       $scope.deleteRow = function(id){
-           $http({
-               method: 'DELETE',
-               url: '/ajax/subscription/'+id
-           }).success(function(data) {
-               $rootScope.successNoty(data);
-           }).error(function(data){
-               $rootScope.failNoty($scope.message.substring($scope.message.indexOf('<u>'), $scope.message.indexOf('</u>')));
-           });
+        $scope.deleteRow = function(id){
+            $http({
+                method: 'DELETE',
+                url: '/ajax/subscription/'+id
+            }).success(function(data) {
+                $rootScope.successNoty(data);
+            }).error(function(data){
+                $rootScope.failNoty($scope.message.substring($scope.message.indexOf('<u>'), $scope.message.indexOf('</u>')));
+            });
         };
 
         $rootScope.details = function(id){
@@ -259,24 +262,92 @@ app.controller('tutorDetailsController',
 
 app.controller('contactsController',
 
-    function($scope, $http, $rootScope, $location, UserFactory, CourseFactory) {
-            $scope.tutors = {};
-            UserFactory.tutors(function success(data){
-                $scope.tutors = data;
+    function($scope, $http, $rootScope, $location, UserFactory, CourseFactory, MessageFactory, $interval) {
+        $scope.tutors = {};
+        $scope.count = {};
+
+        UserFactory.tutors(function success(data){
+            $scope.tutors = data;
+            $scope.init();
+        });
+
+        $scope.init = function(){
+            $scope.tutors.forEach(function(item){
+                console.log(item);
+                $http.get("/ajax/messages/?referrerId=" + item.id + "&count=true", {}).success(function(data) {
+                    console.log(data);
+                    $scope.count[item.id] = data;
+                })
             });
-            $scope.getCount = function(user){
-                var count = 0;
+        };
 
-                CourseFactory.byTutor({tId : user.id}, function success(data){
-                    count = data.length;
+
+        var stop;
+
+
+        $scope.messaging = function() {
+            // Don't start a new fight if we are already fighting
+            if ( angular.isDefined(stop) ) return;
+
+            stop = $interval($scope.updateMessages, 300);
+        };
+
+        $scope.updateMessages = function(){
+            if($rootScope.flag){
+                $scope.message($scope.opponentId);
+            }else{
+                $scope.stopMessaging();
+            }
+        };
+
+        $scope.stopMessaging = function() {
+            if (angular.isDefined(stop)) {
+                $interval.cancel(stop);
+                stop = undefined;
+            }
+        };
+
+        $scope.$on('$destroy', function() {
+            // Make sure that the interval is destroyed too
+            $scope.stopMessaging();
+        });
+
+        $scope.opponentId = 0;
+        $scope.currentId = 0;
+
+        $scope.messages = {};
+        $scope.messageText = {};
+        $scope.messageText['message'] = "";
+
+        $scope.sendMessage = function(){
+            $scope.messageText['toId'] = $scope.opponentId;
+            $scope.messageText['fromId'] = 0;
+            $scope.date = new Date();
+            $scope.referrerName = "";
+            console.log($scope.messageText);
+            MessageFactory.post($scope.messageText);
+            $scope.messageText = {};
+            $scope.messageText['message'] = "";
+            $scope.messaging();
+        };
+
+
+        $scope.message = function(referrerId){
+            $scope.opponentId = referrerId;
+            $rootScope.flag = true;
+            MessageFactory.getMessages({referrerId: referrerId}, function(data){
+                $scope.messages = data;
+                $scope.detailsData = $scope.messages;
+                $scope.messages.forEach(function(item){
+                    item.read=true;
+                    if (item.toId != referrerId){
+                        MessageFactory.update(item);}
                 });
+            });
+            $scope.init();
+            $rootScope.courseDetails($scope.messages);
+        }
 
-                return count;
-            }
-
-            $scope.getUnread = function(userId,  opponentId){
-
-            }
 
     });
 
@@ -288,7 +359,16 @@ app.factory('UserFactory', function ($resource) {
         post: { method: 'POST', headers : { 'Content-Type': 'application/json; charset=UTF-8' }  // set the headers so angular passing info as form data (not request payload)
         },
         delete: { method: 'DELETE'},
-        update: { method: 'PUT'}
+        update: { method: 'PUT', headers : { 'Content-Type': 'application/json; charset=UTF-8' }}
+    })
+});
+
+app.factory('MessageFactory', function ($resource) {
+    return $resource('/ajax/messages/:id', {id:'@id'}, {
+        count: { method: 'GET', params:{count:'true', referrerId: '@rId'}},
+        getMessages: { method: 'GET', params:{referrerId : '@rId'}, isArray: true},
+        post: { method: 'POST'},
+        update:{method: 'PUT'}
     })
 });
 

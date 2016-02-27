@@ -1,6 +1,6 @@
-courseUrl = "/ajax/course?sortBy=BEFORE_START";
-inProgressUrl = "/ajax/course?sortBy=IN_PROGRESS";
-finishedUrl = "/ajax/course?sortBy=FINISHED";
+courseUrl = "/ajax/course?byParam=BEFORE_START";
+inProgressUrl = "/ajax/course?byParam=IN_PROGRESS";
+finishedUrl = "/ajax/course?byParam=FINISHED";
 var datatableApi;
 $(function () {
     datatableApi = $('#before').DataTable({

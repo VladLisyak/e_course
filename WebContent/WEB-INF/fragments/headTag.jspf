@@ -16,10 +16,9 @@
     <link href="<c:url value="/assets/css/user.css"/>" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link rel="stylesheet" href="webjars/datatables/1.10.9/css/jquery.dataTables.min.css">
 
-    <script src="webjars/angularjs/1.4.9/angular.js"></script>
-    <script src="webjars/angularjs/1.4.9/angular-messages.js"></script>
-    <script src="webjars/angularjs/1.4.9/angular-resource.min.js" type="text/javascript"></script>
-    <script src="webjars/angularjs/1.4.9/angular-route.min.js" type="text/javascript"></script>
-    <script src="webjars/nervgh-angular-file-upload/2.1.1/angular-file-upload.min.js" type="text/javascript"></script>
-
+    <style type="text/css">
+        [ng\:cloak], [ng-cloak], .ng-cloak {
+            display: none !important;
+        }
+    </style>
 </head>

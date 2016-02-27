@@ -40,7 +40,7 @@ public class PasswordRemindServlet extends BaseServlet{
                 return;
             }
         }
-        resp.sendError(HttpServletResponse.SC_NOT_FOUND, translator.translate("user.not.found", locale));
+        resp.sendError(HttpServletResponse.SC_NOT_FOUND, translator.translate("validator.userNotFound", locale));
     }
 
     private boolean sendEmail(HttpServletRequest request, User user) throws MessagingException {

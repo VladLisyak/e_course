@@ -112,6 +112,7 @@ public final class Constants {
         public static final String EMAIL = "email";
         public static final java.lang.String GET_BY = "getBy";
         public static final java.lang.String ROLE = "role";
+        public static final java.lang.String BY_PARAM = "byParam";
 
         private Attributes() {
         }
@@ -152,6 +153,7 @@ public final class Constants {
         public static final String MESSAGES = AJAX + "messages/*";
         public static final String AJAX_COURSE_LIST =  AJAX + "course/*";
         public static final String USER =AJAX + "user/*" ;
+        public static final String START_PATH = "/";
 
         public static final class User{
 
@@ -203,7 +205,7 @@ public final class Constants {
             public static final String HOME = PREFIX + "index.jsp";
             public static final String COURSES = USER_PREFIX + "courses.jsp";
             public static final String PROFILE = USER_PREFIX + "profile.jsp";
-            public static final String DIALOG = USER_PREFIX + "dialog.jsp";
+            public static final String DIALOG = USER_PREFIX + "contacts.jsp";
             public static final String UNREAD = USER_PREFIX + "unread.jsp";
             public static final String TUTOR = USER_PREFIX + "tutor.jsp";
             public static final String REMIND_PAGE = USER_PREFIX + "forgetPassword.jsp";

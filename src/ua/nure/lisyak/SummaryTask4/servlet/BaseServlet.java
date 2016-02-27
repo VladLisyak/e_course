@@ -152,6 +152,7 @@ public abstract class BaseServlet extends AbstractServlet {
     }
 
     protected User saveUser(String image, User user) {
+        String imageToSave = user.getImage();
         user.setImage("");
         User savedUser = getUserService().save(user);
         if (image != null) {

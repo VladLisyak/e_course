@@ -35,22 +35,13 @@ public class JdbcMessageService implements MessageService {
     }
 
     @Override
-    public Integer getUnreadCount(int id) {
-        return repository.getUnreadCount(id);
-    }
-
-    @Override
-    public Message getUnread(int toId, int fromId) {
-        return repository.getUnread(toId, fromId);
-    }
-
-    @Override
     public List<Message> getDialog(int fId, int sId) {
         return repository.getDialog(fId, sId);
     }
 
     @Override
-    public List<Message> getUnread(Integer userId) {
-        return repository.getUnread(userId);
+    public int getUnreadCount(Integer userId, Integer referrerId) {
+        return repository.getUnreadCount(userId, referrerId);
     }
+
 }
