@@ -171,7 +171,7 @@ app.controller('tutorContactsController',
         $scope.details = function(id){
             $http({
                 method: 'GET',
-                url: '/ajax/course/'+id
+                url: '/ajax/course/'+id+"?r=TUTOR"
             }).success(function(data) {
                 $rootScope.courseDetails(data);
             }).error(function(data){

@@ -9,7 +9,7 @@
     <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="panel panel-info" >
             <div class="panel-heading">
-                <div class="panel-title">{lang.login}}</div>
+                <div class="panel-title">{{lang.login}}</div>
             </div>
 
             <div style="padding-top:30px" class="panel-body" >
@@ -27,9 +27,9 @@
                                ng-maxlength="10"
                                required>
                         <div class="help-block" ng-messages="userForm.login.$error" ng-show="userForm.login.$touched">
-                            <p ng-message="minlength">{lang.tooShort3}}</p>
-                            <p ng-message="maxlength">{lang.tooLong100}}</p>
-                            <p ng-message="required">{lang.required}}</p>
+                            <p ng-message="minlength">{{lang.tooShort3}}</p>
+                            <p ng-message="maxlength">{{lang.tooLong100}}</p>
+                            <p ng-message="required">{{lang.required}}</p>
                         </div>
                     </div>
 
@@ -43,9 +43,9 @@
                                ng-maxlength="20"
                                required>
                         <div class="help-block" ng-messages="userForm.password.$error" ng-show="userForm.password.$touched">
-                            <p ng-message="minlength">{lang.tooShort5}}</p>
-                            <p ng-message="maxlength">{lang.tooLong20}}</p>
-                            <p ng-message="required">{lang.required}}</p>
+                            <p ng-message="minlength">{{lang.tooShort5}}</p>
+                            <p ng-message="maxlength">{{lang.tooLong20}}</p>
+                            <p ng-message="required">{{lang.required}}</p>
                         </div>
                     </div>
 
@@ -53,7 +53,7 @@
                         <!-- Button -->
 
                         <div class="col-sm-12 controls">
-                            <a id="btn-login" ng-click ="submitForm()" ng-show="!userForm.$invalid" class="btn btn-success">{lang.login}}</a>
+                            <a id="btn-login" ng-click ="submitForm()" ng-show="!userForm.$invalid" class="btn btn-md btn-success">{{lang.login}}</a>
                         </div>
                     </div>
 
@@ -72,5 +72,7 @@
 <%@include file="../../fragments/footer.jspf" %>
     <script src="assets/js/admin.js" type="text/javascript"></script>
     <script src="<c:url value="assets/js/custom.min.js"/>"></script>
+<script src="<c:url value="/webjars/metisMenu/1.1.2/metisMenu.js"/>"></script>
+
 </body>
 </html>

@@ -5,13 +5,16 @@
 </head>
 
 <body ng-cloak class="ng-cloak" ng-controller = "activeCtrl">
+<div class = "row">
+    <h3 class="page-header">{{lang['admin.active']}}</h3>
+</div>
 <div class="table-responsive">
   <table class="table table-bordered table-hover">
     <thead>
     <tr>
       <th>#id</th>
       <th>{{lang.userName}}</th>
-      <th>{lang.userEmail}}</th>
+      <th>{{lang.userEmail}}</th>
       <th></th>
       <th></th>
     </tr>
@@ -24,10 +27,10 @@
             {{user.email}}
         </td>
         <td class="col-lg-1">
-            <a class="btn btn-danger btn-sm" ng-click = "ban(user)">{lang.ban}}</a>
+            <a class="btn btn-danger btn-sm" ng-click = "ban(user)">{{lang.ban}}</a>
         </td>
         <td class="col-lg-1">
-            <a class="btn btn-warning btn-sm" ng-click = "showDetails(user)">{lang.details}}</a>
+            <a class="btn btn-warning btn-sm" ng-click = "showDetails(user)">{{lang.details}}</a>
         </td>
       </tr>
     </tbody>
@@ -38,7 +41,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title" id="myModalLabel">{lang.userDetails}}</h2>
+                <h2 class="modal-title" id="myModalLabel">{{lang.userDetails}}</h2>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -46,27 +49,27 @@
                         <div class="row" >
                         <img src="/uploads/users/{{detailsData.image}}" width="300" height="300">
                         </div>
-                        <label class="control-label" for="name">{lang.name}}</label>
+                        <label class="control-label" for="name">{{lang.name}}</label>
                         <input type="text" id = "name" ng-model = "detailsData.name" class="form-control" disabled>
 
-                        <label class="control-label" for="email">{lang.email}}</label>
+                        <label class="control-label" for="email">{{lang.email}}</label>
                         <input type="text" id = "email" ng-model = "detailsData.email" class="form-control" disabled>
 
-                        <label class="control-label" for="login">{lang.login}}</label>
+                        <label class="control-label" for="login">{{lang.login}}</label>
                         <input type="text" id = "login" ng-model = "detailsData.login" class="form-control" disabled>
                         <div class="radio form-control" >
                             <label>
                                 <input type="radio" class="radio-button" ng-model="detailsData.enabled" name="status" ng-checked = "true" checked value="ACTIVE">
-                                {lang.active}}
+                                {{lang.active}}
                             </label>
                             <label>
                                 <input type="radio" class="radio-button" ng-model="detailsData.enabled" name="status" value="BANNED">
-                                {lang.ban}}
+                                {{lang.ban}}
                             </label>
                         </div>
-                        <label class="control-label" for="roles">{lang.roles}}</label>
+                        <label class="control-label" for="roles">{{lang.roles}}</label>
                         <select id = "roles" ng-model = "detailsData.roles"
-                                ng-multiple="true" multiple data-placeholder="{lang.roles}}"
+                                ng-multiple="true" multiple data-placeholder="{{lang.roles}}"
                                 chosen
                                 class="form-control chosen"
                                 ng-options="role for role in roles">
@@ -74,8 +77,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" ng-click="submit()">{lang.Update}}</button>
-                    <button type="button" class="btn btn-default" ng-click="hide()">{lang.Cancel}}</button>
+                    <button type="button" class="btn btn-primary" ng-click="submit()">{{lang.Update}}</button>
+                    <button type="button" class="btn btn-default" ng-click="hide()">{{lang.Cancel}}</button>
                 </div>
             </div>
 

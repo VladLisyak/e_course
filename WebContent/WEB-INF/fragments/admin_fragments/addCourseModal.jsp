@@ -13,7 +13,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title" id="myModalLabel">{lang.courseDetails}}</h2>
+                <h2 class="modal-title" id="myModalLabel">{{lang.courseDetails}}</h2>
             </div>
             <form id="courseForm" name = "courseForm" class="form-horizontal" role="form" enctype="multipart/form-data" novalidate>
                 <div class="modal-body">
@@ -64,9 +64,9 @@
                             </div>
 
                             <div style="margin-bottom: 25px"  ng-class="{ 'has-error': courseForm.tutor.$touched && courseForm.tutor.$invalid }">
-                                <label class="control-label" for="tutor">{lang.tutor}}</label>
+                                <label class="control-label" for="tutor">{{lang.tutor}}</label>
                                 <select class="form-control" name = "tutor" id = "tutor" ng-model = "detailsData.tutor"
-                                        ng-multiple="false" data-placeholder="{lang.tutor}}"
+                                        ng-multiple="false" data-placeholder="{{lang.tutor}}"
                                         chosen
                                         class="form-control"
                                         ng-options="tutor.name for tutor in tutors"

@@ -7,7 +7,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title" id="myModalLabel">{lang.courseDetails}}</h2>
+                <h2 class="modal-title" id="myModalLabel">{{lang.courseDetails}}</h2>
             </div>
             <div class="modal-body">
                 <img src="<c:url value="/uploads/courses/{{detailsData.image}}"/>"<%-- alt="item1"--%> width="570" height="250">
@@ -22,13 +22,13 @@
 
                 <div >
                     <p role="presentation">
-                        <small>{lang.subscribersCount}} <span class="badge subscribersCount">{{detailsData.subscribersCount}}</span>
+                        <small>{{lang.subscribersCount}} <span class="badge subscribersCount">{{detailsData.subscribersCount}}</span>
                         </small>
                     </p>
                 </div>
 
                 <div >
-                    <h4>{lang.start}} {{detailsData.startDate}} | {lang.end}} {{detailsData.endDate}}</h4>
+                    <h4>{{lang.start}} {{detailsData.startDate}} | {{lang.end}} {{detailsData.endDate}}</h4>
                 </div>
 
                 <div>
@@ -40,7 +40,7 @@
                         <img src="<c:url value="/uploads/users/{{detailsData.tutor.image}}"/>"<%-- alt="item1"--%>
                         width="80" height="80">
                     </div>
-                    <h5 class = "pull-right text-right">{lang.tutorIs}} <a href="${pageContext.request.contextPath}/user/tutor/{{detailsData.tutor.id}}">
+                    <h5 class = "pull-right text-right">{{lang.tutorIs}} <a href="${pageContext.request.contextPath}/user/tutor/{{detailsData.tutor.id}}">
                         {{detailsData.tutor.name}}</a></h5>
                 </div>
                 <br><br><br><br>
@@ -48,10 +48,10 @@
                 <div class="modal-footer">
                     <c:if test="${not empty currentUser}">
                     <button type="button" ng-show="(!detailsData.subscribed) && (detailsData.status.localeCompare('FINISHED')!=0)" class="btn btn-primary" ng-click="subscribeToCourse(course.id)">
-                        {lang.subscribe}}
+                        {{lang.subscribe}}
                     </button>
                     </c:if>
-                    <button type="button" class="btn btn-default" ng-click="hide()">{lang.close}}</button>
+                    <button type="button" class="btn btn-default" ng-click="hide()">{{lang.close}}</button>
                 </div>
             </div>
 

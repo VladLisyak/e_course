@@ -24,11 +24,11 @@
                             <table class="table table-user-information">
                                 <tbody>
                                 <tr>
-                                    <td>{lang.name}}:</td>
+                                    <td>{{lang.name}}:</td>
                                     <td>${tutor.name}</td>
                                 </tr>
                                 <tr>
-                                    <td>{lang.login}}:</td>
+                                    <td>{{lang.login}}:</td>
                                     <td>${tutor.login}</td>
                                 </tr>
                                 <tr>
@@ -37,12 +37,8 @@
                                     <td>${tutor.email}</td>
                                 </tr>
                                 <tr>
-                                    <td>{lang.coursesCount}}</td>
+                                    <td>{{lang.coursesCount}}</td>
                                     <td>{{courses.length}}</td>
-                                </tr>
-                                <tr>
-                                    <td> <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-lg btn-primary"><i class="glyphicon glyphicon-envelope"></i></a>
-                                    </td>
                                 </tr>
 
                                 </tbody>
@@ -54,16 +50,16 @@
                     </div>
                 </div>
                     <div class="panel-footer">
-                            <input type="text"  class = "input-medium search-query form-control" ng-model = "searchText" placeholder="{lang.search}}"/>
+                            <input type="text"  class = "input-medium search-query form-control" ng-model = "searchText" placeholder="{{lang.search}}"/>
                     </div>
             <table class="table table-condensed">
             <thead>
                 <tr>
                     <th></th>
-                    <th>{lang.title}}</th>
-                    <th>{lang.status}}</th>
-                    <th>{lang.startDate}}</th>
-                    <th>{lang.themes}}</th>
+                    <th>{{lang.title}}</th>
+                    <th>{{lang.status}}</th>
+                    <th>{{lang.startDate}}</th>
+                    <th>{{lang.themes}}</th>
                     <th></th>
                     <th></th>
                 </tr>

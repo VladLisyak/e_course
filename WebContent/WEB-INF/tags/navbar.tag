@@ -6,7 +6,7 @@
 <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">{lang.navigation}}</span>
+            <span class="sr-only">{{lang.navigation}}</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -38,7 +38,7 @@
             <ul class="dropdown-menu dropdown-user">
                 <li>
                     <a href="${pageContext.request.contextPath}/admin/logout"><i class="fa fa-sign-out fa-fw"></i>
-                        {lang.logout}}
+                        {{lang.logout}}
                     </a>
                 </li>
             </ul>
@@ -49,33 +49,34 @@
             <ul class="nav" id="side-menu">
                 <li class="active">
                     <a href="admin/main/#/home"><i class="fa fa-dashboard fa-fw"></i> <%--Change to angular--%>
-                        {lang.home}}
+                        {{lang.home}}
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <i class="fa fa-users fa-fw"></i>
-                        {lang.users}}<span class="fa arrow"></span>
+                        {{lang.users}}
+                        <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level">
                         <li>
                             <a href="admin/main/#/users/notConfirmed">
-                                {lang.notConfirmed}}
+                                {{lang.notConfirmed}}
                             </a>
                         </li>
                         <li>
                             <a href="admin/main/#/users/active">
-                                {lang.active}}
+                                {{lang['admin.active']}}
                             </a>
                         </li>
                         <li>
                             <a href="admin/main/#/users/tutors">
-                                {lang.tutors}}
+                                {{lang.tutors}}
                             </a>
                         </li>
                         <li>
                             <a href="admin/main/#/users/blackList">
-                                {lang.blackList}}
+                                {{lang.blackList}}
                             </a>
                         </li>
                     </ul>
@@ -83,7 +84,7 @@
                 <li>
                     <a href="admin/main/#/courses">
                         <i class="fa fa-book fa-fw"></i>
-                        {lang.courses}}
+                        {{lang.courses}}
                     </a>
                 </li>
             </ul>

@@ -27,11 +27,11 @@
                         <input id="login-username" type="text" id="login" class="form-control" name="login" placeholder="login"
                                ng-model="formData.login"
                                ng-minlength="5"
-                               ng-maxlength="10"
+                               ng-maxlength="20"
                                required>
                         <div class="help-block" ng-messages="userForm.login.$error" ng-show="userForm.login.$touched">
-                            <p ng-message="minlength">{{lang.tooShort3}}</p>
-                            <p ng-message="maxlength">{{lang.tooLong100}}</p>
+                            <p ng-message="minlength">{{lang.tooShort5}}</p>
+                            <p ng-message="maxlength">{{lang.tooLong20}}</p>
                             <p ng-message="required">{{lang.required}}</p>
                         </div>
                     </div>

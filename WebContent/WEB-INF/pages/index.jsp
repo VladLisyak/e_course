@@ -8,12 +8,12 @@
 
 <%@include file="/WEB-INF/fragments/user_fragments/bodyHeader.jspf"%>
 
-    <h1 class="center center-align -align-center text-center">{lang.meetEcourse}}</h1>
+    <h1 class="center center-align -align-center text-center">{{lang.meetEcourse}}</h1>
     <img src="assets/img/homepage-hero-lg.jpg" style = "width: 100%; height : 300px">
-    <h4 class="center center-align -align-center text-center">{lang.promotion}}</h4>
+    <h3 class="center center-align -align-center text-center -bold">{{lang.promotion}}</h3>
 
 <div class="text-center">
-    <a href="${pageContext.request.contextPath}/user/courses" class="btn btn-lg btn-warning">{lang.courses}}</a>
+    <a href="${pageContext.request.contextPath}/user/courses" class="btn btn-lg btn-warning">{{lang.courses}}</a>
 </div>
 
 <%@ include file="/WEB-INF/fragments/footer.jspf"%>

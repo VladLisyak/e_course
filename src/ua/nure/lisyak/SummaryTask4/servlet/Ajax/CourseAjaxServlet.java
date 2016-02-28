@@ -69,8 +69,14 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
             if(id!=null){
                 Course course = getCourseService().get(id);
                 if(course!=null){
+                    if(user!=null){
+                     print(req,resp,studentSubscriptions.contains(course)?
+                             new CourseWithSubscription(course, true)
+                             :new CourseWithSubscription(course,false));
+                    }else{
                      print(req, resp, getCourseService().get(id));
                      return;
+                    }
                 }
 
                     String locale = getLocale(req);

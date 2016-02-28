@@ -8,10 +8,10 @@
 <%@include file="/WEB-INF/fragments/tutor_fragments/bodyHeader.jspf" %>
 <div class="container">
     <ul class="nav nav-pills nav-justified" role="tablist">
-        <li role="presentation" class="active"><a href="#tab1" role="tab" data-toggle="tab">{lang.profile}}</a></li>
-        <li role="presentation"><a href="#tab2" role="tab" data-toggle="tab">{lang.beforeStartCourses}}</a></li>
-        <li role="presentation"><a href="#tab3" role="tab" data-toggle="tab">{lang.activeCourses}}</a></li>
-        <li role="presentation"><a href="#tab4" role="tab" data-toggle="tab">{lang.finishedCourses}}</a></li>
+        <li role="presentation" class="active"><a href="#tab1" role="tab" data-toggle="tab">{{lang.profile}}</a></li>
+        <li role="presentation"><a href="#tab2" role="tab" data-toggle="tab">{{lang.beforeStartCourses}}</a></li>
+        <li role="presentation"><a href="#tab3" role="tab" data-toggle="tab">{{lang.activeCourses}}</a></li>
+        <li role="presentation"><a href="#tab4" role="tab" data-toggle="tab">{{lang.finishedCourses}}</a></li>
     </ul>
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="tab1">
@@ -33,11 +33,11 @@
                                     <table class="table table-user-information">
                                         <tbody>
                                         <tr>
-                                            <td>{lang.name}}:</td>
+                                            <td>{{lang.name}}:</td>
                                             <td>${currentUser.name}</td>
                                         </tr>
                                         <tr>
-                                            <td>{lang.login}}:</td>
+                                            <td>{{lang.login}}:</td>
                                             <td>${currentUser.login}</td>
                                         </tr>
                                         <tr>
@@ -46,7 +46,7 @@
                                             <td>${currentUser.email}</td>
                                         </tr>
                                         <tr>
-                                            <td>{lang.tutorCoursesCount}}</td>
+                                            <td>{{lang.tutorCoursesCount}}</td>
                                             <td><span class="badge">${coursesCount}</span></td>
                                         </tr>
                                         </tbody>
@@ -65,14 +65,14 @@
                 <div class="container">
                     <div class="shadow">
                         <div class="view-box">
-                            <h3>{lang.beforeStartCourses}}</h3>
+                            <h3>{{lang.beforeStartCourses}}</h3>
                             <table class="table table-striped display" id="before">
                                 <thead>
                                 <tr>
-                                    <th>{lang.title}}</th>
-                                    <th>{lang.startDate}}</th>
-                                    <th>{lang.endDate}}</th>
-                                    <th>{lang.themes}}</th>
+                                    <th>{{lang.title}}</th>
+                                    <th>{{lang.startDate}}</th>
+                                    <th>{{lang.endDate}}</th>
+                                    <th>{{lang.themes}}</th>
                                     <th>{{lang.subscribersCount}}</th>
                                     <th></th>
                                     <th></th>
@@ -89,14 +89,14 @@
                 <div class="container">
                     <div class="shadow">
                         <div class="view-box">
-                            <h3>{lang.activeCourses}}</h3>
+                            <h3>{{lang.activeCourses}}</h3>
                             <table class="table table-striped display" id="active">
                                 <thead>
                                 <tr>
-                                    <th>{lang.title}}</th>
-                                    <th>{lang.startDate}}</th>
-                                    <th>{lang.endDate}}</th>
-                                    <th>{lang.themes}}</th>
+                                    <th>{{lang.title}}</th>
+                                    <th>{{lang.startDate}}</th>
+                                    <th>{{lang.endDate}}</th>
+                                    <th>{{lang.themes}}</th>
                                     <th>{{lang.subscribersCount}}</th>
                                     <th></th>
                                     <th></th>
@@ -113,14 +113,14 @@
                 <div class="container">
                     <div class="shadow">
                         <div class="view-box">
-                            <h3>{lang.finishedCourses}}</h3>
+                            <h3>{{lang.finishedCourses}}</h3>
                             <table class="table table-striped display" id="finished">
                                 <thead>
                                 <tr>
-                                    <th>{lang.title}}</th>
-                                    <th>{lang.startDate}}</th>
-                                    <th>{lang.endDate}}</th>
-                                    <th>{lang.themes}}</th>
+                                    <th>{{lang.title}}</th>
+                                    <th>{{lang.startDate}}</th>
+                                    <th>{{lang.endDate}}</th>
+                                    <th>{{lang.themes}}</th>
                                     <th>{{lang.subscribersCount}}</th>
                                     <th></th>
                                     <th></th>

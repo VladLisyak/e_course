@@ -5,17 +5,21 @@
 </head>
 
 <body ng-cloak class="ng-cloak" ng-controller = "tutorsCtrl">
-    <a class="btn btn-info pull-right" ng-click = "showWithName('','addTutor')">{lang.add}}</a>
-<br>
-<br>
+<div class = "row">
+    <h3 class="page-header">{{lang.tutors}}</h3>
+</div>
+
 <div class="table-responsive">
+    <a class="btn btn-info pull-right" ng-click = "showWithName('','addTutor')">{{lang.add}}</a>
+    <br>
+    <br>
     <table class="table table-bordered table-hover">
         <thead>
         <tr>
             <th>#id</th>
-            <th>{lang.userName}}</th>
-            <th>{lang.userEmail}}</th>
-            <th>{lang.coursesCount}}</th>
+            <th>{{lang.userName}}</th>
+            <th>{{lang.userEmail}}</th>
+            <th>{{lang.coursesCount}}</th>
             <th></th>
             <th></th>
         </tr>
@@ -31,10 +35,10 @@
                     {{ getCount(user.id) }}
                 </td>
                 <td class="col-lg-1">
-                    <a class="btn btn-primary btn-sm" ng-click = "showDetails(user)">{lang.details}}</a>
+                    <a class="btn btn-primary btn-sm" ng-click = "showDetails(user)">{{lang.details}}</a>
                 </td>
                 <td class="col-lg-1">
-                    <a class="btn btn-danger btn-sm" ng-click = "delete(user)">{lang.delete}}</a>
+                    <a class="btn btn-danger btn-sm" ng-click = "delete(user)">{{lang.delete}}</a>
                 </td>
             </tr>
         </tbody>
@@ -45,22 +49,22 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title" id="myModalLabel2">{lang.userDetails}}</h2>
+                <h2 class="modal-title" id="myModalLabel2">{{lang.userDetails}}</h2>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="table-responsive">
-                            <h3>{lang.tutorsCourses}}</h3>
+                            <h3>{{lang.tutorsCourses}}</h3>
                             <table class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
                                     <th>#id</th>
-                                    <th>{lang.title}}</th>
-                                    <th>{lang.startDate}}</th>
-                                    <th>{lang.endDate}}</th>
-                                    <th>{lang.themes}}</th>
-                                    <th>{lang.subscribers}}</th>
+                                    <th>{{lang.title}}</th>
+                                    <th>{{lang.startDate}}</th>
+                                    <th>{{lang.endDate}}</th>
+                                    <th>{{lang.themes}}</th>
+                                    <th>{{lang.subscribers}}</th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -79,13 +83,13 @@
                                         {{course.subscribersCount}}
                                     </td>
                                     <td class="col-lg-1">
-                                        <a class="btn btn-warning btn-sm" ng-click = "showWithName(course, 'courseModal')">{lang.details}}</a>
+                                        <a class="btn btn-warning btn-sm" ng-click = "showWithName(course, 'courseModal')">{{lang.details}}</a>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
                             <div class="">
-                                <a class="btn btn-default btn-sm col-lg-1 col-lg-offset-11 pull-right" ng-click = "hideWithName('modal2')">{lang.cancel}}</a>
+                                <a class="btn btn-default btn-sm col-lg-1 col-lg-offset-11 pull-right" ng-click = "hideWithName('modal2')">{{lang.cancel}}</a>
                             </div>
                         </div>
                 </div>
@@ -99,69 +103,69 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title" id="myModalLabel">{lang.userDetails}}</h2>
+                <h2 class="modal-title" id="myModalLabel">{{lang.userDetails}}</h2>
             </div>
             <div class="modal-body">
                 <form id="loginform" name="tutorForm" action="" class="form-horizontal" role="form" enctype="multipart/form-data" novalidate>
                     <div class="row">
                     <div class="col-lg-10 col-lg-offset-1">
                     <div class="form-group" ng-class="{ 'has-error': tutorForm.name.$touched && tutorForm.name.$invalid }">
-                        <label class="control-label" for="name">{lang.name}}</label>
+                        <label class="control-label" for="name">{{lang.name}}</label>
                         <input type="text" id = "name" name = "name" ng-model = "detailsData.name" class="form-control" ng-model="formData.name"
                                ng-minlength="3"
                                ng-maxlength="100"
                                required>
                         <div class="help-block" ng-messages="tutorForm.name.$error" ng-show="tutorForm.name.$touched">
-                            <p ng-message="minlength">{lang.tooShort3}}</p>
-                            <p ng-message="maxlength">{lang.tooLong100}}</p>
-                            <p ng-message="required">{lang.required}}</p>
-                            <p ng-message="pattern">{lang.invalidFormat}}</p>
+                            <p ng-message="minlength">{{lang.tooShort3}}</p>
+                            <p ng-message="maxlength">{{lang.tooLong100}}</p>
+                            <p ng-message="required">{{lang.required}}</p>
+                            <p ng-message="pattern">{{lang.invalidFormat}}</p>
                         </div>
                     </div>
                     <div class="form-group" ng-class="{ 'has-error': tutorForm.email.$touched && tutorForm.email.$invalid }">
 
-                        <label class="control-label" for="email">{lang.email}}</label>
+                        <label class="control-label" for="email">{{lang.email}}</label>
                         <input type="email" id = "email" name = "email" ng-pattern="emailTemplate" ng-model = "detailsData.email" class="form-control" ng-model="formData.email"
                                ng-minlength="5"
                                ng-maxlength="100"
                                required>
                         <div class="help-block" ng-messages="tutorForm.email.$error" ng-show="tutorForm.email.$touched">
-                            <p ng-message="minlength">{lang.tooShort5}}</p>
-                            <p ng-message="maxlength">{lang.tooLong100}}</p>
-                            <p ng-message="required">{lang.required}}</p>
-                            <p ng-message="email">{lang.invalidEmail}}</p>
-                            <p ng-message="pattern">{lang.invalidFormat}}</p>
+                            <p ng-message="minlength">{{lang.tooShort5}}</p>
+                            <p ng-message="maxlength">{{lang.tooLong100}}</p>
+                            <p ng-message="required">{{lang.required}}</p>
+                            <p ng-message="email">{{lang.invalidEmail}}</p>
+                            <p ng-message="pattern">{{lang.invalidFormat}}</p>
                         </div>
                     </div>
                     <div class="form-group" ng-class="{ 'has-error': tutorForm.login.$touched && tutorForm.login.$invalid }">
-                        <label class="control-label" for="login">{lang.login}}</label>
-                        <input type="text" id = "login" name = "login" ng-model = "detailsData.login" class="form-control" disabledplaceholder="{lang.login}}"
+                        <label class="control-label" for="login">{{lang.login}}</label>
+                        <input type="text" id = "login" name = "login" ng-model = "detailsData.login" class="form-control" disabledplaceholder="{{lang.login}}"
                                ng-model="formData.login"
                                ng-minlength="5"
                                ng-maxlength="100"
                                required>
                         <div class="help-block" ng-messages="tutorForm.login.$error" ng-show="tutorForm.login.$touched">
-                            <p ng-message="minlength">{lang.tooShort5}}</p>
-                            <p ng-message="maxlength">{lang.tooLong100}}</p>
-                            <p ng-message="required">{lang.required}}</p>
-                            <p ng-message="pattern">{lang.invalidFormat}}</p>
+                            <p ng-message="minlength">{{lang.tooShort5}}</p>
+                            <p ng-message="maxlength">{{lang.tooLong100}}</p>
+                            <p ng-message="required">{{lang.required}}</p>
+                            <p ng-message="pattern">{{lang.invalidFormat}}</p>
                         </div>
                      </div>
 
                         <div class="radio" >
                             <label>
                                 <input type="radio" class="radio-button" ng-model="detailsData.enabled" name="status" ng-checked = "true" checked value="ACTIVE">
-                                {lang.active}}
+                                {{lang.active}}
                             </label>
                             <label>
                                 <input type="radio" class="radio-button" ng-model="detailsData.enabled" name="status" value="BANNED">
-                                {lang.ban}}
+                                {{lang.ban}}
                             </label>
                         </div>
                         <div class="help-block " ng-messages="tutorForm.roles.$error" ng-show="tutorForm.roles.$touched">
-                            <label class="control-label" for="roles">{lang.roles}}</label>
+                            <label class="control-label" for="roles">{{lang.roles}}</label>
                             <select id = "roles" name = "roles" required ng-model = "detailsData.roles"
-                                    ng-multiple="true" multiple data-placeholder="{lang.roles}}"
+                                    ng-multiple="true" multiple data-placeholder="{{lang.roles}}"
                                     chosen
                                     class="form-control"
                                     ng-options="role for role in roles">
@@ -178,8 +182,8 @@
                 </div>
 
                     <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" ng-show="!tutorForm.$invalid" ng-click="submit()">{lang.update}}</button>
-                    <button type="button" class="btn btn-default" ng-click="hide()">{lang.Cancel}}</button>
+                    <button type="button" class="btn btn-primary" ng-show="!tutorForm.$invalid" ng-click="submit()">{{lang.update}}</button>
+                    <button type="button" class="btn btn-default" ng-click="hide()">{{lang.Cancel}}</button>
                 </div>
                 </form>
             </div>

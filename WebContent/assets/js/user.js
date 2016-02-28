@@ -29,6 +29,7 @@ app.run(function($rootScope, $http, $location) {
     };
 
     $rootScope.courseDetails = function(object){
+        console.log(object);
         $rootScope.detailsData = object;
         $('#editRow').modal();
     };
@@ -198,7 +199,7 @@ app.controller('coursesController',
             $scope.searchData['offset'] = (pageNumber - 1)*$scope.searchData['limit'];
             $http({
                 method: 'GET',
-                url: '/ajax/course',
+                url: '/ajax/course?r=STUDENT',
                 params: $scope.searchData
             }).success(function(data) {
                 $scope.courses=data['firstEntity'];
@@ -229,7 +230,7 @@ app.controller('profileController',
         $rootScope.details = function(id){
             $http({
                 method: 'GET',
-                url: '/ajax/course/'+id
+                url: '/ajax/course/'+id+"?r=STUDENT"
             }).success(function(data) {
                 $rootScope.courseDetails(data);
             }).error(function(data){
@@ -252,7 +253,7 @@ app.controller('tutorDetailsController',
             if(id!=undefined){
                 $http({
                     method: 'GET',
-                    url: '/ajax/course?tId='+id
+                    url: '/ajax/course?tId='+id+'&r=STUDENT'
                 }).success(function(data) {
                     $scope.courses = data;
                     console.log($scope.courses);
@@ -373,7 +374,7 @@ app.factory('MessageFactory', function ($resource) {
 });
 
 app.factory('CourseFactory', function ($resource) {
-    return $resource('/ajax/course/:id', {id:'@id'}, {
+    return $resource('/ajax/course/:id', {id:'@id', r:"STUDENT"}, {
         query: { method: 'GET', isArray: true},
         get: { method: 'GET'},
         post: { method: 'POST', headers : { 'Content-Type': 'application/json; charset=UTF-8' }  // set the headers so angular passing info as form data (not request payload)

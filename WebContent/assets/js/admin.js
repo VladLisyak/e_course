@@ -226,11 +226,6 @@ app.controller('tutorsCtrl',
             $rootScope.hide();
         };
 
-        $scope.showCourses = function(user){
-            $scope.currUser = user.id;
-            $rootScope.showWithName(user, "modal2");
-        }
-
 
 
     });
@@ -245,10 +240,7 @@ app.controller('coursesCtrl',
             $scope.themes = "";
             $scope.minDate = new Date();
             $scope.minDate.setDate($scope.minDate.getDate());
-            $scope.courses = "";
-            CourseFactory.query(function success(data){
-                $scope.courses = data;
-            });
+            $scope.courses = CourseFactory.query();
 
             $scope.open1 = function() {
                 $scope.popup1.opened = true;
@@ -266,12 +258,28 @@ app.controller('coursesCtrl',
                 opened: false
             };
 
-           /* $scope.getDate = function(){
-                var max = new Date($rootScope.detailsData.startDate);
-                max.setDate(max.getDate()+1);
+        $rootScope.updateCourses = function(){
+            $scope.courses = CourseFactory.query();
+        };
 
-                return max;
-            };*/
+        $scope.deleteCourse = function (course){
+            course.image = $scope.newImage;
+            delete course['$$hashKey'];
+            console.log(course);
+            CourseFactory.delete(course, function success(data) {
+                $rootScope.successNoty($rootScope.lang['success']);
+                $scope.courses = CourseFactory.query();
+            }, function error(data) {
+                $rootScope.failNoty($rootScope.lang['deletingError']);
+            });
+            $rootScope.hide();
+        };
+
+
+        $scope.showCourses = function(user){
+            $scope.currUser = user.id;
+            $rootScope.showWithName(user, "modal2");
+        };
 
 
         $scope.postCourse = function(){
@@ -291,7 +299,7 @@ app.controller('coursesCtrl',
             $scope.newImage = "";
         };
 
-        $http.get("/ajax/themes")
+            $http.get("/ajax/themes")
                 .then(function(response){
                 $scope.themes = response.data;
             });
@@ -338,7 +346,7 @@ services.factory('UserFactory', function ($resource) {
 });
 
 services.factory('CourseFactory', function ($resource) {
-    return $resource('/ajax/course/:id', {id:'@id'}, {
+    return $resource('/ajax/course/:id', {id:'@id', r:"ADMIN"}, {
         query: { method: 'GET', isArray: true},
         get: { method: 'GET'},
         post: { method: 'POST', headers : { 'Content-Type': 'application/json; charset=UTF-8' }  // set the headers so angular passing info as form data (not request payload)
@@ -505,8 +513,16 @@ main.run(function($rootScope, $http, $location, UserFactory, CourseFactory) {
         console.log(reason);
         var message;
         if(reason!=undefined){
-
+            if(reason.data!=undefined){
+                console.log(reason);
+                reason = reason.data;
+                console.log(reason);
+            }
+            console.log(reason);
             message = reason.substring(reason.indexOf('<u>'), reason.indexOf('</u>'));
+            if(message==undefined||message.length==0){
+                message = reason;
+            }
         }else{
             message = $rootScope.lang['fail'];
         }

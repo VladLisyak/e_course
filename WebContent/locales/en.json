@@ -58,8 +58,9 @@
   "viewOnPage":"View on page",
   "filter":"Filter",
   "reset":"Reset",
-  "loginTo":"Log in to",
-  "subscribe":"subscribe",
+  "loginTo":"Log in",
+  "subscribe":"to subscribe",
+  "subscribeTo":"Subscribe",
   "passwordRecovery":"Password recovery",
   "yourEmail":"Your Email",
   "remind":"Remind",
@@ -88,5 +89,18 @@
   "status":"Status",
   "start":"Start",
   "add":"Add",
-  "delete":"Delete"
+  "delete":"Delete",
+  "tutorIs":"Tutor is",
+  "end":"End",
+  "coursesCount":"Courses count",
+  "tutorLogged":"You logged as tutor",
+  "saved":"Saved",
+  "remindSent":"Remind was sent to your email",
+  "operationSuccess":"Operation succeeded",
+  "fail":"Failed",
+  "admin.active":"Active",
+  "admin.Tutors":"Tutors",
+  "users":"Users"
+
+
 }

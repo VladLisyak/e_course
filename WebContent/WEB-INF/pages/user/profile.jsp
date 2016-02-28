@@ -8,10 +8,10 @@
 <%@include file="/WEB-INF/fragments/user_fragments/bodyHeader.jspf" %>
     <div class="container">
         <ul class="nav nav-pills nav-justified" role="tablist">
-            <li role="presentation" class="active"><a href="#tab1" role="tab" data-toggle="tab">{lang.profile}}</a></li>
-            <li role="presentation"><a href="#tab2" role="tab" data-toggle="tab">{lang.beforeStartCourses}}</a></li>
-            <li role="presentation"><a href="#tab3" role="tab" data-toggle="tab">{lang.activeCourses}}</a></li>
-            <li role="presentation"><a href="#tab4" role="tab" data-toggle="tab">{lang.finishedCourses}}</a></li>
+            <li role="presentation" class="active"><a href="#tab1" role="tab" data-toggle="tab">{{lang.profile}}</a></li>
+            <li role="presentation"><a href="#tab2" role="tab" data-toggle="tab">{{lang.beforeStartCourses}}</a></li>
+            <li role="presentation"><a href="#tab3" role="tab" data-toggle="tab">{{lang.activeCourses}}</a></li>
+            <li role="presentation"><a href="#tab4" role="tab" data-toggle="tab">{{lang.finishedCourses}}</a></li>
         </ul>
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="tab1">
@@ -33,11 +33,11 @@
                                         <table class="table table-user-information">
                                             <tbody>
                                             <tr>
-                                                <td>{lang.name}}:</td>
+                                                <td>{{lang.name}}:</td>
                                                 <td>${currentUser.name}</td>
                                             </tr>
                                             <tr>
-                                                <td>{lang.login}}:</td>
+                                                <td>{{lang.login}}:</td>
                                                 <td>${currentUser.login}</td>
                                             </tr>
                                             <tr>
@@ -46,11 +46,11 @@
                                                 <td>${currentUser.email}</td>
                                             </tr>
                                             <tr>
-                                                <td>{lang.coursesCount}}</td>
+                                                <td>{{lang.coursesCount}}</td>
                                                 <td>${coursesCount}</td>
                                             </tr>
                                             <tr>
-                                                <td>{lang.averageMark}}</td>
+                                                <td>{{lang.averageMark}}</td>
                                                 <td>${avgMark}</td>
                                             </tr>
 
@@ -66,11 +66,7 @@
                                 </div>
                             </div>
                             <div class="panel-footer">
-                                <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-envelope"></i></a>
-                                <%-- <span class="pull-right">
-                                     <a href="edit.html" data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
-                                     <a data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
-                                 </span>--%>
+
                             </div>
 
                         </div>
@@ -85,11 +81,11 @@
                                 <table class="table table-striped display" id="datatable1">
                                     <thead>
                                     <tr>
-                                        <th>{lang.title}}</th>
-                                        <th>{lang.startDate}}</th>
-                                        <th>{lang.endDate}}</th>
-                                        <th>{lang.themes}}</th>
-                                        <th>{lang.mark}}</th>
+                                        <th>{{lang.title}}</th>
+                                        <th>{{lang.startDate}}</th>
+                                        <th>{{lang.endDate}}</th>
+                                        <th>{{lang.themes}}</th>
+                                        <th>{{lang.mark}}</th>
                                         <th></th>
                                         <th></th>
                                     </tr>
@@ -108,11 +104,11 @@
                                 <table class="table table-striped display" id="datatable2">
                                     <thead>
                                     <tr>
-                                        <th>{lang.title}}</th>
-                                        <th>{lang.startDate}}</th>
-                                        <th>{lang.endDate}}</th>
-                                        <th>{lang.themes}}</th>
-                                        <th>{lang.mark}}</th>
+                                        <th>{{lang.title}}</th>
+                                        <th>{{lang.startDate}}</th>
+                                        <th>{{lang.endDate}}</th>
+                                        <th>{{lang.themes}}</th>
+                                        <th>{{lang.mark}}</th>
                                         <th></th>
                                         <th></th>
                                     </tr>
@@ -131,11 +127,11 @@
                                 <table class="table table-striped display" id="datatable3">
                                     <thead>
                                     <tr>
-                                        <th>{lang.title}}</th>
-                                        <th>{lang.startDate}}</th>
-                                        <th>{lang.endDate}}</th>
-                                        <th>{lang.themes}}</th>
-                                        <th>{lang.mark}}</th>
+                                        <th>{{lang.title}}</th>
+                                        <th>{{lang.startDate}}</th>
+                                        <th>{{lang.endDate}}</th>
+                                        <th>{{lang.themes}}</th>
+                                        <th>{{lang.mark}}</th>
                                         <th></th>
                                     </tr>
                                     </thead>
