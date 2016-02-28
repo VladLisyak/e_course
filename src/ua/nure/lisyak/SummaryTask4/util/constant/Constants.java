@@ -113,6 +113,7 @@ public final class Constants {
         public static final java.lang.String GET_BY = "getBy";
         public static final java.lang.String ROLE = "role";
         public static final java.lang.String BY_PARAM = "byParam";
+        public static final java.lang.String ROLE_OF_QUERY = "r";
 
         private Attributes() {
         }
@@ -180,6 +181,7 @@ public final class Constants {
             public static final String MAIN = ADMIN + "main/";
             public static final String THEMES = AJAX + "themes";
             public static final String LOGIN = ADMIN + "login";
+            public static final String LOGOUT = ADMIN + "logout";
         }
 
         public class Tutor {
@@ -190,6 +192,7 @@ public final class Constants {
             public static final String MESSAGES = TUTOR + "messages";
             public static final String LOGIN = TUTOR + "login";
             public static final String REPORT = TUTOR + "report/*";
+            public static final String LOGOUT = TUTOR + "logout";
         }
     }
 

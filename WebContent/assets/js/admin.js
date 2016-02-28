@@ -21,7 +21,6 @@ app.controller('loginCtrl',
 
         // function to submit the form after all validation has occurred
         $scope.submitForm = function() {
-            console.log($scope.formData);
             $http({
                 method  : 'POST',
                 url     : "/admin/login",
@@ -155,8 +154,7 @@ app.controller('tutorsCtrl',
         $scope.passwordTemplate = "^[A-ZА-Яа-яa-z0-9_-]+[-\s][A-ZА-Яа-яa-z0-9_-]+$";
 
         $scope.newImage = "";
-        $scope.currUser = 0;
-       
+
         
 
         function updateTutors(){
@@ -167,7 +165,6 @@ app.controller('tutorsCtrl',
 
         $scope.submit = function(){
             var user = $rootScope.detailsData;
-            console.log(user);
             $rootScope.detailsData = {};
             if($scope.newImage.length>0){
                 user.image = $scope.newImage;
@@ -188,7 +185,6 @@ app.controller('tutorsCtrl',
 
         $scope.postTutor = function(){
             var user = $rootScope.detailsData;
-            console.log(user);
             $rootScope.detailsData = {};
                 user.image = $scope.newImage;
             $scope.addTutorForm.$setUntouched();
@@ -200,7 +196,6 @@ app.controller('tutorsCtrl',
                 updateTutors();
             }, function error(data) {
                 $scope.message = data;
-                console.log($scope.message);
                 $rootScope.failNoty($scope.message);
 
             });
@@ -216,7 +211,6 @@ app.controller('tutorsCtrl',
         $scope.delete = function (user){
             user.image = $scope.newImage;
             delete user['$$hashKey'];
-            console.log(user);
             UserFactory.delete(user, function success(data) {
                 $rootScope.successNoty($rootScope.lang['success']);
                 $scope.updateTutors();
@@ -265,7 +259,6 @@ app.controller('coursesCtrl',
         $scope.deleteCourse = function (course){
             course.image = $scope.newImage;
             delete course['$$hashKey'];
-            console.log(course);
             CourseFactory.delete(course, function success(data) {
                 $rootScope.successNoty($rootScope.lang['success']);
                 $scope.courses = CourseFactory.query();
@@ -277,7 +270,7 @@ app.controller('coursesCtrl',
 
 
         $scope.showCourses = function(user){
-            $scope.currUser = user.id;
+            $rootScope.currUser = user.id;
             $rootScope.showWithName(user, "modal2");
         };
 
@@ -308,7 +301,6 @@ app.controller('coursesCtrl',
                 if($scope.newImage.localeCompare("")!=0){
                     $rootScope.detailsData.image = $scope.newImage;
                 }
-                console.log($rootScope.detailsData);
                 CourseFactory.update($rootScope.detailsData, function success(){
                     $rootScope.successNoty($rootScope.lang['success']);
                     $rootScope.updateTutors();
@@ -431,6 +423,7 @@ main.directive('appFilereader', function($q) {
 });
 
 main.run(function($rootScope, $http, $location, UserFactory, CourseFactory) {
+    $rootScope.currUser = 0;
     $rootScope.message = "";
     $rootScope.tutors = UserFactory.tutors();
     $rootScope.roles = ["STUDENT", "TUTOR"];
@@ -467,7 +460,8 @@ main.run(function($rootScope, $http, $location, UserFactory, CourseFactory) {
         $rootScope.tutors = UserFactory.tutors();
         $rootScope.usersFromDb = UserFactory.tutors(function success(){
             $rootScope.usersFromDb.forEach(function(item, i, arr){
-                $rootScope.usersWithCourses[item.id+""] = CourseFactory.byTutor({tId : item.id});
+                $rootScope.usersWithCourses[item.id] = CourseFactory.byTutor({tId : item.id});
+                console.log($rootScope.usersWithCourses);
             });
         });
     };

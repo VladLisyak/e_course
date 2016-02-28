@@ -35,82 +35,87 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
         Integer id = getEntityId(req);
         Integer tutorId = getIntParam(req, Constants.Attributes.TUTOR_ID);
         String byParam = getStringParam(req, Constants.Attributes.BY_PARAM);
+        Role roleOfQuery = Role.valueOf(getStringParam(req, Constants.Attributes.ROLE_OF_QUERY));
         List<Course> studentSubscriptions = new ArrayList<>();
         User user = getCurrentUser(req);
-
-        String param = getStringParam(req, Constants.Attributes.SORT_BY);
 
         if(user!=null) {
             studentSubscriptions = getCourseService().getAllByStudentId(user.getId());
         }
         /*if(true){*/
-            if(tutorId != null){
-                List<Course> tutorCourses = getCourseService().getAllByTutorId(tutorId);
+        if(tutorId != null){
+            List<Course> tutorCourses = getCourseService().getAllByTutorId(tutorId);
 
-                for (Course course : tutorCourses) {
-                    courses.add(studentSubscriptions.contains(course)
-                            ? new CourseWithSubscription(course, true)
-                            : new CourseWithSubscription(course, false));
+            for (Course course : tutorCourses) {
+                courses.add(studentSubscriptions.contains(course)
+                        ? new CourseWithSubscription(course, true)
+                        : new CourseWithSubscription(course, false));
+            }
+
+            print(req, resp, courses);
+            return;
+        }
+
+        if(id!=null){
+            Course course = getCourseService().get(id);
+            if(course!=null){
+                if(user!=null){
+                    print(req,resp,studentSubscriptions.contains(course)?
+                            new CourseWithSubscription(course, true)
+                            :new CourseWithSubscription(course,false));
+                }else{
+                    print(req, resp, getCourseService().get(id));
+                    return;
                 }
-
-                print(req, resp, courses);
-                return;
-            }
-         /*studentSubscriptions = getCourseService().getAllByStudentId(user.getId());//TODO Uncomment and delete*/
-
-            if(user!=null && user.getRoles().contains(Role.TUTOR) && byParam!=null){
-
-                courses = getCourseService().getByStatusAndTutorId(byParam.toUpperCase(), user.getId());
-
-                print(req, resp, courses);
-                return;
             }
 
-            if(id!=null){
-                Course course = getCourseService().get(id);
-                if(course!=null){
-                    if(user!=null){
-                     print(req,resp,studentSubscriptions.contains(course)?
-                             new CourseWithSubscription(course, true)
-                             :new CourseWithSubscription(course,false));
-                    }else{
-                     print(req, resp, getCourseService().get(id));
-                     return;
+            String locale = getLocale(req);
+            LocaleUtil translator = getTranslator();
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, translator.translate("object.notFound",locale));
+            return;
+        }
+
+        if(roleOfQuery!=null){
+            switch (roleOfQuery){
+                case STUDENT:{
+                    String searchBy = getStringParam(req, Constants.Attributes.SEARCH_BY);
+                    String search = getStringParam(req, Constants.Attributes.SEARCH_PARAM);
+                    Integer limit = getIntParam(req, Constants.Attributes.LIMIT, SettingsAndFolderPaths.getCoursesPerPage());
+                    Integer offset = getIntParam(req, Constants.Attributes.OFFSET, 0);
+                    String sort = getStringParam(req, Constants.Attributes.SORT_BY, "id");
+                    String order = getStringParam(req, Constants.Attributes.ORDER, "asc");
+
+
+
+                    Tuple<List<? extends Course>, Integer> coursesWithCount = getCourseService().getFiltered(offset,limit,searchBy,search,sort,order);
+
+                    for (Course course : coursesWithCount.getFirstEntity()) {
+                        courses.add(studentSubscriptions.contains(course)
+                                ? new CourseWithSubscription(course, true)
+                                : new CourseWithSubscription(course, false));
+                    }
+                    coursesWithCount.setFirstEntity(courses);
+
+                    print(req, resp, coursesWithCount);
+                    return;
+                }
+                case TUTOR:{
+                    if(user!=null && user.getRoles().contains(Role.TUTOR) && byParam!=null){
+
+                        courses = getCourseService().getByStatusAndTutorId(byParam.toUpperCase(), user.getId());
+
+                        print(req, resp, courses);
+                        return;
                     }
                 }
-
-                    String locale = getLocale(req);
-                    LocaleUtil translator = getTranslator();
-                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, translator.translate("object.notFound",locale));
-                    return;
-            }
-            else{
-                String searchBy = getStringParam(req, Constants.Attributes.SEARCH_BY);
-                String search = getStringParam(req, Constants.Attributes.SEARCH_PARAM);
-                Integer limit = getIntParam(req, Constants.Attributes.LIMIT, SettingsAndFolderPaths.getCoursesPerPage());
-                Integer offset = getIntParam(req, Constants.Attributes.OFFSET, 0);
-                String sort = getStringParam(req, Constants.Attributes.SORT_BY, "id");
-                String order = getStringParam(req, Constants.Attributes.ORDER, "asc");
-
-               if(user!=null && user.getRoles().contains(Role.ADMIN)){
-                    List<Course> allCourses = getCourseService().getAll();
-                    print(req, resp, allCourses);
-               }
-
-                Tuple<List<? extends Course>, Integer> coursesWithCount = getCourseService().getFiltered(offset,limit,searchBy,search,sort,order);
-
-                for (Course course : coursesWithCount.getFirstEntity()) {
-                    courses.add(studentSubscriptions.contains(course)
-                            ? new CourseWithSubscription(course, true)
-                            : new CourseWithSubscription(course, false));
+                case ADMIN:{
+                    if(user!=null && user.getRoles().contains(Role.ADMIN)){
+                        List<Course> allCourses = getCourseService().getAll();
+                        print(req, resp, allCourses);
+                    }
                 }
-                coursesWithCount.setFirstEntity(courses);
-
-                print(req, resp, coursesWithCount);
-                return;
             }
-
-       /* resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "validator.error500");*/
+        }
     }
 
     @Override

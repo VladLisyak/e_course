@@ -33,7 +33,7 @@
         <div class="modal-dialog" id = "hid">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <button type="button" class="close" ng-click="hide()" aria-hidden="true">&times;</button>
                     <h2 class="modal-title" id="myModalLabel">{{lang.Conversation}}</h2>
                 </div>
                 <div class="modal-body">

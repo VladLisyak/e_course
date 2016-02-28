@@ -78,6 +78,13 @@ public class LoginServlet extends BaseServlet{
             }
         }
 
+
+        if(!user.getRoles().contains(Role.STUDENT)){
+            validator.putIssue("rights", "validator.noRights");
+            sendError(req, resp, validator);
+            return;
+        }
+
         setCurrentUser(req, user);
 
         redirectToAction(Constants.ServletPaths.User.COURSE_LIST, req, resp);

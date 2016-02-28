@@ -1,4 +1,4 @@
-package ua.nure.lisyak.SummaryTask4.servlet.Simple.admin;
+package ua.nure.lisyak.SummaryTask4.servlet.Simple.tutor;
 
 import ua.nure.lisyak.SummaryTask4.servlet.BaseServlet;
 import ua.nure.lisyak.SummaryTask4.util.constant.Constants;
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(Constants.ServletPaths.Admin.LOGOUT)
+@WebServlet(Constants.ServletPaths.Tutor.LOGOUT)
 public class LogoutServlet extends BaseServlet{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
