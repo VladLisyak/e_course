@@ -28,7 +28,7 @@ public class UserAjaxServlet extends BaseAjaxServlet{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer id = getEntityId(req);
-
+        User excludedUser = getCurrentUser(req);
         if(id!=null){
             User user = getUserService().get(id);
             if(user!=null){
@@ -51,7 +51,7 @@ public class UserAjaxServlet extends BaseAjaxServlet{
             }
             param = getStringParam(req, Constants.Attributes.ROLE);
             if(param!=null && Role.valueOf(param)!=null){
-                users = getUserService().getAllByRole(Role.valueOf(param));
+                users = getUserService().getAllByRole(Role.valueOf(param), excludedUser!=null?excludedUser.getId():0);
             }
 
             print(req, resp, users);

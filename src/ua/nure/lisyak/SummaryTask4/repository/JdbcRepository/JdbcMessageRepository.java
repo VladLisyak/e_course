@@ -8,6 +8,7 @@ import ua.nure.lisyak.SummaryTask4.model.Message;
 import ua.nure.lisyak.SummaryTask4.repository.MessageRepository;
 
 import java.sql.*;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class JdbcMessageRepository extends JdbcAbstractRepository implements Mes
             ps.setInt(2, message.getToId());
             ps.setString(3, message.getMessage());
             ps.setBoolean(4, message.isRead());
-            ps.setTimestamp(5, new Timestamp(message.getDate().getTime()));
+            ps.setTimestamp(5, new Timestamp(new Date().getTime()));
             ps.executeUpdate();
 
             ResultSet generatedKeys = ps.getGeneratedKeys();
@@ -184,7 +185,7 @@ public class JdbcMessageRepository extends JdbcAbstractRepository implements Mes
         m.setReferrerName(rs.getString("name"));
         m.setFromId(rs.getInt("from_id"));
         m.setToId(rs.getInt("to_id"));
-        m.setDate(rs.getDate("date"));
+        m.setDate(rs.getTimestamp("date"));
         m.setMessage(rs.getString("message"));
         return m;
     }

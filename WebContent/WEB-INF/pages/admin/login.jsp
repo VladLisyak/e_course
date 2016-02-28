@@ -1,11 +1,10 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<%@include file="../../fragments/admin_fragments/header.jsp" %>
+<%@taglib prefix="n" tagdir="/WEB-INF/tags" %>
+<!DOCTYPE html>
 <html>
-<%@include file="/WEB-INF/fragments/headTag.jspf" %>
-<body ng-app="app" id = "body" ng-cloak ng-controller="mainTutorController">
-<%@include file="/WEB-INF/fragments/tutor_fragments/bodyHeader.jspf" %>
+<%--<!--suppress HtmlUnknownTarget -->--%>
+<%@include file="/WEB-INF/fragments/headTag.jspf"%>
+<body ng-app = "adminApp" ng-controller = "loginCtrl" ng-cloak class="ng-cloak">
 <div class="container">
     <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="panel panel-info" >
@@ -68,7 +67,10 @@
         </div>
     </div>
 </div>
-<%@ include file="/WEB-INF/fragments/footer.jspf" %>
-<%@ include file="/WEB-INF/fragments/tutor_fragments/tutorScripts.jspf" %>
+
+
+<%@include file="../../fragments/footer.jspf" %>
+    <script src="assets/js/admin.js" type="text/javascript"></script>
+    <script src="<c:url value="assets/js/custom.min.js"/>"></script>
 </body>
 </html>

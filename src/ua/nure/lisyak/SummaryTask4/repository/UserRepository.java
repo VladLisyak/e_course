@@ -20,7 +20,9 @@ public interface UserRepository {
     // null if not found
     User getByEmail(String email);
 
-    List<User> getAllByRole(Role role);
+  /*  List<User> getAllByRole(Role role);*/
+
+    List<User> getAllByRole(Role role, int userId);
 
     List<User> getAll();
 

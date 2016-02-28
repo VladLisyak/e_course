@@ -1,4 +1,4 @@
-package ua.nure.lisyak.SummaryTask4.servlet.Simple.user;
+package ua.nure.lisyak.SummaryTask4.servlet.Simple.admin;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,27 +15,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {Constants.ServletPaths.User.LOGIN})
+@WebServlet(Constants.ServletPaths.Admin.LOGIN)
 public class LoginServlet extends BaseServlet{
+
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = getCurrentUser(req);
-        if (user != null && user.getRoles().contains(Role.STUDENT)) {
-            redirectToAction(Constants.ServletPaths.User.COURSE_LIST, req, resp);
+        if(user!=null && user.getRoles().contains(Role.ADMIN)){
+            redirectToAction(Constants.Pages.Admin.MAIN_PAGE, req, resp);
             return;
         }
-        forward(Constants.Pages.User.LOGIN, req, resp);
+        forward(Constants.Pages.Admin.LOGIN, req, resp);
     }
-
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User currUser = getCurrentUser(req);
-        if (currUser!=null && currUser.getRoles().contains(Role.STUDENT)){
-            LOGGER.error("User already logged in");
-            redirectToAction(Constants.ServletPaths.User.COURSE_LIST, req, resp);
+        User user = getCurrentUser(req);
+        if (user!=null && user.getRoles().contains(Role.ADMIN)){
+            LOGGER.error("Admin already logged in");
+            redirectToAction(Constants.Pages.Admin.MAIN_PAGE, req, resp);
             return;
         }
 
@@ -49,8 +49,8 @@ public class LoginServlet extends BaseServlet{
             return;
         }
 
-        User user = getUserService().getByLogin(login);
-        if ( user== null || !user.getLogin().equals(login)) {
+        user = getUserService().getByLogin(login);
+        if ( user == null || !user.getLogin().equals(login)) {
             validator.putIssue("login", "validator.invalidLogin");
             sendError(req, resp, validator);
             return;
@@ -63,25 +63,14 @@ public class LoginServlet extends BaseServlet{
             return;
         }
 
-        switch (user.getEnabled()){
-            case WAITING:{
-                validator.putIssue("enabled", "validator.confirmation");
-                sendError(req, resp, validator);
-                /*forward(Constants.Pages.ENABLED_ISSUE, req, resp);*/
-                return;
-            }
-            case BANNED:{
-                validator.putIssue("enabled", "validator.banned");
-                sendError(req, resp, validator);
-                /*forward(Constants.Pages.ENABLED_ISSUE, req, resp);*/
-                return;
-            }
+        if(!user.getRoles().contains(Role.ADMIN)){
+            validator.putIssue("rights", "validator.noRights");
+            sendError(req, resp, validator);
+            return;
         }
 
         setCurrentUser(req, user);
 
-        redirectToAction(Constants.ServletPaths.User.COURSE_LIST, req, resp);
-
+        redirectToAction(Constants.ServletPaths.Admin.MAIN, req, resp);
     }
-
 }

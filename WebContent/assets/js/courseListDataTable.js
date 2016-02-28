@@ -1,4 +1,52 @@
 ajaxUrl = "/ajax/subscription";
+var datatableApi;
+
+$(function () {
+    datatableApi = $('#datatable3').DataTable({
+        "sAjaxSource": ajaxUrl+'?sortBy=FINISHED',
+        "sAjaxDataProp": "",
+        "bPaginate": false,
+        "bInfo": false,
+        "aoColumns": [
+            {
+                "mData": "courseTitle",
+                "bSortable": false
+            },
+            {
+                "mData": "startDate"
+            },
+            {
+                "mData": "endDate"
+            },
+            {
+                "mData": "themes",
+                "bSortable": true,
+                "mRender": function (data, type, row) {
+                    var strToReturn = "";
+                    data.forEach(function(item){
+                        strToReturn = strToReturn + '<h6><span class = "badge">'+ item + '</span></h6>'
+                    });
+                    return strToReturn;
+                }
+            },
+            {
+                "mData": "mark",
+                "bSortable": true
+            },
+            {
+                "bSortable": false,
+                "sDefaultContent": "",
+                "mRender": renderDetailsBtn
+            }
+        ],
+        "aaSorting": [
+            [
+                0,
+                "asc"
+            ]
+        ]
+    });
+});
 $(function () {
     datatableApi = $('#datatable1').DataTable({
         "sAjaxSource": ajaxUrl+'?sortBy=BEFORE_START',
@@ -101,52 +149,7 @@ $(function () {
         ]
     });
 });
-$(function () {
-    datatableApi = $('#datatable3').DataTable({
-        "sAjaxSource": ajaxUrl+'?sortBy=FINISHED',
-        "sAjaxDataProp": "",
-        "bPaginate": false,
-        "bInfo": false,
-        "aoColumns": [
-            {
-                "mData": "courseTitle",
-                "bSortable": false
-            },
-            {
-                "mData": "startDate"
-            },
-            {
-                "mData": "endDate"
-            },
-            {
-                "mData": "themes",
-                "bSortable": true,
-                "mRender": function (data, type, row) {
-                    var strToReturn = "";
-                    data.forEach(function(item){
-                        strToReturn = strToReturn + '<h6><span class = "badge">'+ item + '</span></h6>'
-                    });
-                    return strToReturn;
-                }
-            },
-            {
-                "mData": "mark",
-                "bSortable": true
-            },
-            {
-                "bSortable": false,
-                "sDefaultContent": "",
-                "mRender": renderDetailsBtn
-            }
-        ],
-        "aaSorting": [
-            [
-                0,
-                "asc"
-            ]
-        ]
-    });
-});
+
 var failedNote;
 
 function closeNoty() {

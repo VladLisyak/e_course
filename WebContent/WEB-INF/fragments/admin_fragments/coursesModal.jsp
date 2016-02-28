@@ -26,8 +26,8 @@
                                    ng-maxlength="20"
                                    required>
                             <div class="help-block" ng-messages="courseForm.title.$error" ng-show="courseForm.title.$touched">
-                                <p ng-message="minlength">{lang.tooShort}}</p>
-                                <p ng-message="maxlength">{lang.tooLong}}</p>
+                                <p ng-message="minlength">{lang.tooShort5}}</p>
+                                <p ng-message="maxlength">{lang.tooLong20}}</p>
                                 <p ng-message="required">{lang.required}}</p>
                             </div>
                         </div>

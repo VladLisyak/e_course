@@ -1,1 +1,1 @@
-<script src="/assets/js/user.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/user.js"></script>

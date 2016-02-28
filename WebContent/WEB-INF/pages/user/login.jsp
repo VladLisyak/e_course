@@ -11,8 +11,8 @@
     <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="panel panel-info" >
             <div class="panel-heading">
-                <div class="panel-title">{lang.login}}</div>
-                <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="${pageContext.request.contextPath}/user/forgetPassword">{lang.forgotPassword}}</a></div>
+                <div class="panel-title">{{lang.login}}</div>
+                <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="${pageContext.request.contextPath}/user/forgetPassword">{{lang.forgotPassword}}</a></div>
             </div>
 
             <div style="padding-top:30px" class="panel-body" >
@@ -30,9 +30,9 @@
                                ng-maxlength="10"
                                required>
                         <div class="help-block" ng-messages="userForm.login.$error" ng-show="userForm.login.$touched">
-                            <p ng-message="minlength">{lang.tooShort3}}</p>
-                            <p ng-message="maxlength">{lang.tooLong100}}</p>
-                            <p ng-message="required">{lang.required}}</p>
+                            <p ng-message="minlength">{{lang.tooShort3}}</p>
+                            <p ng-message="maxlength">{{lang.tooLong100}}</p>
+                            <p ng-message="required">{{lang.required}}</p>
                         </div>
                     </div>
 
@@ -46,9 +46,9 @@
                                ng-maxlength="20"
                                required>
                         <div class="help-block" ng-messages="userForm.password.$error" ng-show="userForm.password.$touched">
-                            <p ng-message="minlength">{lang.tooShort}}</p>
-                            <p ng-message="maxlength">{lang.tooLong}}</p>
-                            <p ng-message="required">{lang.required}}</p>
+                            <p ng-message="minlength">{{lang.tooShort5}}</p>
+                            <p ng-message="maxlength">{{lang.tooLong20}}</p>
+                            <p ng-message="required">{{lang.required}}</p>
                         </div>
                     </div>
 
@@ -56,7 +56,7 @@
                         <!-- Button -->
 
                         <div class="col-sm-12 controls">
-                            <a id="btn-login" ng-click ="submitForm(login)" ng-show="!userForm.$invalid" class="btn btn-success">{lang.login}}</a>
+                            <a id="btn-login" ng-click ="submitForm(login)" ng-show="!userForm.$invalid" class="btn btn-success">{{lang.login}}</a>
                         </div>
                     </div>
 
@@ -64,9 +64,9 @@
                     <div class="form-group">
                         <div class="col-md-12 control">
                             <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%" >
-                                {lang.accountMissing}}
+                                {{lang.accountMissing}}
                                 <a onClick="$('#loginbox').hide(); $('#signupbox').show()">
-                                    {lang.registerHere}}
+                                    {{lang.registerHere}}
                                 </a>
                             </div>
                         </div>
@@ -79,83 +79,83 @@
     <div id="signupbox" style="display:none; margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <div class="panel-title">{lang.register}}</div>
+                <div class="panel-title">{{lang.register}}</div>
                 <div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" onclick="$('#signupbox').hide(); $('#loginbox').show()">Sign In</a></div>
             </div>
             <div class="panel-body" >
                 <form id="signupform" name = "signupForm" class="form-horizontal" role="form" enctype="multipart/form-data" novalidate>
 
                     <div class="form-group" ng-class="{ 'has-error': signupForm.name.$touched && signupForm.name.$invalid }">
-                        <label for="name" class="col-md-3 control-label">{lang.name}}</label>
+                        <label for="name" class="col-md-3 control-label">{{lang.name}}</label>
                         <div class="col-md-9">
-                            <input type="text" id = "name" class="form-control" ng-pattern = "nameTemplate" name="name" placeholder="{lang.name}}"
+                            <input type="text" id = "name" class="form-control" ng-pattern = "nameTemplate" name="name" placeholder="{{lang.name}}"
                                    ng-model="formData.name"
                                    ng-minlength="3"
                                    ng-maxlength="100"
                                    required>
                             <div class="help-block" ng-messages="signupForm.name.$error" ng-show="signupForm.name.$touched">
-                                <p ng-message="minlength">{lang.tooShort3}}</p>
-                                <p ng-message="maxlength">{lang.tooLong100}}</p>
-                                <p ng-message="required">{lang.required}}</p>
-                                <p ng-message="pattern">{lang.invalidFormat}}</p>
+                                <p ng-message="minlength">{{lang.tooShort3}}</p>
+                                <p ng-message="maxlength">{{lang.tooLong100}}</p>
+                                <p ng-message="required">{{lang.required}}</p>
+                                <p ng-message="pattern">{{lang.invalidFormat}}</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group" ng-class="{ 'has-error': signupForm.login.$touched && signupForm.login.$invalid }">
-                        <label for="userLogin" class="col-md-3 control-label">{lang.login}}</label>
+                        <label for="userLogin" class="col-md-3 control-label">{{lang.login}}</label>
                         <div class="col-md-9">
-                            <input type="text" id="userLogin" class="form-control" ng-pattern = "loginTemplate" name="login" placeholder="{lang.login}}"
+                            <input type="text" id="userLogin" class="form-control" ng-pattern = "loginTemplate" name="login" placeholder="{{lang.login}}"
                                    ng-model="formData.login"
                                    ng-minlength="5"
                                    ng-maxlength="100"
                                    required>
                             <div class="help-block" ng-messages="signupForm.login.$error" ng-show="signupForm.login.$touched">
-                                <p ng-message="minlength">{lang.tooShort5}}</p>
-                                <p ng-message="maxlength">{lang.tooLong100}}</p>
-                                <p ng-message="required">{lang.required}}</p>
-                                <p ng-message="pattern">{lang.invalidFormat}}</p>
+                                <p ng-message="minlength">{{lang.tooShort5}}</p>
+                                <p ng-message="maxlength">{{lang.tooLong100}}</p>
+                                <p ng-message="required">{{lang.required}}</p>
+                                <p ng-message="pattern">{{lang.invalidFormat}}</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group" ng-class="{ 'has-error': signupForm.email.$touched && signupForm.email.$invalid }">
-                        <label for="email" class="col-md-3 control-label">{lang.email}}</label>
+                        <label for="email" class="col-md-3 control-label">{{lang.email}}</label>
                         <div class="col-md-9">
-                            <input type="email" id = "email" class="form-control" ng-pattern = "emailTemplate" name="email" placeholder="{lang.email}}"
+                            <input type="email" id = "email" class="form-control" ng-pattern = "emailTemplate" name="email" placeholder="{{lang.email}}"
                                    ng-model="formData.email"
                                    ng-minlength="5"
                                    ng-maxlength="100"
                                    required>
                             <div class="help-block" ng-messages="signupForm.email.$error" ng-show="signupForm.email.$touched">
-                                <p ng-message="minlength">{lang.tooShort5}}</p>
-                                <p ng-message="maxlength">{lang.tooLong100}}</p>
-                                <p ng-message="required">{lang.required}}</p>
-                                <p ng-message="email">{lang.invalidEmail}}</p>
-                                <p ng-message="pattern">{lang.invalidFormat}}</p>
+                                <p ng-message="minlength">{{lang.tooShort5}}</p>
+                                <p ng-message="maxlength">{{lang.tooLong100}}</p>
+                                <p ng-message="required">{{lang.required}}</p>
+                                <p ng-message="email">{{lang.invalidEmail}}</p>
+                                <p ng-message="pattern">{{lang.invalidFormat}}</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group" ng-class="{ 'has-error': signupForm.password.$touched && signupForm.password.$invalid }">
-                        <label for="password" class="col-md-3 control-label">{password}}</label>
+                        <label for="password" class="col-md-3 control-label">{{lang.password}}</label>
                         <div class="col-md-9">
-                            <input type="password" class="form-control"  ng-pattern="passwordTemplate" name="password" placeholder="{password}}"
+                            <input type="password" class="form-control"  ng-pattern="passwordTemplate" name="password" placeholder="{{lang.password}}"
                                    ng-model="formData.password"
                                    ng-minlength="5"
                                    ng-maxlength="100"
                                    required>
                             <div class="help-block" ng-messages="signupForm.password.$error" ng-show="signupForm.password.$touched">
-                                <p ng-message="minlength">{lang.tooShort5}}</p>
-                                <p ng-message="maxlength">{lang.tooLong100}}</p>
-                                <p ng-message="pattern">{lang.invalidFormat}}</p>
-                                <p ng-message="required">{lang.required}}</p>
+                                <p ng-message="minlength">{{lang.tooShort5}}</p>
+                                <p ng-message="maxlength">{{lang.tooLong100}}</p>
+                                <p ng-message="pattern">{{lang.invalidFormat}}</p>
+                                <p ng-message="required">{{lang.required}}</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="password" class="col-md-3 control-label">{lang.image}}</label>
+                        <label for="password" class="col-md-3 control-label">{{lang.image}}</label>
                         <div class="col-md-9">
                             <input type="file" class="form-control" name="image" placeholder="{image}}" ng-model="formData.image" accept="image/*" app-filereader/>
                         </div>
@@ -164,7 +164,7 @@
                     <div class="form-group">
                         <!-- Button -->
                         <div class="col-md-offset-3 col-md-9">
-                            <button id="btn-signup" type="button" ng-click = "submitForm(register)" ng-show="!signupForm.$invalid" class="btn btn-info"><i class="icon-hand-right"></i> &nbsp {lang.register}}</button>
+                            <button id="btn-signup" type="button" ng-click = "submitForm(register)" ng-show="!signupForm.$invalid" class="btn btn-info"><i class="icon-hand-right"></i> &nbsp {{lang.register}}</button>
                         </div>
                     </div>
                 </form>

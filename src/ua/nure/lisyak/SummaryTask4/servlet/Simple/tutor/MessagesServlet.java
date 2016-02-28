@@ -14,11 +14,9 @@ public class MessagesServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer id = getEntityId(req);
-        if(id != null){
             req.setAttribute(Constants.Attributes.ID, id);
-            forward(Constants.Pages.Tutor.DIALOG, req, resp);
-        }else{
-            forward(Constants.Pages.Tutor.UNREAD, req, resp);
-        }
+
+            forward(Constants.Pages.Tutor.MESSAGES, req, resp);
+
     }
 }

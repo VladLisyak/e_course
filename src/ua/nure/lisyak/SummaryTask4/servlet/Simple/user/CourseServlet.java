@@ -1,5 +1,6 @@
 package ua.nure.lisyak.SummaryTask4.servlet.Simple.user;
 
+import ua.nure.lisyak.SummaryTask4.model.User;
 import ua.nure.lisyak.SummaryTask4.model.enums.Role;
 import ua.nure.lisyak.SummaryTask4.model.enums.Theme;
 import ua.nure.lisyak.SummaryTask4.servlet.BaseServlet;
@@ -16,7 +17,8 @@ public class CourseServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute(Constants.Attributes.TUTORS, getUserService().getAllByRole(Role.TUTOR));
+        User user = getCurrentUser(req);
+        req.setAttribute(Constants.Attributes.TUTORS, getUserService().getAllByRole(Role.TUTOR, user!=null? user.getId():0));
         req.setAttribute(Constants.Attributes.SEARCH_BY, Constants.SEARCH_TYPES);
         req.setAttribute(Constants.Attributes.SORT_BY, Constants.SORT_TYPES);
         req.setAttribute(Constants.Attributes.THEMES, Theme.values());

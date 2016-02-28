@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class MessageAjaxServlet extends BaseAjaxServlet {
         Message newMessage = (Message) getEntityFromRequest(req, Message.class);
         newMessage.setFromId(getCurrentUser(req).getId());
         newMessage.setReferrerName(getUserService().get(newMessage.getToId()).getName());
-        newMessage.setDate(new Date());
+        newMessage.setDate(new Timestamp(new Date().getTime()));
         newMessage.setRead(false);
         getMessageService().save(newMessage);
     }

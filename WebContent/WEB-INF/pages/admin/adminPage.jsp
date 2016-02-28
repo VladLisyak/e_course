@@ -36,6 +36,6 @@
     }, 0);
 });</script>
 <script src="<c:url value="/webjars/metisMenu/1.1.2/metisMenu.js"/>"></script>
-<script src="<c:url value="../../../assets/js/custom.min.js"/>"></script>
+<script src="<c:url value="assets/js/custom.min.js"/>"></script>
 </body>
 </html>

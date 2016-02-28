@@ -2,12 +2,45 @@
  * Created by Влад on 22.02.2016.
  */
 
-var app = angular.module('admin.controllers', [ 'ngRoute', 'ngResource' ]);
+var app = angular.module('admin.controllers', [ 'ngRoute', 'ngResource', 'ngMessages' ]);
 
 
 app.controller('homeCtrl',
     function ($scope, $location, UserFactory, $rootScope, UsersFactory) {
 
+    }
+);
+app.controller('loginCtrl',
+    function ($scope, $location, UserFactory, $rootScope, UsersFactory, $http) {
+        $scope.notyFlag = "new";
+        $scope.loginTemplate = "^[A-ZА-Яа-яa-z0-9_-]+$";
+        $scope.passwordTemplate = "^[A-ZА-Яа-яa-z0-9_-]+[-\s][A-ZА-Яа-яa-z0-9_-]+$";
+
+        $scope.formData = {};
+
+
+        // function to submit the form after all validation has occurred
+        $scope.submitForm = function() {
+            console.log($scope.formData);
+            $http({
+                method  : 'POST',
+                url     : "/admin/login",
+                data    : $.param($scope.formData),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }  // set the headers so angular passing info as form data (not request payload)
+            }).success(function (){
+                $rootScope.successNoty($rootScope.lang['success']);
+                setTimeout($scope.locationChange, 3000);
+
+            }).error(function (data){
+                $scope.message = data;
+
+                $rootScope.failNoty(data);
+            });
+        };
+
+        $scope.locationChange = function(){
+            window.location.href = 'admin/main/';
+        };
     }
 );
    app.controller('notConfirmedCtrl',
@@ -469,11 +502,13 @@ main.run(function($rootScope, $http, $location, UserFactory, CourseFactory) {
     };
 
     $rootScope.failNoty = function(reason) {
-        if(reason.data!=undefined){
-        reason = reason.data;
-        var message = reason.substring(reason.indexOf('<u>'), reason.indexOf('</u>'));}else{
+        console.log(reason);
+        var message;
+        if(reason!=undefined){
 
-            message = reason;
+            message = reason.substring(reason.indexOf('<u>'), reason.indexOf('</u>'));
+        }else{
+            message = $rootScope.lang['fail'];
         }
         $rootScope.closeNoty();
         $rootScope.failedNote = noty({

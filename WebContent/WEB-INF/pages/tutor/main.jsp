@@ -49,10 +49,6 @@
                                             <td>{lang.tutorCoursesCount}}</td>
                                             <td><span class="badge">${coursesCount}</span></td>
                                         </tr>
-                                        <tr>
-                                            <td>{lang.messages}}</td>
-                                            <td><span class="badge">${coursesCount}</span></td>
-                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>

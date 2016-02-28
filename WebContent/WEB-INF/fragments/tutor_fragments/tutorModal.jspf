@@ -40,8 +40,8 @@
                         <img src="<c:url value="/uploads/users/{{detailsData.tutor.image}}"/>"<%-- alt="item1"--%>
                              width="80" height="80">
                     </div>
-                    <h5>{lang.tutorIs}} <a href="${pageContext.request.contextPath}/user/tutor/{{detailsData.tutor.id}}">
-                        {{detailsData.tutor.name}}</a></h5>
+                    <%--<h5>{lang.tutorIs}} <a href="${pageContext.request.contextPath}/user/tutor/{{detailsData.tutor.id}}">
+                        {{detailsData.tutor.name}}</a></h5>--%>
                 </div>
 
                 <div class="modal-footer">

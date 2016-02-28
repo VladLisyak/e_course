@@ -31,7 +31,7 @@ public interface UserService {
     User getByEmail(String email);
 
     @Cacheable
-    List<User> getAllByRole(Role role);
+    List<User> getAllByRole(Role role, int id);
 
     @Cacheable
     List<User> getAll();

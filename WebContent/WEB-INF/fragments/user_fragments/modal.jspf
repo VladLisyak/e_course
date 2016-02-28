@@ -40,10 +40,11 @@
                         <img src="<c:url value="/uploads/users/{{detailsData.tutor.image}}"/>"<%-- alt="item1"--%>
                         width="80" height="80">
                     </div>
-                    <h5>{lang.tutorIs}} <a href="${pageContext.request.contextPath}/user/tutor/{{detailsData.tutor.id}}">
+                    <h5 class = "pull-right text-right">{lang.tutorIs}} <a href="${pageContext.request.contextPath}/user/tutor/{{detailsData.tutor.id}}">
                         {{detailsData.tutor.name}}</a></h5>
                 </div>
-
+                <br><br><br><br>
+                <br><br>
                 <div class="modal-footer">
                     <c:if test="${not empty currentUser}">
                     <button type="button" ng-show="(!detailsData.subscribed) && (detailsData.status.localeCompare('FINISHED')!=0)" class="btn btn-primary" ng-click="subscribeToCourse(course.id)">

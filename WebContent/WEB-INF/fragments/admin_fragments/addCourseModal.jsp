@@ -20,28 +20,28 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div style="margin-bottom: 25px"  ng-class="{ 'has-error': courseForm.title.$touched && courseForm.title.$invalid }">
-                                <label class="control-label" for="title">{lang.title}}</label>
+                                <label class="control-label" for="title">{{lang.title}}</label>
                                 <input type="text" id = "title" name = "title" ng-model = "detailsData.title" class="form-control"
                                        ng-minlength="5"
                                        ng-maxlength="20"
                                        required>
                                 <div class="help-block" ng-messages="courseForm.title.$error" ng-show="courseForm.title.$touched">
-                                    <p ng-message="minlength">{lang.tooShort}}</p>
-                                    <p ng-message="maxlength">{lang.tooLong}}</p>
-                                    <p ng-message="required">{lang.required}}</p>
+                                    <p ng-message="minlength">{{lang.tooShort5}}</p>
+                                    <p ng-message="maxlength">{{lang.tooLong20}}</p>
+                                    <p ng-message="required">{{lang.required}}</p>
                                 </div>
                             </div>
 
                             <div style="margin-bottom: 25px"  ng-class="{ 'has-error': courseForm.desc.$touched && courseForm.desc.$invalid }">
-                                <label class="control-label" for="desc">{lang.description}}</label>
+                                <label class="control-label" for="desc">{{lang.description}}</label>
                         <textarea id = "desc" class="form-control" name = "desc" ng-model = "detailsData.description" class="form-control"
                                   required></textarea>
                                 <div class="help-block" ng-messages="courseForm.desc.$error" ng-show="courseForm.desc.$touched">
-                                    <p ng-message="required">{lang.required}}</p>
+                                    <p ng-message="required">{{lang.required}}</p>
                                 </div>
                             </div>
 
-                            <label class="control-label" for="startDate">{lang.startDate}}</label>
+                            <label class="control-label" for="startDate">{{lang.startDate}}</label>
 
 
                             <div id = "startDate"  ng-class="{ 'has-error': courseForm.start.$touched && courseForm.start.$invalid }">
@@ -53,7 +53,7 @@
                                 </p>
                             </div>
 
-                            <label class="control-label" for="endDate">{lang.endDate}}</label>
+                            <label class="control-label" for="endDate">{{lang.endDate}}</label>
                             <div id = "endDate"  ng-class="{ 'has-error': courseForm.end.$touched && courseForm.end.$invalid }">
                                 <p class="input-group">
                                     <input type="text" class="form-control" name = "end" uib-datepicker-popup="yyyy-MM-dd" ng-model="detailsData.endDate" is-open="popup2.opened" min-date="getDate()" ng-required="true" close-text="Close" />
@@ -75,9 +75,9 @@
                             </div>
 
                             <div style="margin-bottom: 25px" ng-class="{ 'has-error': courseForm.themes.$touched && courseForm.themes.$invalid }">
-                                <label class="control-label" for="themes">{lang.themes}}</label>
+                                <label class="control-label" for="themes">{{lang.themes}}</label>
                                 <select id = "themes" name = "themes" ng-model = "detailsData.themes"
-                                        ng-multiple="true" multiple data-placeholder="{lang.themes}}"
+                                        ng-multiple="true" multiple data-placeholder="{{lang.themes}}"
                                         chosen
                                         class="form-control"
                                         ng-options="theme for theme in themes" required>
@@ -91,8 +91,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary"  ng-show="!courseForm.$invalid" ng-click="postCourse()">{lang.Submit}}</button>
-                        <button type="button" class="btn btn-default" ng-click="hideWithName('addCourseModal')">{lang.Cancel}}</button>
+                        <button type="button" class="btn btn-primary"  ng-show="!courseForm.$invalid" ng-click="postCourse()">{{lang.Submit}}</button>
+                        <button type="button" class="btn btn-default" ng-click="hideWithName('addCourseModal')">{{lang.Cancel}}</button>
                     </div>
                 </div>
             </form>

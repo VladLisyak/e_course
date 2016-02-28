@@ -10,7 +10,7 @@
     <table class="table table-bordered table-hover">
         <thead>
         <tr>
-            <th>{lang.userName}}</th>
+            <th>{{lang.userName}}</th>
             <th>{lang.email}}</th>
             <th></th>
         </tr>

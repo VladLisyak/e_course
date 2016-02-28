@@ -3,6 +3,96 @@
  */
 var app = angular.module('app')
 
+app.controller('tutorContactsController',
+
+    function($scope, $http, $rootScope, $location, UserFactory, CourseFactory, MessageFactory, $interval) {
+        $scope.tutors = {};
+        $scope.count = {};
+
+        UserFactory.students(function success(data){
+            $scope.tutors = data;
+            $scope.init();
+        });
+
+        $scope.init = function(){
+            $scope.tutors.forEach(function(item){
+                $http.get("/ajax/messages/?referrerId=" + item.id + "&count=true", {}).success(function(data) {
+                    console.log(data);
+                    $scope.count[item.id] = data;
+                })
+            });
+        };
+
+
+        var stop;
+
+
+        $scope.messaging = function() {
+            // Don't start a new fight if we are already fighting
+            if ( angular.isDefined(stop) ) return;
+
+            stop = $interval($scope.updateMessages, 300);
+        };
+
+        $scope.updateMessages = function(){
+            if($rootScope.flag){
+                $scope.message($scope.opponentId);
+            }else{
+                $scope.stopMessaging();
+            }
+        };
+
+        $scope.stopMessaging = function() {
+            if (angular.isDefined(stop)) {
+                $interval.cancel(stop);
+                stop = undefined;
+            }
+        };
+
+        $scope.$on('$destroy', function() {
+            // Make sure that the interval is destroyed too
+            $scope.stopMessaging();
+        });
+
+        $scope.opponentId = 0;
+        $scope.currentId = 0;
+
+        $scope.messages = {};
+        $scope.messageText = {};
+        $scope.messageText['message'] = "";
+
+        $scope.sendMessage = function(){
+            $scope.messageText['toId'] = $scope.opponentId;
+            $scope.messageText['fromId'] = 0;
+            $scope.date = new Date();
+            $scope.referrerName = "";
+            console.log($scope.messageText);
+            MessageFactory.post($scope.messageText);
+            $scope.messageText = {};
+            $scope.messageText['message'] = "";
+        };
+
+
+        $scope.message = function(referrerId){
+            $scope.opponentId = referrerId;
+            $rootScope.flag = true;
+            MessageFactory.getMessages({referrerId: referrerId}, function(data){
+                $scope.messages = data;
+                $scope.detailsData = $scope.messages;
+                $scope.messages.forEach(function(item){
+                    item.read=true;
+                    if (item.toId != referrerId){
+                        MessageFactory.update(item);}
+                });
+            });
+            $scope.init();
+            $rootScope.courseDetails($scope.messages);
+            $scope.messaging();
+        }
+
+
+    })
+
 .controller('mainTutorController',
 
     function($scope, $http, $rootScope) {

@@ -127,8 +127,9 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
     }
 
     @Override
-    public List<User> getAllByRole(Role role) {
+    public List<User> getAllByRole(Role role, int userId) {
         String sql = QueryStorage.get(GET_BY_ROLE);
+        sql = String.format(sql, userId);
         return getAllByEnum(role.toString(), sql);
     }
 

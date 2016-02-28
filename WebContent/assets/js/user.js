@@ -328,7 +328,6 @@ app.controller('contactsController',
             MessageFactory.post($scope.messageText);
             $scope.messageText = {};
             $scope.messageText['message'] = "";
-            $scope.messaging();
         };
 
 
@@ -346,6 +345,7 @@ app.controller('contactsController',
             });
             $scope.init();
             $rootScope.courseDetails($scope.messages);
+            $scope.messaging();
         }
 
 

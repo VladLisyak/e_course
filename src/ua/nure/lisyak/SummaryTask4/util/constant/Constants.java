@@ -179,10 +179,11 @@ public final class Constants {
             public static final String USERS = ADMIN + "users";
             public static final String MAIN = ADMIN + "main/";
             public static final String THEMES = AJAX + "themes";
+            public static final String LOGIN = ADMIN + "login";
         }
 
         public class Tutor {
-            private static final String TUTOR = "/tutor/";
+            public static final String TUTOR = "/tutor/";
 
             public static final String JOURNAL = TUTOR + "journal";
             public static final String PROFILE = TUTOR + "profile";
@@ -217,6 +218,7 @@ public final class Constants {
             public static final String COURSES = ADMIN_PREFIX + "courses.jsp";
             public static final String USERS = "user.jsp";
             public static final String MAIN_PAGE = ADMIN_PREFIX + "adminPage.jsp";
+            public static final String LOGIN = ADMIN_PREFIX + "login.jsp";
         }
 
         public class Tutor {
@@ -227,6 +229,7 @@ public final class Constants {
             public static final String UNREAD = TUTOR_PREFIX + "unread.jsp";
             public static final String PROFILES = TUTOR_PREFIX + "profile.jsp";
             public static final String LOGIN = TUTOR_PREFIX + "login.jsp";
+            public static final String MESSAGES = TUTOR_PREFIX + "contacts.jsp";
         }
     }
 

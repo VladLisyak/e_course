@@ -40,8 +40,8 @@ public class JdbcUserService implements UserService {
     }
 
     @Override
-    public List<User> getAllByRole(Role role) {
-        return repository.getAllByRole(role);
+    public List<User> getAllByRole(Role role,int id) {
+        return repository.getAllByRole(role, id);
     }
 
     @Override

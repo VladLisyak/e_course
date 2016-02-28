@@ -1,6 +1,6 @@
 package ua.nure.lisyak.SummaryTask4.model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Message extends Entity {
     private int fromId;
@@ -11,7 +11,7 @@ public class Message extends Entity {
 
     private Boolean read;
 
-    private Date date;
+    private Timestamp date;
 
     private String referrerName;
 
@@ -47,11 +47,11 @@ public class Message extends Entity {
         this.read = read;
     }
 
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
