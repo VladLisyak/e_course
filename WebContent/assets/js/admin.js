@@ -138,6 +138,7 @@ app.controller('blackListCtrl',
             UserFactory.update(user, function success(data) {
                 $rootScope.successNoty($rootScope.lang['success']);
                 $scope.updateBanned();
+                $rootScope.hide();
             }, function error(data) {
                 $scope.message = data;
                 $rootScope.failNoty($scope.message);

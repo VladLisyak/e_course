@@ -1,10 +1,10 @@
 --User
 INSERT INTO `e_course`.`user` (`name`, `login`, `password`, `email`, `enabled`, `image`)
-VALUES ('user', 'user', 'user', 'abc@mail.ru', 'ACTIVE', '1.jpg'),
+VALUES ('user', 'user', 'useruser', 'abc@mail.ru', 'ACTIVE', '1.jpg'),
   ('admin', 'admin', 'admin', 'abc@mail.com', 'ACTIVE', '2.jpg'),
-  ('Петров Петр', 'Петр', 'Петр', 'abc@rambler.ru', 'ACTIVE', '4.jpg'),
+  ('Петров Петр', 'Петр', 'петрпетр', 'abc@rambler.ru', 'ACTIVE', '4.jpg'),
   ('tutor', 'tutor', 'tutor', 'def@mail.ru', 'ACTIVE', '3.jpg'),
-  ('Иванов Иван', 'Иван', 'иван', 'ghi@mail.ru', 'ACTIVE', '5.jpg'),
+  ('Иванов Иван', 'Иван', 'иваниван', 'ghi@mail.ru', 'ACTIVE', '5.jpg'),
   ('Jennings, Sonya F.', 'Neroa', 'MJA30ZUD3DL', 'abcqwert@mail.ru', 'ACTIVE', '6.jpg'),
   ('Lane, Priscilla A.', 'Dolanc', 'LTX56RBM3JS', 'abcqwer@mail.ru', 'ACTIVE', '7.jpg'),
   ('Rodgers, Abigail A.', 'Philipa', 'VPU75LAU1OR', 'abcqwe@mail.ru', 'ACTIVE', '8.jpg'),
