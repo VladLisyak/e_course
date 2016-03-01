@@ -28,7 +28,7 @@
                                     <td>${tutor.name}</td>
                                 </tr>
                                 <tr>
-                                    <td>{{lang.login}}:</td>
+                                    <td>{{lang.tlogin}}:</td>
                                     <td>${tutor.login}</td>
                                 </tr>
                                 <tr>

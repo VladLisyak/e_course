@@ -26,8 +26,6 @@ public interface UserService {
     // null if not found
     User get(int id);
 
-    // null if not found
-    @Cacheable
     User getByEmail(String email);
 
     @Cacheable

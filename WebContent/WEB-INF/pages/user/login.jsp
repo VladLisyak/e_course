@@ -103,7 +103,7 @@
                     </div>
 
                     <div class="form-group" ng-class="{ 'has-error': signupForm.login.$touched && signupForm.login.$invalid }">
-                        <label for="userLogin" class="col-md-3 control-label">{{lang.login}}</label>
+                        <label for="userLogin" class="col-md-3 control-label">{{lang.tlogin}}</label>
                         <div class="col-md-9">
                             <input type="text" id="userLogin" class="form-control" ng-pattern = "loginTemplate" name="login" placeholder="{{lang.login}}"
                                    ng-model="formData.login"

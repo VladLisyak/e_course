@@ -89,8 +89,13 @@
                         </c:when>
                         <c:otherwise>
                         <a ng-show="(!course.subscribed) && (course.status.localeCompare('FINISHED')!=0)"
-                              ng-click="subscribeToCourse(course.id)" class="btn btn-primary" role="button">{{lang.subscribe}}</a>
-                            </c:otherwise>
+                              ng-click="subscribeToCourse(course.id)" class="btn btn-primary" role="button">{{lang.subscribeTo}}</a>
+                            <a ng-show="(course.status.localeCompare('FINISHED')==0)"
+                               ng-click="" ng-disabled = "true" class="btn btn-danger" role="button">{{lang.finished}}</a>
+                            <a ng-show="(course.subscribed) && (course.status.localeCompare('FINISHED')!=0)"
+                               ng-click="" ng-disabled = "true" class="btn btn-warning" role="button">{{lang.subscribed}}</a>
+
+                        </c:otherwise>
                         </c:choose>
                         <div>
                             <a class="btn btn-default" ng-click="courseDetails(course)" role="button">{{lang.details}}</a>

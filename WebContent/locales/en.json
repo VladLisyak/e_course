@@ -100,7 +100,11 @@
   "fail":"Failed",
   "admin.active":"Active",
   "admin.Tutors":"Tutors",
-  "users":"Users"
+  "users":"Users",
+  "tlogin":"Login",
+  "SubscribeTo":"Subscribe",
+  "finished":"Finished",
+  "subscribed":"Subscribed"
 
 
 }

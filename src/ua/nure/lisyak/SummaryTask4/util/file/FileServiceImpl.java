@@ -80,8 +80,8 @@ public class FileServiceImpl implements FileService {
     @Override
     public String getExtension(String file) {
         try {
-            String[] fl =  file.split(";|\\.");
-            return fl[1];
+            String[] fl =  file.split(";|\\.|:|/");
+            return fl[2];
         } catch (IndexOutOfBoundsException e) {
             throw new FileProcessingException("Cannot get file extension", e);
         }

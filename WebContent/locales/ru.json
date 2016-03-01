@@ -100,7 +100,12 @@
     "fail":"Не удалось",
     "admin.active":"Активные",
     "admin.Tutors":"Преп-ли",
-    "users":"Пользователи"
+    "users":"Пользователи",
+    "tlogin":"Логин",
+    "SubscribeTo":"Подписаться",
+    "finished":"Завершен",
+    "subscribed":"Подписан"
+
 
 
 }

@@ -15,7 +15,7 @@ public class UserValidator extends AbstractValidator {
             "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
     private static final Pattern LOGIN_TEMPLATE = Pattern.compile(
             "^[A-ZА-Яа-яa-z0-9_-]+$", Pattern.CASE_INSENSITIVE);
-    private static final Pattern NAME_TEMPLATE = Pattern.compile("^\\p{L}+$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern NAME_TEMPLATE = Pattern.compile("^\\p{L}+(,\\s\\p{L}+\\s\\p{L}\\.)?(\\s?\\p{L}+)?$", Pattern.CASE_INSENSITIVE);
 
 
     /**
@@ -90,8 +90,8 @@ public class UserValidator extends AbstractValidator {
         if (!LOGIN_TEMPLATE.matcher(login).matches()) {
             return Validation.PATT_MATCH;
         }
-        if (login.length() < 5 || login.length() > 100) {
-            return Validation.LEN_5_TO_100;
+        if (login.length() < 4 || login.length() > 100) {
+            return Validation.LEN_4_TO_100;
         }
         return null;
     }

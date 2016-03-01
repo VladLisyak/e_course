@@ -8,6 +8,7 @@ app.controller('tutorContactsController',
     function($scope, $http, $rootScope, $location, UserFactory, CourseFactory, MessageFactory, $interval) {
         $scope.tutors = {};
         $scope.count = {};
+        $scope.searchField = "";
 
         UserFactory.students(function success(data){
             $scope.tutors = data;

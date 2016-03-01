@@ -144,6 +144,7 @@ public final class Constants {
         public static final String YEAR = "validator.year";
         public static final String TOO_BIG = "validator.tooBig";
         public static final String START_DATE_GREATER_END_DATE = "validator.startGreaterEnd";
+        public static final String LEN_4_TO_100 = "validator.lengthFrom4to100";
     }
 
     public static final class ServletPaths {

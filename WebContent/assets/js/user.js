@@ -78,7 +78,7 @@ app.controller('loginRegisterController',
         $scope.nameTemplate = "^[A-ZА-Яа-яa-z]+$";
         $scope.loginTemplate = "^[A-ZА-Яа-яa-z0-9_-]+$";
         $scope.emailTemplate = "^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$";
-        $scope.passwordTemplate = "^[A-ZА-Яа-яa-z0-9_-]+[-\s][A-ZА-Яа-яa-z0-9_-]+$";
+        $scope.passwordTemplate = "^[A-ZА-Яа-яa-z0-9_-]+$";
 
         $scope.login = '/user/login';
         $scope.register = '/user/register';

@@ -46,8 +46,8 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="row" >
-                        <img src="/uploads/users/{{detailsData.image}}" width="300" height="300">
+                        <div class="row" style="margin: 0 auto;">
+                            <img src="/uploads/users/{{detailsData.image}}" width="300" height="300">
                         </div>
                         <label class="control-label" for="name">{{lang.name}}</label>
                         <input type="text" id = "name" ng-model = "detailsData.name" class="form-control" disabled>
@@ -55,7 +55,7 @@
                         <label class="control-label" for="email">{{lang.email}}</label>
                         <input type="text" id = "email" ng-model = "detailsData.email" class="form-control" disabled>
 
-                        <label class="control-label" for="login">{{lang.login}}</label>
+                        <label class="control-label" for="login">{{lang.tlogin}}</label>
                         <input type="text" id = "login" ng-model = "detailsData.login" class="form-control" disabled>
                         <div class="radio form-control" >
                             <label>
@@ -77,7 +77,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" ng-click="submit()">{{lang.Update}}</button>
+                    <button type="button" class="btn btn-primary" ng-click="submit()">{{lang.update}}</button>
                     <button type="button" class="btn btn-default" ng-click="hide()">{{lang.Cancel}}</button>
                 </div>
             </div>

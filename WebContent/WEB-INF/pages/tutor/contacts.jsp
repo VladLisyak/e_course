@@ -6,6 +6,9 @@
 <body ng-app="app" id = "body" ng-cloak ng-controller="tutorContactsController">
 <%@include file="/WEB-INF/fragments/tutor_fragments/bodyHeader.jspf" %>
 <div class="container">
+    <label for="search">{{lang.search}}</label>
+    <input class="input-field form-control" id = "search" ng-model = "searchField"/>
+    <br>
     <div class="table-responsive">
         <table class="table table-bordered table-hover">
             <thead>
@@ -16,7 +19,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="tutor in tutors" >
+            <tr ng-repeat="tutor in tutors | filter: searchField" >
                 <td><div ng-class="{ 'has-feedback': count[tutor.id] > 0 }">{{tutor.name}}</div></td>
                 <td>
                     <a href="mailto:{{tutor.email}}">{{tutor.email}}</a>
