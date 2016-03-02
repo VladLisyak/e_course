@@ -54,7 +54,7 @@ public class ContextLoader extends AbstractContextLoader {
         this.connectionHolder = holder;
         this.connectionManager = manager;
 
-        context.setAttribute(LocaleUtil.class.getName(), new LocaleUtil(Constants.ROUTES.BUNDLE_PATH, localesToSet));
+        context.setAttribute(LocaleUtil.class.getName(), new LocaleUtil("/"+Constants.ROUTES.BUNDLE_PATH, localesToSet));
         context.setAttribute(Constants.Attributes.CONNECTION_MANAGER, manager);
         context.setAttribute(Constants.Service.FILE_PROC_SERVICE, new FileServiceImpl(SettingsAndFolderPaths.getUploadDirectory()));
         context.setAttribute(Constants.Attributes.CACHE, cacheManager.getCache(Constants.Attributes.CACHE));

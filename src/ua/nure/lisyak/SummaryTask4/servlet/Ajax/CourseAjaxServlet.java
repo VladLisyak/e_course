@@ -63,6 +63,7 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
                     print(req,resp,studentSubscriptions.contains(course)?
                             new CourseWithSubscription(course, true)
                             :new CourseWithSubscription(course,false));
+                    return;
                 }else{
                     print(req, resp, getCourseService().get(id));
                     return;

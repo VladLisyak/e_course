@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
  */
 public abstract class AbstractValidator implements Validator {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractValidator.class);
-    private final ResourceBundle bundle;
+    private ResourceBundle bundle;
 
     private Map<String, String> errMessages;
     private String locale;
@@ -33,6 +33,14 @@ public abstract class AbstractValidator implements Validator {
     @Override
     public Map<String, String> getMessages() {
         return errMessages;
+    }
+
+    public ResourceBundle getBundle() {
+        return bundle;
+    }
+
+    public void setBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
     }
 
     @Override

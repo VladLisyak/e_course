@@ -232,18 +232,6 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
         return true;
     }
 
-    private boolean deleteRole(int userId, Role role){
-        String sql = QueryStorage.get(DELETE_ROLE);
-        try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
-            ps.setInt(1, userId);
-            ps.setString(2, role.toString());
-
-            return ps.executeUpdate()!=0;
-        } catch (SQLException e) {
-            LOGGER.warn(ERROR_MESSAGE, sql, e);
-            throw new DataAccessException(getMessage(sql), e);
-        }
-    }
 
     private boolean deleteOldRoles(int userId){
         return super.delete(userId, QueryStorage.get(DELETE_OLD));

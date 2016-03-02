@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `e_course`.`user` (
   `password` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `enabled` VARCHAR(45) NOT NULL DEFAULT 'WAITING',
-  `image` VARCHAR(45) NULL DEFAULT 'noimage.jpg',
+  `image` VARCHAR(45) NOT NULL DEFAULT 'noimage.jpg',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   UNIQUE INDEX `login_UNIQUE` (`login` ASC),

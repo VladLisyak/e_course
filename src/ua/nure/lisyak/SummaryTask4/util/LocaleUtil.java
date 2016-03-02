@@ -11,7 +11,6 @@ import java.util.ResourceBundle;
 /**
  * Contains values from specified bundle in all accessible locales.
  */
-//TODO See if this class needs deleting
 public class LocaleUtil {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LocaleUtil.class);
 	private Map<String, ResourceBundle> resBundles;

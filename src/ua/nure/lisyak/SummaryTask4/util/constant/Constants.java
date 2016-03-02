@@ -38,7 +38,7 @@ public final class Constants {
         public static final String UPLOAD_AUTHORS_DIRECTORY = "authors/";
         public static final String UPLOAD_BOOKS_DIRECTORY = "books/";
         public static final String UPLOAD_DIR = "B://library/";
-        public static final String BUNDLE_PATH = "/messages";
+        public static final String BUNDLE_PATH = "messages";
     }
 
     /**
