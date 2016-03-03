@@ -63,8 +63,6 @@ public class UserAjaxServlet extends BaseAjaxServlet{
         User user = (User) getEntityFromRequest(req, User.class);
         String locale = getLocale(req);
 
-        LocaleUtil translator = getTranslator();
-
         String imagePart = getStringParam(req, Constants.Attributes.IMAGE);
 
         if(imagePart==null){

@@ -21,10 +21,12 @@ public interface MessageRepository {
     List<Message> getByToId(int id);*/
 
     Integer getUnreadCount(int toId, int fromId);
+/*
 
     Message getUnread(int toId, int fromId);
+*/
 
     List<Message> getDialog(int fId, int sId);
-
-    List<Message> getUnread(Integer userId);
+/*
+    List<Message> getUnread(Integer userId);*/
 }

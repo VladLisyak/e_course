@@ -175,7 +175,7 @@ public class JdbcUserRepository extends JdbcAbstractRepository implements UserRe
         }
     }
 
-    @Override
+     @Override
     public List<User> getAllByStatus(String param) {
         String query = QueryStorage.get(GET_ALL_BY_STATUS);
         return getAllByEnum(param, query);
