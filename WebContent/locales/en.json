@@ -104,7 +104,9 @@
   "tlogin":"Login",
   "SubscribeTo":"Subscribe",
   "finished":"Finished",
-  "subscribed":"Subscribed"
+  "subscribed":"Subscribed",
+  "tooShort4":"Must be longer than 3"
+
 
 
 }

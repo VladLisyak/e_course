@@ -3,24 +3,24 @@ package ua.nure.lisyak.SummaryTask4.db.holder;
 import java.sql.Connection;
 
 /**
- * Holds a {@link Connection}
+ * Used to hold a {@link Connection}
  */
 public interface ConnectionHolder {
 
     /**
-     * Get a connection.
+     * Used to get connection
      * @return connection
      */
     Connection get();
 
     /**
-     * Sets a connection
-     * @param connection connection to set
+     * Used to set a connection
+     * @param connection connection to be set
      */
     void set(Connection connection);
 
     /**
-     * Removes a connection
+     * Removes a connection from holder
      */
     void remove();
 

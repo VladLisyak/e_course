@@ -2,6 +2,11 @@ package ua.nure.lisyak.SummaryTask4.util;
 
 import java.io.Serializable;
 
+/**
+ * Class used to store and retrieve a pair of values.
+ * @param <T>
+ * @param <R>
+ */
 public class Tuple<T, R> implements Serializable{
     private T firstEntity;
     private R secondEntity;

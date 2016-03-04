@@ -53,7 +53,7 @@ app.run(function($rootScope, $http, $location) {
             text: reason,
             type: 'error',
             layout: 'bottomRight',
-            timeout: 2500
+            timeout: 1000
         });
     };
 
@@ -63,7 +63,7 @@ app.run(function($rootScope, $http, $location) {
             text: reason,
             type: 'success',
             layout: 'bottomRight',
-            timeout: 2500
+            timeout: 1000
         });
     };
 
@@ -117,7 +117,7 @@ app.controller('loginRegisterController',
                     $scope.notyFlag = 'new';
                 }
 
-                setTimeout($scope.locationChange, 3000);
+                setTimeout($scope.locationChange, 1000);
             }).error(function (data){
                 $scope.message = data;
                 console.log(data);
@@ -133,7 +133,7 @@ app.controller('loginRegisterController',
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }  // set the headers so angular passing info as form data (not request payload)
             }).success(function (){
                 $rootScope.successNoty($rootScope.lang['remindSent']);
-                setTimeout($scope.locationChange, 3000);
+                setTimeout($scope.locationChange, 1000);
 
             }).error(function (data){
                 $scope.message = data;

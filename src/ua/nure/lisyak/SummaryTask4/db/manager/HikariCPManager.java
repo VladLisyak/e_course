@@ -13,8 +13,7 @@ import java.util.Map;
 import static ua.nure.lisyak.SummaryTask4.db.manager.DatabaseConfig.*;
 
 /**
- * A connection manager, based on HikariCP tool.
- *
+ * An implementation of {@link ConnectionManager}, based on HikariCP tool.
  */
 @SuppressWarnings("unused")
 public final class HikariCPManager implements ConnectionManager {
@@ -51,6 +50,7 @@ public final class HikariCPManager implements ConnectionManager {
         config.addDataSourceProperty("useServerPrepStmts", USE_SERVER_PREPARE_STATEMENTS);
         config.setTransactionIsolation("TRANSACTION_" + getTransactionIsolation());
         dataSource = new HikariDataSource(config);
+        LOGGER.debug("Datasource was configured successfully.");
     }
 
     @Override

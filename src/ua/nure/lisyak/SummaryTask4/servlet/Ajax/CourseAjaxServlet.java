@@ -21,12 +21,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Servlet for manipulating with {@link Course} entities
+ */
 @WebServlet(urlPatterns = {Constants.ServletPaths.AJAX_COURSE_LIST})
-/*@MultipartConfig(
-        location = SettingsAndFolderPaths.Images.TEMP_DIRECTORY,
-        fileSizeThreshold = SettingsAndFolderPaths.Images.SIZE_THRESHOLD,
-        maxFileSize = SettingsAndFolderPaths.Images.MAX_SIZE
-)*/
 public class CourseAjaxServlet extends BaseAjaxServlet {
 
     @Override
@@ -229,7 +227,7 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
     }
 
     private Course saveCourse(String image, Course course) {
-        course.setImage("");
+        course.setImage("noimage.jpg");
         if (image != null && image.length()==0) image = null;
         Course savedCourse = getCourseService().save(course);
         if (image != null) {

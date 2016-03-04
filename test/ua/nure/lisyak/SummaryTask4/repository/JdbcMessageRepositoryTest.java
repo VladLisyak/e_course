@@ -5,16 +5,13 @@ import org.junit.Test;
 import ua.nure.lisyak.SummaryTask4.db.holder.ConnectionHolder;
 import ua.nure.lisyak.SummaryTask4.db.holder.ThreadLocalConnectionHolder;
 import ua.nure.lisyak.SummaryTask4.db.manager.HikariCPManager;
-import ua.nure.lisyak.SummaryTask4.exception.DataAccessException;
 import ua.nure.lisyak.SummaryTask4.model.Message;
 import ua.nure.lisyak.SummaryTask4.repository.JdbcRepository.JdbcMessageRepository;
 
 import java.sql.Timestamp;
 import java.util.Date;
 
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class JdbcMessageRepositoryTest {
     private static final ConnectionHolder holder = new ThreadLocalConnectionHolder();
@@ -33,41 +30,42 @@ public class JdbcMessageRepositoryTest {
         message.setFromId(1);
         message.setToId(2);
         message.setDate(new Timestamp(new Date().getTime()));
+
+
+        message = rep.save(message);
+
     }
 
 
     @Test
     public void saveMessageTest(){
-        Message m = rep.save(message);
-        assertNotNull(m);
-        rep.delete(m.getId());
+        assertNotNull(message);
+        rep.delete(message.getId());
     }
 
     @Test
     public void updateMessageTest(){
-        Message m = rep.save(message);
-        message.setId(m.getId());
+        message.setId(message.getId());
+        String oldMessage = message.getMessage();
         message.setMessage("askkkk");
         Message m2 = rep.update(message);
-        assertNotEquals(m.getMessage(), m2.getMessage());
-        rep.delete(m.getId());
+        assertNotEquals(oldMessage, m2.getMessage());
+        rep.delete(message.getId());
     }
 
-    @Test(expected = DataAccessException.class)
+    @Test
     public void updateMessageFailTest(){
-        Message m = rep.save(message);
-        int id = m.getId();
-        m.setId(0);
+        int id = message.getId();
+        message.setId(0);
 
-        Message m2 = rep.update(m);
+        assertNull(rep.update(message));
         rep.delete(id);
     }
 
     @Test
     public void getMessageTest(){
-        Message m = rep.save(message);
-        assertNotNull(rep.get(m.getId()));
-        rep.delete(m.getId());
+        assertNotNull(rep.get(message.getId()));
+        rep.delete(message.getId());
     }
 
     @Test()
@@ -75,7 +73,37 @@ public class JdbcMessageRepositoryTest {
        assertNull(rep.get(0));
     }
 
+    @Test
+    public void deleteMessageTest(){
+        assertNotNull(rep.get(message.getId()));
+        assertTrue(rep.delete(message.getId()));
+    }
 
+    @Test()
+    public void deleteMessageFailTest(){
+       assertFalse(rep.delete(0));
+    }
+
+    @Test
+    public void getUnreadCountTest(){
+        int count = rep.getUnreadCount(message.getToId(), message.getFromId());
+        Message m = rep.save(this.message);
+        int count2 = rep.getUnreadCount(this.message.getToId(), this.message.getFromId());
+
+        assertEquals(count+1, count2);
+        rep.delete(m.getId());
+    }
+
+
+    @Test
+    public void getDialogTest(){
+        int count = rep.getDialog(message.getToId(), message.getFromId()).size();
+        Message m = rep.save(this.message);
+        int count2 = rep.getDialog(this.message.getToId(), this.message.getFromId()).size();
+
+        assertEquals(count+1, count2);
+        rep.delete(m.getId());
+    }
 
 
 

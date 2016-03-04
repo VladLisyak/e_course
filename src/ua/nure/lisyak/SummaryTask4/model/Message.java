@@ -2,6 +2,9 @@ package ua.nure.lisyak.SummaryTask4.model;
 
 import java.sql.Timestamp;
 
+/**
+ * Class that represents a message between two users
+ */
 public class Message extends Entity {
     private int fromId;
 

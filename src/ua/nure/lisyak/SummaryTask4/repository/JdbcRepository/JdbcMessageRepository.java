@@ -87,15 +87,6 @@ public class JdbcMessageRepository extends JdbcAbstractRepository implements Mes
         return super.delete(id, QueryStorage.get(DELETE_MESSAGE));
     }
 
-   /* @Override
-    public List<Message> getAllByFromId(int id) {
-        return null;
-    }
-
-    @Override
-    public List<Message> getByToId(int id) {
-        return null;
-    }*/
 
     @Override
     public Integer getUnreadCount(int toId, int fromId) {
@@ -154,20 +145,6 @@ public class JdbcMessageRepository extends JdbcAbstractRepository implements Mes
         }
     }
 
-/*    @Override
-    public List<Message> getUnread(Integer userId) {
-        String sql = QueryStorage.get(GET_UNREAD);
-        try(PreparedStatement ps = getConnection().prepareStatement(sql)) {
-            ps.setInt(1, userId);
-            ResultSet rs = ps.executeQuery();
-
-
-            return getAllFromResultSet(rs);
-        }catch (SQLException e) {
-            LOGGER.warn(ERROR_MESSAGE, sql, e);
-            throw new DataAccessException(getMessage(sql), e);
-        }
-    }*/
 
     private List<Message> getAllFromResultSet(ResultSet rs) throws SQLException {
         List<Message> messages = new ArrayList<>();
@@ -185,7 +162,7 @@ public class JdbcMessageRepository extends JdbcAbstractRepository implements Mes
         m.setReferrerName(rs.getString("name"));
         m.setFromId(rs.getInt("from_id"));
         m.setToId(rs.getInt("to_id"));
-        //m.setRead(rs.getBoolean("is_read"));
+        m.setRead(rs.getBoolean("is_read"));
         m.setDate(rs.getTimestamp("date"));
         m.setMessage(rs.getString("message"));
         return m;

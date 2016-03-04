@@ -29,6 +29,7 @@ public class JdbcUserRepositoryTest {
         user.setName("asdasf");
         user.setEmail("name@mail.ru");
         user.setLogin("name");
+        user.setImage("noimage.jpg");
         user.setEnabled(Enabled.ACTIVE);
         user.setPassword("password");
         user.addRole(Role.STUDENT);

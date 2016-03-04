@@ -3,21 +3,21 @@ package ua.nure.lisyak.SummaryTask4.db.manager;
 import java.sql.Connection;
 
 /**
- * Manages a connection data source.
+ * Manages a data source connection.
  *
  * @see Connection
  */
 public interface ConnectionManager {
 
     /**
-     * Obtains a connection from pool
+     * Receives connection from pool
      *
-     * @return obtained connection
+     * @return received connection
      */
     Connection getConnection();
 
     /**
-     * Closes data source connection.
+     * Closes connection.
      */
     void shutdown();
 

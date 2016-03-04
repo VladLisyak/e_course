@@ -3,7 +3,7 @@ package ua.nure.lisyak.SummaryTask4.db.holder;
 import java.sql.Connection;
 
 /**
- * Provides thread-safe implementation of {@link ua.nure.lisyak.SummaryTask4.db.holder.ConnectionHolder}
+ * This is a thread-safe implementation of {@link ua.nure.lisyak.SummaryTask4.db.holder.ConnectionHolder}
  * interface.
  * @see ThreadLocal
  */

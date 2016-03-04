@@ -7,9 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * User class.
- *
- * @author Dmitry Bekuzarov
+ * User class
  */
 public class User extends Entity {
 

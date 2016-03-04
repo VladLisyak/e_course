@@ -1,5 +1,7 @@
 package ua.nure.lisyak.SummaryTask4.servlet.Ajax;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.nure.lisyak.SummaryTask4.model.User;
 import ua.nure.lisyak.SummaryTask4.model.enums.Enabled;
 import ua.nure.lisyak.SummaryTask4.model.enums.Role;
@@ -18,6 +20,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Servlet used for operating with {@link User} entity
+ */
 @MultipartConfig(
         location = SettingsAndFolderPaths.Images.TEMP_DIRECTORY,
         fileSizeThreshold = SettingsAndFolderPaths.Images.SIZE_THRESHOLD,
@@ -25,6 +30,8 @@ import java.util.List;
 )
 @WebServlet(Constants.ServletPaths.USER)
 public class UserAjaxServlet extends BaseAjaxServlet{
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserAjaxServlet.class);
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer id = getEntityId(req);
@@ -54,6 +61,7 @@ public class UserAjaxServlet extends BaseAjaxServlet{
                 users = getUserService().getAllByRole(Role.valueOf(param), excludedUser!=null?excludedUser.getId():0);
             }
 
+            LOGGER.debug("doGet for {}", users.toString());
             print(req, resp, users);
         }
     }
@@ -61,6 +69,8 @@ public class UserAjaxServlet extends BaseAjaxServlet{
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) getEntityFromRequest(req, User.class);
+        LOGGER.debug("doPost for {}", user.toString());
+
         String locale = getLocale(req);
 
         String imagePart = getStringParam(req, Constants.Attributes.IMAGE);

@@ -6,10 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that the method must be executed within a transaction.
- * It make sense to place this annotation on the method in interface that is implemented
- * by classes, marked with {@link Service}
- * annotation.
+ * Indicates that method should be invoked within a transaction.
+ * Used to annotate methods of interfaces annotated with {@link Service} annotation
+ * @see Service
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

@@ -11,8 +11,6 @@ import java.util.Properties;
 
 /**
  * DatabaseConfig class.
- *
- * @author Dmitry Bekuzarov
  */
 public final class DatabaseConfig {
 

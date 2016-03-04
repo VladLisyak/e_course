@@ -17,11 +17,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * Provides functionality for transaction handling.
- * Invokes withing a transaction only methods annotated
- * with {@link Transactional}
- * Throws {@link DataAccessException}
- * if an exception was thrown in invoked method or while managing connection.
+ * Provides functionality for {@link Transactional}, {@link Cacheable} and {@link EvictCache} transactions handling.
  */
 public class AnnotationHandler implements InvocationHandler {
 
@@ -37,10 +33,10 @@ public class AnnotationHandler implements InvocationHandler {
 
     /**
      * Creates a new transaction handler.
-     *  @param holder          connection holder
+     * @param holder          connection holder
      * @param serviceToInvoke service to invoke
      * @param manager         connection manager
-     * @param cache
+     * @param cache           cache manager
      */
     public AnnotationHandler(ConnectionHolder holder, Object serviceToInvoke, ConnectionManager manager, Cache cache) {
         this.connectionManager = manager;

@@ -8,7 +8,6 @@ import java.io.IOException;
 /**
  * Sets request charset encoding. 
  */
-//@WebFilter("/*")
 public class EncodingFilter implements Filter{
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EncodingFilter.class);
 
@@ -29,7 +28,6 @@ public class EncodingFilter implements Filter{
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
 		LOGGER.debug("Filter starts");
-		//String requestEncoding = request.getCharacterEncoding();
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
 		
@@ -42,7 +40,6 @@ public class EncodingFilter implements Filter{
 	
 	public void destroy() {
 		LOGGER.debug("Filter destruction starts");
-		// no op
 		LOGGER.debug("Filter destruction finished");
 	}
 }

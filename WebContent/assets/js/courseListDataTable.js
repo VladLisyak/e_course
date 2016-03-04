@@ -1,8 +1,10 @@
 ajaxUrl = "/ajax/subscription";
-var datatableApi;
+var datatableApi1;
+var datatableApi2;
+var datatableApi3;
 
 $(function () {
-    datatableApi = $('#datatable3').DataTable({
+    datatableApi1 = $('#datatable3').DataTable({
         "sAjaxSource": ajaxUrl+'?sortBy=FINISHED',
         "sAjaxDataProp": "",
         "bPaginate": false,
@@ -48,7 +50,7 @@ $(function () {
     });
 });
 $(function () {
-    datatableApi = $('#datatable1').DataTable({
+    datatableApi2 = $('#datatable1').DataTable({
         "sAjaxSource": ajaxUrl+'?sortBy=BEFORE_START',
         "sAjaxDataProp": "",
         "bPaginate": false,
@@ -76,10 +78,6 @@ $(function () {
                 }
             },
             {
-                "mData": "mark",
-                "bSortable": true
-            },
-            {
                  "bSortable": false,
                  "sDefaultContent": "",
                  "mRender": renderDetailsBtn
@@ -99,7 +97,7 @@ $(function () {
     });
 });
 $(function () {
-    datatableApi = $('#datatable2').DataTable({
+    datatableApi3 = $('#datatable2').DataTable({
         "sAjaxSource": ajaxUrl+'?sortBy=IN_PROGRESS',
         "sAjaxDataProp": "",
         "bPaginate": false,
@@ -125,10 +123,6 @@ $(function () {
                     });
                     return strToReturn;
                 }
-            },
-            {
-                "mData": "mark",
-                "bSortable": true
             },
             {
                 "bSortable": false,
@@ -182,7 +176,7 @@ function renderDetailsBtn(data, type, row) {
 
 function deleteRow(id) {
     $.ajax({
-        url: ajaxUrl + id,
+        url: ajaxUrl + '/'+id,
         type: 'DELETE',
         success: function () {
             updateTable();

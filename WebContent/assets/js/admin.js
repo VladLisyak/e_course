@@ -28,7 +28,7 @@ app.controller('loginCtrl',
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }  // set the headers so angular passing info as form data (not request payload)
             }).success(function (){
                 $rootScope.successNoty($rootScope.lang['success']);
-                setTimeout($scope.locationChange, 3000);
+                setTimeout($scope.locationChange, 1000);
 
             }).error(function (data){
                 $scope.message = data;
@@ -526,7 +526,7 @@ main.run(function($rootScope, $http, $location, UserFactory, CourseFactory) {
             text: message,
             type: 'error',
             layout: 'bottomRight',
-            timeout: 2500
+            timeout: 1000
         });
         $rootScope.message = "";
     };
@@ -541,7 +541,7 @@ main.run(function($rootScope, $http, $location, UserFactory, CourseFactory) {
             text: reason,
             type: 'success',
             layout: 'bottomRight',
-            timeout: 2500
+            timeout: 1000
         });
     };
 

@@ -6,6 +6,9 @@ import ua.nure.lisyak.SummaryTask4.model.enums.Theme;
 import java.util.Date;
 import java.util.Set;
 
+/**
+ * Class that represent an entry of journal for some user
+ */
 public class JournalEntry extends Entity{
     private int courseId;
     private String courseTitle;

@@ -104,7 +104,8 @@
     "tlogin":"Логин",
     "SubscribeTo":"Подписаться",
     "finished":"Завершен",
-    "subscribed":"Подписан"
+    "subscribed":"Подписан",
+    "tooShort4":"Должно быть длиннее 3"
 
 
 

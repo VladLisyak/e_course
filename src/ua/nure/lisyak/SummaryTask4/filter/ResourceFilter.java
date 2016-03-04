@@ -20,7 +20,6 @@ import java.net.URLDecoder;
 /**
  * Filters requests to static resources as files, images.
  */
-//@WebFilter("ResourceFilter")
 public class ResourceFilter extends BaseFilter {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ResourceFilter.class);

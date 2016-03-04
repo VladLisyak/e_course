@@ -6,10 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates a repository. Repositories must have a constructor
- * taking {@code ConnectionHolder} object as  a parameter.
+ * That annotated class is repository. Repositories must contain a constructor
+ * taking {@code ConnectionHolder} object as parameter.
  *
- * @see ua.nure.bekuzarov.SummaryTask4.db.holder.ConnectionHolder
+ * @see ua.nure.lisyak.SummaryTask4.db.holder.ConnectionHolder
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

@@ -85,7 +85,6 @@
                                         <th>{{lang.startDate}}</th>
                                         <th>{{lang.endDate}}</th>
                                         <th>{{lang.themes}}</th>
-                                        <th>{{lang.mark}}</th>
                                         <th></th>
                                         <th></th>
                                     </tr>
@@ -108,7 +107,6 @@
                                         <th>{{lang.startDate}}</th>
                                         <th>{{lang.endDate}}</th>
                                         <th>{{lang.themes}}</th>
-                                        <th>{{lang.mark}}</th>
                                         <th></th>
                                         <th></th>
                                     </tr>

@@ -17,7 +17,6 @@ import java.io.IOException;
 /**
  * Defines and sets current locale
  */
-//@WebFilter("/*")
 public class LocaleFilter extends BaseFilter{
     private static final Logger LOGGER = LoggerFactory.getLogger(LocaleFilter.class);
 
@@ -114,10 +113,6 @@ public class LocaleFilter extends BaseFilter{
         return null;
     }
 
-    /**
-     * Sets locale in request, 
-     * session and cookie
-     */
     private void setLocale(HttpServletRequest request, HttpServletResponse response, String locale) {
     	request.setAttribute(Constants.Attributes.CURRENT_LOCALE, locale);
         setLocaleInSession(request, locale);

@@ -6,8 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that the value of the field will be set automatically on application startup.
- * There is no need in initializing this field.
+ * Indicates fields that is do not need to be initialized,
+ * because of being initialized on program startup.
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

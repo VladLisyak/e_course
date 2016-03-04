@@ -15,8 +15,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Filters request and defines whether the current user has access to the action.
- * In case of denied access redirects to the appropriate action.
+ * Filters request and defines whether the current user can access specified path.
+ * In case of denied access redirects to the path that can be accessed.
  */
 @WebFilter(filterName = "AccessFilter")
 public class AccessFilter extends BaseFilter {
@@ -46,8 +46,6 @@ public class AccessFilter extends BaseFilter {
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         HttpSession session = request.getSession();
-        String url = request.getRequestURL().toString();
-        String contextPath = request.getContextPath();
         String path = request.getServletPath();
         User user = (User) session.getAttribute(Constants.Attributes.CURRENT_USER);
         String redirect = isAllowed(path, user);

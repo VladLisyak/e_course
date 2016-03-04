@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * Contains all queries used in repositories.
+ * Contains all queries  used in repositories and stored in specified properties file.
  *
  * @see ua.nure.lisyak.SummaryTask4.annotation.Repository
  */

@@ -6,15 +6,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates a serializer.
- * @see ua.nure.bekuzarov.SummaryTask4.api.serialization.StreamSerializer
+ * Indicates that annotated class is serializer.
+ * @see ua.nure.lisyak.SummaryTask4.util.serialization.StreamSerializer
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Serializer {
 
     /**
-     * Prefix for serializer (name of the returned type if strongly recommended)
+     * Prefix that indicates the name of the returned type if strongly recommended
      * @return prefix for serializer
      */
     String value();

@@ -162,7 +162,7 @@ app.controller('tutorContactsController',
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }  // set the headers so angular passing info as form data (not request payload)
             }).success(function (){
                     $rootScope.successNoty($scope.lang['tutorLogged']);
-                    setTimeout($scope.locationChange, 3000);
+                    setTimeout($scope.locationChange, 1000);
             }).error(function (data){
                 $scope.message = data;
                 $rootScope.failNoty($scope.message.substring($scope.message.indexOf('<u>'), $scope.message.indexOf('</u>')));

@@ -4,8 +4,13 @@ import ua.nure.lisyak.SummaryTask4.model.enums.Status;
 import ua.nure.lisyak.SummaryTask4.model.enums.Theme;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Class that represents a course of certain tutor
+ * @see User
+ */
 public class Course extends Entity{
 
     private int tutorId;
@@ -19,7 +24,7 @@ public class Course extends Entity{
     private Date endDate;
     private Status status;
     private User tutor;
-    private Set<Theme> themes;
+    private Set<Theme> themes = new HashSet<>();
 
     public Course() {
     }
