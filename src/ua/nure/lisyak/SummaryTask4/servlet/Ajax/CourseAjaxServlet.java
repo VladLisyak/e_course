@@ -33,9 +33,20 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
         Integer id = getEntityId(req);
         Integer tutorId = getIntParam(req, Constants.Attributes.TUTOR_ID);
         String byParam = getStringParam(req, Constants.Attributes.BY_PARAM);
-        Role roleOfQuery = Role.valueOf(getStringParam(req, Constants.Attributes.ROLE_OF_QUERY));
         List<Course> studentSubscriptions = new ArrayList<>();
         User user = getCurrentUser(req);
+
+        Boolean forStudent = getBooleanParam(req, "forStudent", false);
+
+        if (forStudent){
+            int studentId = getIntParam(req, "studentId");
+            getCourseService().getAllByStudentId(studentId);
+            List<Course> studCourses = getCourseService().getAllByStudentId(studentId);
+            print(req, resp,  studCourses);
+            return;
+        }
+
+        Role roleOfQuery = Role.valueOf(getStringParam(req, Constants.Attributes.ROLE_OF_QUERY));
 
         if(user!=null) {
             studentSubscriptions = getCourseService().getAllByStudentId(user.getId());
@@ -228,9 +239,8 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
 
     private Course saveCourse(String image, Course course) {
         course.setImage("noimage.jpg");
-        if (image != null && image.length()==0) image = null;
         Course savedCourse = getCourseService().save(course);
-        if (image != null) {
+        if (image != null && image.length()>0) {
             String imageName = getFileService().saveFile(savedCourse.getId(), SettingsAndFolderPaths.getUploadCoursesDirectory(), image);
             savedCourse.setImage(imageName);
             return getCourseService().update(savedCourse);
@@ -251,23 +261,21 @@ public class CourseAjaxServlet extends BaseAjaxServlet {
     private Course resolveStatus(Course course){
         Course courseToResolve = course;
 
-        if(course !=null && course.getStartDate()!= null && course.getEndDate()!=null){
-            if(course.getStartDate().before(new Date())){
-                if(course.getEndDate().before(new Date()) || course.getEndDate().equals(new Date())){
-                    course.setStatus(Status.FINISHED);
-                }else{
-                    if (course.getEndDate().after(new Date())){
-                        course.setStatus(Status.IN_PROGRESS);
-                    }else{
-                        if (course.getStartDate().after(new Date())){
-                            course.setStatus(Status.BEFORE_START);
-                        }
-                    }
-
-                }
+        if(course !=null && course.getStartDate()!= null && course.getEndDate()!=null) {
+            if (course.getEndDate().before(new Date()) || course.getEndDate().equals(new Date())) {
+                course.setStatus(Status.FINISHED);
+                return course;
             }
-        }
+            Date curr = new Date();
+            if ((course.getStartDate().before(curr) || course.getStartDate().equals(curr)) && (course.getEndDate().after(curr) || course.getEndDate().equals(curr))) {
+                course.setStatus(Status.IN_PROGRESS);
+                return course;
+            }
 
+            course.setStatus(Status.BEFORE_START);
+            return course;
+
+        }
         return course;
     }
 

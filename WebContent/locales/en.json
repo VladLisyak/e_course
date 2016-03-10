@@ -105,7 +105,10 @@
   "SubscribeTo":"Subscribe",
   "finished":"Finished",
   "subscribed":"Subscribed",
-  "tooShort4":"Must be longer than 3"
+  "tooShort4":"Must be longer than 3",
+  "asc":"возр",
+  "desc":"убыв",
+  "userCoursesCount":"Subscribed courses count:"
 
 
 

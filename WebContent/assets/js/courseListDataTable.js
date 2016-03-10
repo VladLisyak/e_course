@@ -85,7 +85,7 @@ $(function () {
             {
                 "bSortable": false,
                 "sDefaultContent": "",
-                "mRender": renderDeleteBtn
+                "mRender": renderDeleteBtnStart
             }
         ],
         "aaSorting": [
@@ -132,7 +132,7 @@ $(function () {
             {
                 "bSortable": false,
                 "sDefaultContent": "",
-                "mRender": renderDeleteBtn
+                "mRender": renderDeleteBtnProg
             }
         ],
         "aaSorting": [
@@ -163,10 +163,15 @@ function successNoty(text) {
     });
 }
 
-function renderDeleteBtn(data, type, row) {
+function renderDeleteBtnProg(data, type, row) {
     console.log(row);
-        return '<a class="btn btn-xs btn-danger" onclick="deleteRow(' + row.id + ');"><i class = "glyphicon glyphicon-remove"></i></a>';
+        return '<a class="btn btn-xs btn-danger" onclick="deleteRowProg(' + row.id + ');"><i class = "glyphicon glyphicon-remove"></i></a>';
+    return data;
+}
 
+function renderDeleteBtnStart(data, type, row) {
+    console.log(row);
+        return '<a class="btn btn-xs btn-danger" onclick="deleteRowStart(' + row.id + ');"><i class = "glyphicon glyphicon-remove"></i></a>';
     return data;
 }
 
@@ -174,12 +179,23 @@ function renderDetailsBtn(data, type, row) {
        return '<a class="btn btn-xs btn-success details-btn" onclick = "details(' + row.courseId + ')"><i class = "glyphicon glyphicon-search"></i></a>';
  }
 
-function deleteRow(id) {
+function deleteRowProg(id) {
     $.ajax({
         url: ajaxUrl + '/'+id,
         type: 'DELETE',
         success: function () {
-            updateTable();
+            updateTableProg();
+            successNoty('Deleted');
+        }
+    });
+}
+
+function deleteRowStart(id) {
+    $.ajax({
+        url: ajaxUrl + '/'+id,
+        type: 'DELETE',
+        success: function () {
+            updateTableStart();
             successNoty('Deleted');
         }
     });
@@ -189,12 +205,21 @@ function details(id) {
     angular.element(document.getElementById('body')).scope().details(id);
 }
 
-function updateTable() {
-    $.get(ajaxUrl, function (data) {
-        updateTableByData(data);
+function updateTableProg() {
+    $.get(ajaxUrl+'?sortBy=IN_PROGRESS', function (data) {
+        updateTableByDataProg(data);
+    });
+}
+function updateTableStart() {
+    $.get(ajaxUrl+'?sortBy=BEFORE_START', function (data) {
+        updateTableByDataStart(data);
     });
 }
 
-function updateTableByData(data) {
-    datatableApi.clear().rows.add(data).draw();
+function updateTableByDataProg(data) {
+    datatableApi3.clear().rows.add(data).draw();
+}
+
+function updateTableByDataStart(data) {
+    datatableApi2.clear().rows.add(data).draw();
 }

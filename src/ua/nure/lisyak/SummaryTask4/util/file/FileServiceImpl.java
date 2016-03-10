@@ -40,7 +40,11 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String saveFile(String name, String subDirectory, String file) {
-        String extension = getExtension(file);
+        String extension = "";
+        try{extension = getExtension(file);
+        }catch (FileProcessingException e){
+         LOGGER.debug("Extension wasn't get");
+        }
         String imageToSave = file.split(",")[1];
         String fileName = generateFileName(name, extension);
 

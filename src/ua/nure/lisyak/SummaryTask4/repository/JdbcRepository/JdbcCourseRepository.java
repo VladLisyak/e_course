@@ -94,6 +94,7 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
             ResultSet generatedKeys = ps.getGeneratedKeys();
             generatedKeys.next();
             int id = generatedKeys.getInt(1);
+            course.setId(id);
 
             updateThemes(course);
 
@@ -269,25 +270,10 @@ public class JdbcCourseRepository extends JdbcAbstractRepository implements Cour
     }
 
 
-    /*private Integer getSubscribersCount(int courseId){
-        String query = QueryStorage.get(SUBSCRIBERS_COUNT);
-        try (PreparedStatement ps = getConnection().prepareStatement(query)) {
-            ps.setInt(1, courseId);
-            ResultSet rs = ps.executeQuery();
-            rs.next();
-
-            return rs.getInt("count");
-        }catch (SQLException e){
-            LOGGER.warn(ERROR_MESSAGE, query, e);
-            throw new DataAccessException(getMessage(query), e);
-        }
-    }*/
 
    private boolean updateThemes(Course course) {
 
-       if (!deleteOldThemes(course.getId()))
-           return false;
-
+       deleteOldThemes(course.getId());
 
        for (Theme theme : course.getThemes()) {
            addTheme(course.getId(), theme);

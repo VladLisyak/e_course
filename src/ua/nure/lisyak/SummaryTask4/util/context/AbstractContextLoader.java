@@ -10,7 +10,6 @@ import java.util.List;
 /**
  * Abstract utility class for loading classes from packages.
  *
- * @author Dmitry Bekuzarov
  */
 public abstract class AbstractContextLoader {
 
